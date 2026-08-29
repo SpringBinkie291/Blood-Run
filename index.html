@@ -98,6 +98,7 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 #boardScreen tr.podium2 td{background:linear-gradient(135deg,#252b34,#13171d);border-color:#dce6f455;color:#edf3ff}#boardScreen tr.podium2 td:first-child::before{content:'🥈';margin-right:7px}
 #boardScreen tr.podium3 td{background:linear-gradient(135deg,#352117,#171210);border-color:#d69b7455;color:#e8b89d}#boardScreen tr.podium3 td:first-child::before{content:'🥉';margin-right:7px}
 .podiumTag{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;font-size:8px;letter-spacing:.9px;font-weight:950;vertical-align:2px;background:#ffffff10;border:1px solid #ffffff16;color:inherit}
+#playerRankStatus{display:none;margin:14px 0 8px;padding:13px 14px;border-radius:15px;background:linear-gradient(180deg,#111b29,#0b121d);border:1px solid #62eaff30;color:#dce8f5;font-size:13px;font-weight:800;line-height:1.4}#playerRankStatus.show{display:block}#playerRankStatus.top50{border-color:#62eaff55;background:linear-gradient(180deg,#10252d,#0a171d);color:#bff7ff}#playerRankStatus.outside{border-color:#ffffff18;color:#c8d0dc}
 @media(max-width:520px){.prizeTitle{font-size:17px}.prizeBanner{padding:14px}.prizeSub{font-size:11px}#boardScreen tr td{padding:12px 9px}}
 
 </style>
@@ -147,7 +148,7 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 <div class="row"><button class="btn alt tab" data-tab="themes">Vessel Themes</button></div>
 <div id="shopGrid"></div><button class="btn" id="backLab">BACK</button></div></div>
 
-<div id="boardScreen" class="screen hidden"><div class="panel"><div class="logo">EBNF POSTER PROJECT DAY</div><h2>🏆 Leaderboard</h2><div class="prizeBanner"><div class="prizeEyebrow">🏅 Finish the day in 1st place</div><div class="prizeTitle">Win a <strong>$25 Chick-fil-A gift card</strong></div><div class="prizeSub">The player holding the #1 leaderboard spot at the end of EBNF poster project day takes the prize. Keep running, keep learning, and protect that high score.</div></div><table><tbody id="rows"></tbody></table><button class="btn" id="backBoard">BACK</button></div></div>
+<div id="boardScreen" class="screen hidden"><div class="panel"><div class="logo">EBNF POSTER PROJECT DAY</div><h2>🏆 Leaderboard</h2><div class="prizeBanner"><div class="prizeEyebrow">🏅 Finish the day in 1st place</div><div class="prizeTitle">Win a <strong>$25 Chick-fil-A gift card</strong></div><div class="prizeSub">The player holding the #1 leaderboard spot at the end of EBNF poster project day takes the prize. Keep running, keep learning, and protect that high score.</div></div><div id="playerRankStatus" aria-live="polite"></div><table><tbody id="rows"></tbody></table><button class="btn" id="backBoard">BACK</button></div></div>
 
 <div id="knowledge" class="screen hidden"><div class="panel"><div class="logo">🧠 KNOWLEDGE DROP</div><h2 id="question"></h2><div id="questionTimer"><div class="timerClock"><span id="timerSeconds">10</span>s</div><div style="flex:1;min-width:0"><div class="timerText">TIME REMAINING</div><div class="timerTrack"><i id="questionTimerFill"></i></div></div></div><div class="answers" id="answers"></div></div></div>
 
@@ -368,6 +369,9 @@ function startGame(){
    submitBtn.style.pointerEvents='';
    submitBtn.textContent='SUBMIT SCORE';
  }
+
+ // Keep the last successfully submitted run's rank across new runs and browser restarts.
+ // It will be replaced only after another score saves successfully.
 
  unlockAudio().then(()=>startMusic());
  resetOcclusionWarning();
@@ -624,6 +628,40 @@ function endGame(reason){stopQuestionTimer();if(!game||!game.alive)return;game.a
 let liveScores=[];
 let leaderboardConnected=false;
 
+// Persist ALL successfully submitted Firebase run keys for this browser/device.
+// This lets the leaderboard find the best CURRENT rank from any run made on this device,
+// even after the tab/browser is closed and reopened.
+let savedRankRun=null;
+try{ savedRankRun=JSON.parse(safeStore.get('bloodRun3DLastRankRun','null')||'null'); }catch(e){ savedRankRun=null; }
+let lastSubmittedKey=savedRankRun&&savedRankRun.key?savedRankRun.key:null;
+let lastSubmittedScore=savedRankRun&&savedRankRun.scoreData?savedRankRun.scoreData:null;
+
+let deviceRunKeys=[];
+try{
+  const parsed=JSON.parse(safeStore.get('bloodRun3DDeviceRunKeys','[]')||'[]');
+  if(Array.isArray(parsed))deviceRunKeys=parsed.filter(x=>typeof x==='string'&&x);
+}catch(e){ deviceRunKeys=[]; }
+// Migrate the previously saved single run into the new multi-run history.
+if(lastSubmittedKey&&!deviceRunKeys.includes(lastSubmittedKey)){
+  deviceRunKeys.push(lastSubmittedKey);
+  safeStore.set('bloodRun3DDeviceRunKeys',JSON.stringify(deviceRunKeys));
+}
+
+function rememberDeviceRun(key,scoreData){
+  lastSubmittedKey=key||null;
+  lastSubmittedScore=scoreData?{...scoreData}:null;
+  safeStore.set('bloodRun3DLastRankRun',JSON.stringify({
+    key:lastSubmittedKey,
+    scoreData:lastSubmittedScore
+  }));
+  if(key&&!deviceRunKeys.includes(key)){
+    deviceRunKeys.push(key);
+    // Keep a generous bounded history while avoiding unbounded localStorage growth.
+    if(deviceRunKeys.length>500)deviceRunKeys=deviceRunKeys.slice(-500);
+    safeStore.set('bloodRun3DDeviceRunKeys',JSON.stringify(deviceRunKeys));
+  }
+}
+
 function getLocalScores(){
   try{return JSON.parse(safeStore.get('bloodRun3DScores','[]')||'[]')}catch(e){return []}
 }
@@ -634,13 +672,20 @@ function saveLocalScore(scoreData){
   safeStore.set('bloodRun3DScores',JSON.stringify(a.sort((x,y)=>y.score-x.score).slice(0,100)));
 }
 
+function sortedLeaderboardScores(source){
+  return [...source]
+    .filter(x=>x&&Number.isFinite(Number(x.score)))
+    .sort((a,b)=>{
+      const scoreDiff=Number(b.score)-Number(a.score);
+      if(scoreDiff)return scoreDiff;
+      return Number(a.time||0)-Number(b.time||0);
+    });
+}
+
 function renderBoard(){
   const source=(firebaseReady&&leaderboardConnected)?liveScores:getLocalScores();
-
-  let a=[...source]
-    .filter(x=>x&&Number.isFinite(Number(x.score)))
-    .sort((x,y)=>Number(y.score)-Number(x.score))
-    .slice(0,50);
+  const allScores=sortedLeaderboardScores(source);
+  const a=allScores.slice(0,50);
 
   $('rows').innerHTML=a.length?a.map((x,i)=>{
     let cls=i===0?'podium1':i===1?'podium2':i===2?'podium3':'';
@@ -667,6 +712,35 @@ function renderBoard(){
     `;
   }).join('')
   :'<tr><td colspan="2">No scores yet — be the first to set one.</td></tr>';
+
+  const rankBox=$('playerRankStatus');
+  if(!rankBox)return;
+
+  // Find the best CURRENT rank among every Firebase run remembered on this device.
+  const rememberedKeys=new Set(deviceRunKeys);
+  let rankIndex=allScores.findIndex(x=>x&&x._key&&rememberedKeys.has(x._key));
+
+  // Backward-compatibility fallback for a score saved by the previous single-run version.
+  if(rankIndex<0&&lastSubmittedScore){
+    rankIndex=allScores.findIndex(x=>x
+      &&Number(x.time)===Number(lastSubmittedScore.time)
+      &&Number(x.score)===Number(lastSubmittedScore.score)
+      &&String(x.name||'')===String(lastSubmittedScore.name||''));
+  }
+
+  if(rankIndex>=0){
+    const rank=rankIndex+1;
+    rankBox.className='show '+(rank<=50?'top50':'outside');
+    rankBox.textContent=rank<=50
+      ?`Your best run is currently #${rank}. You’re in the Top 50!`
+      :`Your best run is currently #${rank}. Reach the Top 50 to appear on the leaderboard.`;
+  }else if((deviceRunKeys.length||lastSubmittedScore)&&firebaseReady&&db){
+    rankBox.className='show outside';
+    rankBox.textContent='Finding your best current position…';
+  }else{
+    rankBox.className='';
+    rankBox.textContent='';
+  }
 }
 
 function startLiveLeaderboard(){
@@ -677,7 +751,7 @@ function startLiveLeaderboard(){
       liveScores=[];
       snapshot.forEach(childSnapshot=>{
         const scoreData=childSnapshot.val();
-        if(scoreData)liveScores.push(scoreData);
+        if(scoreData)liveScores.push({...scoreData,_key:childSnapshot.key});
       });
       leaderboardConnected=true;
       renderBoard();
@@ -697,20 +771,33 @@ let submitInFlight=false;
 
 bindPress('submit',async()=>{
   if(!game)return;
+
   const submitBtn=$('submit');
 
-  // One score submission per run. This lock happens before any Firebase await,
-  // so touch/pointer/click duplicates cannot start a second write.
-  if(game.submitted||game.submissionPending||submitInFlight){
-    if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='SCORE SUBMITTED ✓';}
+  // A finished run may submit exactly once. Pending/in-flight only blocks duplicate taps.
+  if(game.submitted){
+    if(submitBtn){
+      submitBtn.disabled=true;
+      submitBtn.style.pointerEvents='none';
+      submitBtn.textContent='SCORE SUBMITTED ✓';
+    }
     return;
   }
+  if(game.submissionPending||submitInFlight)return;
 
   game.submissionPending=true;
   submitInFlight=true;
-  if(submitBtn){submitBtn.disabled=true;submitBtn.style.pointerEvents='none';submitBtn.textContent='SUBMITTING...';}
 
-  let n=($('name').value.trim()||'RBC Runner').slice(0,12).replace(/[&<>"']/g,'');
+  if(submitBtn){
+    submitBtn.disabled=true;
+    submitBtn.style.pointerEvents='none';
+    submitBtn.textContent='SUBMITTING...';
+  }
+
+  const n=($('name').value.trim()||'RBC Runner')
+    .slice(0,12)
+    .replace(/[&<>"']/g,'');
+
   const scoreData={
     name:n||'RBC Runner',
     score:Math.max(0,Math.floor(Number(game.score)||0)),
@@ -720,39 +807,75 @@ bindPress('submit',async()=>{
 
   try{
     if(firebaseReady&&db){
-      // Keep the exact Firebase write format that previously worked with your rules.
+      // Generate a unique Firebase key, save the score, THEN persist that exact run locally.
+      // Persisting only after await set() succeeds prevents a failed attempt from replacing
+      // the player's previously saved rank information.
       const newScoreRef=push(ref(db,'leaderboard'));
+      console.log('Submitting leaderboard score',newScoreRef.key,scoreData);
       await set(newScoreRef,scoreData);
+      console.log('Leaderboard score saved',newScoreRef.key);
       leaderboardConnected=true;
-      game.submitted=true;
-      saveLocalScore(scoreData);
-      if(submitBtn)submitBtn.textContent='SCORE SUBMITTED ✓';
-      notify('SCORE POSTED LIVE','good');
-      sfxPrize();
+      rememberDeviceRun(newScoreRef.key,scoreData);
+      // Do NOT manually push scoreData into liveScores here.
+      // Firebase onValue() is the single source of truth; manually adding it
+      // causes a temporary duplicate until the listener refreshes.
     }else{
-      // Offline/local fallback. Still only one submission for this run.
-      saveLocalScore(scoreData);
-      game.submitted=true;
-      if(submitBtn)submitBtn.textContent='SCORE SAVED ✓';
-      notify('SCORE SAVED LOCALLY','warn');
+      // Offline/local fallback can still remember the latest local run on this device.
+      rememberDeviceRun(null,scoreData);
     }
+
+    // Local backup is best-effort and must never turn a successful Firebase write into an error.
+    try{ saveLocalScore(scoreData); }
+    catch(localError){ console.warn('Local score backup failed:',localError); }
+
+    game.submitted=true;
+
+    if(submitBtn){
+      submitBtn.disabled=true;
+      submitBtn.style.pointerEvents='none';
+      submitBtn.textContent=(firebaseReady&&db)?'SCORE SUBMITTED ✓':'SCORE SAVED ✓';
+    }
+
+    try{
+      notify((firebaseReady&&db)?'SCORE POSTED LIVE':'SCORE SAVED LOCALLY',(firebaseReady&&db)?'good':'warn');
+    }catch(uiError){
+      console.warn('Score notification failed:',uiError);
+    }
+
+    try{ sfxPrize(); }
+    catch(audioError){ console.warn('Prize sound failed:',audioError); }
+
+    renderBoard();
+    show('boardScreen');
+
   }catch(error){
     console.error('Firebase score submission failed:',error);
-    // Only a genuine failed write may be retried.
+    console.error('Firebase error code:',error&&error.code);
+    console.error('Firebase error message:',error&&error.message);
+
     game.submitted=false;
-    if(submitBtn){submitBtn.disabled=false;submitBtn.style.pointerEvents='';submitBtn.textContent='RETRY SUBMIT';}
-    const code=String(error&&error.code?error.code:'unknown').replace('database/','').toUpperCase();
-    notify('SUBMIT FAILED — '+code,'warn');
+    // Keep the previously successful saved rank if this new write fails.
+
+    if(submitBtn){
+      submitBtn.disabled=false;
+      submitBtn.style.pointerEvents='';
+      submitBtn.textContent='RETRY SUBMIT';
+    }
+
+    const code=String(error&&error.code?error.code:'unknown')
+      .replace('database/','')
+      .toUpperCase();
+
+    try{ notify('SUBMIT FAILED — '+code,'warn'); }
+    catch(uiError){ console.warn('Submit failure notification failed:',uiError); }
+
+  }finally{
+    // Always release per-run locks, even if Firebase/UI/audio code throws.
     game.submissionPending=false;
     submitInFlight=false;
-    return;
   }
-
-  game.submissionPending=false;
-  submitInFlight=false;
-  renderBoard();
-  show('boardScreen');
 });
+
 bindPress('start',startGame);bindPress('learn',()=>show('learnScreen'));bindPress('lab',()=>{renderShop();show('labScreen')});bindPress('board',()=>{renderBoard();show('boardScreen');setTimeout(sfxPrize,80)});
 bindPress('backLearn',()=>show('menu'));bindPress('backLab',()=>show('menu'));bindPress('backBoard',()=>show('menu'));bindPress('again',startGame);bindPress('home',()=>show('menu'));
 bindPress('pause',()=>{if(!game)return;paused=true;show('pauseScreen')});bindPress('resume',()=>{paused=false;show(null);['hud'].forEach(id=>$(id).classList.remove('hidden'));last=performance.now()});bindPress('quit',()=>{paused=false;endGame('Run ended by player.')});
