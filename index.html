@@ -438,6 +438,9 @@ function startGame(){
    inputY:0,
    vx:0,
    vy:0,
+   lane:0,
+   jumpT:0,
+   duckT:0,
    boss:false,
    trailTimer:0,
    questionDeck:Array.from(
@@ -537,30 +540,41 @@ function keyboardVector(){
 }
 function applyKeyboard(){if(!game||paused||questionOpen)return;const v=keyboardVector();if(v.x||v.y){game.inputX=v.x;game.inputY=v.y}}
 
-// Responsive mobile swipe steering. On touch screens we use Touch Events
-// directly (instead of relying on browser pointer coalescing) and a small,
-// floating control radius. Tiny thumb motions now register immediately while
-// the top movement speed stays the same.
+// Mobile runner controls: discrete three-lane swipes + jump / duck.
+// Touch devices no longer use analog finger-follow steering, which removes
+// lag, drifting, and the floating-center "snap" correction behavior.
 const touchControls=('ontouchstart' in window)||matchMedia('(pointer:coarse)').matches;
 let dragging=false,dragPointer=null,dragTouch=null,dragStartX=0,dragStartY=0;
+const MOBILE_SWIPE_MIN=24;
+const MOBILE_JUMP_TIME=.62;
+const MOBILE_DUCK_TIME=.52;
 function uiTouchTarget(target){return target.closest('button,input,.panel,#pause,#knowledge,.screen');}
-function setSwipeInput(clientX,clientY){
+function mobileLaneStep(dir){
  if(!game||paused||questionOpen)return;
- let dx=clientX-dragStartX,dy=clientY-dragStartY;
- const dist=Math.hypot(dx,dy),dead=2,radius=42;
- if(dist<=dead){game.inputX=0;game.inputY=0;return}
- const nx=dx/dist,ny=dy/dist;
- // A response curve boosts small movements without increasing max speed.
- const raw=clamp((dist-dead)/(radius-dead),0,1);
- const power=Math.pow(raw,.62);
- game.inputX=nx*power;
- game.inputY=-ny*power; // finger up = RBC up; finger down = RBC down
- // Floating center: once the thumb reaches the control radius, move the
- // virtual center with it so the player never has to make a huge swipe.
- if(dist>radius){dragStartX=clientX-nx*radius;dragStartY=clientY-ny*radius}
+ game.lane=clamp((game.lane|0)+dir,-1,1);
+}
+function mobileJump(){
+ if(!game||paused||questionOpen)return;
+ if((game.jumpT||0)<.12)game.jumpT=MOBILE_JUMP_TIME;
+ game.duckT=0;
+}
+function mobileDuck(){
+ if(!game||paused||questionOpen)return;
+ game.duckT=MOBILE_DUCK_TIME;
+ game.jumpT=0;
+}
+function commitMobileSwipe(clientX,clientY){
+ if(!game||paused||questionOpen)return;
+ const dx=clientX-dragStartX,dy=clientY-dragStartY;
+ const ax=Math.abs(dx),ay=Math.abs(dy);
+ if(Math.max(ax,ay)<MOBILE_SWIPE_MIN)return;
+ if(ax>ay){mobileLaneStep(dx>0?1:-1)}
+ else if(dy<0){mobileJump()}
+ else{mobileDuck()}
 }
 
-// Native touch path for phones/tablets.
+// Native touch path for phones/tablets. The action fires once, on release,
+// like a lane-based endless runner instead of continuously tracking the thumb.
 app.addEventListener('touchstart',e=>{
  if(!touchControls||!game||paused||questionOpen||uiTouchTarget(e.target)||dragTouch!==null)return;
  const t=e.changedTouches[0];dragging=true;dragTouch=t.identifier;dragStartX=t.clientX;dragStartY=t.clientY;
@@ -568,17 +582,30 @@ app.addEventListener('touchstart',e=>{
 },{passive:false});
 app.addEventListener('touchmove',e=>{
  if(!touchControls||!dragging||dragTouch===null||!game||paused||questionOpen)return;
- let t=null;for(const p of e.changedTouches)if(p.identifier===dragTouch){t=p;break}
- if(!t)return;e.preventDefault();setSwipeInput(t.clientX,t.clientY);
+ for(const p of e.changedTouches)if(p.identifier===dragTouch){e.preventDefault();break}
 },{passive:false});
 function finishTouch(e){
  if(dragTouch===null)return;
- for(const p of e.changedTouches)if(p.identifier===dragTouch){dragging=false;dragTouch=null;release();e.preventDefault();break}
+ for(const p of e.changedTouches)if(p.identifier===dragTouch){
+  commitMobileSwipe(p.clientX,p.clientY);
+  dragging=false;dragTouch=null;e.preventDefault();break
+ }
 }
 app.addEventListener('touchend',finishTouch,{passive:false});
-app.addEventListener('touchcancel',finishTouch,{passive:false});
+app.addEventListener('touchcancel',e=>{if(dragTouch!==null){dragging=false;dragTouch=null;e.preventDefault()}},{passive:false});
 
-// Pointer path remains for mouse/pen and as a non-touch fallback.
+// Pointer path remains unchanged for mouse/pen and non-touch fallbacks.
+function setSwipeInput(clientX,clientY){
+ if(!game||paused||questionOpen)return;
+ let dx=clientX-dragStartX,dy=clientY-dragStartY;
+ const dist=Math.hypot(dx,dy),dead=2,radius=42;
+ if(dist<=dead){game.inputX=0;game.inputY=0;return}
+ const nx=dx/dist,ny=dy/dist;
+ const raw=clamp((dist-dead)/(radius-dead),0,1);
+ const power=Math.pow(raw,.62);
+ game.inputX=nx*power;game.inputY=-ny*power;
+ if(dist>radius){dragStartX=clientX-nx*radius;dragStartY=clientY-ny*radius}
+}
 app.addEventListener('pointerdown',e=>{
  if(touchControls&&e.pointerType==='touch')return;
  if(!game||paused||questionOpen||uiTouchTarget(e.target))return;
@@ -608,12 +635,28 @@ function loop(t){
   game.elapsed+=dt;let speed=17+Math.min(25,game.dist*.0042);game.dist+=speed*dt*2.2;game.score+=speed*dt*2;if(!game.event&&game.dist>=game.nextMajor)startMajorEvent();else if(!game.event&&game.dist>=game.nextMinor)startMinorEvent();
   if(game.event&&game.event!=='knowledge'){game.eventTimer-=dt;if(game.eventDuration>0)$('bossFill').style.width=Math.max(0,game.eventTimer/game.eventDuration*100)+'%';if(game.event==='crisis'){game.eventWave-=dt;if(game.eventWave<=0){spawnBossWave();game.eventWave=1.12}}if(game.event==='golden'&&game.eventTimer<=0){game.event=null;game.goldenActive=false;$('bossBar').classList.remove('show');toast('Golden RBC escaped');}else if(game.eventTimer<=0&&game.event!=='golden')finishEvent(true)}
   if(keysHeld.size)applyKeyboard();
-  let steerResponse=touchControls?11.2:7.6;game.vx+=(game.inputX*11.8-game.vx)*Math.min(1,dt*steerResponse);game.vy+=(game.inputY*10.2-game.vy)*Math.min(1,dt*steerResponse);
-  if(!dragging&&!keysHeld.size){game.inputX*=Math.pow(.78,dt*60);game.inputY*=Math.pow(.78,dt*60)}
-  player.position.x+=game.vx*dt;player.position.y+=game.vy*dt;
-  updateTrail(dt);
   let baseVessel=Math.max(2.75,5.9-game.dist/1800);let targetVessel=baseVessel;if(game.event==='crisis')targetVessel=Math.max(2.4,baseVessel-.72);if(game.event==='capillary')targetVessel=2.15;game.vessel+=(Math.max(2.1,targetVessel)-game.vessel)*Math.min(1,dt*2.8);let scale=game.vessel/5.9;tubeGroup.scale.x+=(scale-tubeGroup.scale.x)*.08;tubeGroup.scale.y+=(scale-tubeGroup.scale.y)*.08;
-  player.position.x=clamp(player.position.x,-game.vessel+1,game.vessel-1);player.position.y=clamp(player.position.y,-Math.max(1.7,game.vessel*.55),Math.max(1.7,game.vessel*.55));if(game.boss)$('bossFill').style.width=Math.max(0,game.bossTimer/9*100)+'%';
+  if(touchControls){
+   const laneX=Math.max(1.05,Math.min(2.15,game.vessel-1.18));
+   const targetX=(game.lane|0)*laneX;
+   const prevX=player.position.x;
+   player.position.x+=(targetX-player.position.x)*Math.min(1,dt*17.5);
+   game.vx=(player.position.x-prevX)/Math.max(dt,.001);
+   game.vy=0;game.inputX=0;game.inputY=0;
+   if(game.jumpT>0)game.jumpT=Math.max(0,game.jumpT-dt);
+   if(game.duckT>0)game.duckT=Math.max(0,game.duckT-dt);
+   const jp=game.jumpT>0?1-game.jumpT/MOBILE_JUMP_TIME:0;
+   const jumpY=game.jumpT>0?Math.sin(jp*Math.PI)*2.45:0;
+   const dp=game.duckT>0?1-game.duckT/MOBILE_DUCK_TIME:0;
+   const duckY=game.duckT>0?-Math.sin(dp*Math.PI)*1.15:0;
+   player.position.y=jumpY+duckY;
+  }else{
+   let steerResponse=7.6;game.vx+=(game.inputX*11.8-game.vx)*Math.min(1,dt*steerResponse);game.vy+=(game.inputY*10.2-game.vy)*Math.min(1,dt*steerResponse);
+   if(!dragging&&!keysHeld.size){game.inputX*=Math.pow(.78,dt*60);game.inputY*=Math.pow(.78,dt*60)}
+   player.position.x+=game.vx*dt;player.position.y+=game.vy*dt;
+  }
+  updateTrail(dt);
+  player.position.x=clamp(player.position.x,-game.vessel+1,game.vessel-1);player.position.y=clamp(player.position.y,-Math.max(1.7,game.vessel*.55),Math.max(2.55,game.vessel*.55));if(game.boss)$('bossFill').style.width=Math.max(0,game.bossTimer/9*100)+'%';
   let oxyDrain=(.8+game.dist/9000)*(game.event==='hypoxia'?3.15:1);game.oxy-=dt*oxyDrain;game.spawn-=dt;game.oSpawn-=dt;game.qTimer-=dt;
   if(game.spawn<=0){spawnObstacle();game.spawn=Math.max(.33,1.08-game.dist/7000)}
   if(game.oSpawn<=0){spawnOxygen();game.oSpawn=(game.event==='oxygenrush'?0.18:game.event==='hypoxia'?0.32:.65)+Math.random()*(game.event==='oxygenrush'?.18:game.event==='hypoxia'?.25:.8)}
@@ -627,7 +670,7 @@ function loop(t){
   setStage();updateHud();if(game.oxy<=0)return endGame('Oxygen critically depleted.');if(game.hits>=8)return endGame('Too many vessel obstructions.');
  }
  camera.position.x+=(player.position.x*.22-camera.position.x)*.08;camera.position.y+=(7.1+player.position.y*.16-camera.position.y)*.08;camera.position.z+=(10.2-camera.position.z)*.08;camera.lookAt(player.position.x*.26,player.position.y*.14,-14);
- player.rotation.z+=(game?(-game.vx*.026)-player.rotation.z:0)*.10;player.rotation.x+=((-0.22+game.inputY*.035)-player.rotation.x)*.08;player.rotation.y=Math.sin(t*.004)*.07;
+ player.rotation.z+=(game?(-game.vx*.026)-player.rotation.z:0)*.10;const mobilePitch=touchControls&&game?((game.jumpT>0?-.08:0)+(game.duckT>0?.10:0)):0;player.rotation.x+=((-0.22+game.inputY*.035+mobilePitch)-player.rotation.x)*.08;player.rotation.y=Math.sin(t*.004)*.07;
  body.scale.z=game&&game.event==='capillary'?.34:(game&&game.oxy<35)?.42:.5;body.scale.x=game&&game.event==='capillary'?1.72:1.55;body.scale.y=game&&game.event==='capillary'?1.02:1.15;rim.scale.set(1.2+.06*Math.sin(t*.01),.88+.04*Math.cos(t*.009),1);dimpleFront.scale.z=dimpleBack.scale.z=(game&&game.oxy<35)?.22:.25;
  renderer.render(scene,camera);requestAnimationFrame(loop)
 }
