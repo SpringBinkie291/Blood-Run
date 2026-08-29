@@ -358,11 +358,93 @@ function updateTrail(dt){
 }
 function startGame(){
  stopQuestionTimer();
- unlockAudio().then(()=>startMusic());resetOcclusionWarning();const os=$('occStatus');if(os){os.className='occStatus';os.textContent='';}paused=false;questionOpen=false;$('bossBar').classList.remove('show');$('bossFill').style.width='100%';
- clearObjects(obstacles);clearObjects(oxygens);trail.forEach(x=>{scene.remove(x.mesh||x);if(x.mesh&&x.mesh.material)x.mesh.material.dispose()});trail.length=0;
- player.position.set(0,0,1);player.rotation.set(-.22,0,0);
- game={score:0,dist:0,oxy:100,hits:0,knowledge:0,qcount:0,elapsed:0,spawn:.7,oSpawn:.8,qTimer:5,stage:0,vessel:5.9,alive:true,inputX:0,inputY:0,vx:0,vy:0,boss:false,trailTimer:0,questionDeck:Array.from({length:50},(_,i)=>i*2+(Math.random()<.5?0:1)).sort(()=>Math.random()-.5),event:null,eventTimer:0,eventDuration:0,eventWave:0,eventHeme:0,nextMajor:1200,nextMinor:650,majorIndex:0,hypoxiaCollected:0,rushCollected:0,keRemaining:0,keCorrect:0,currentEmergency:false,goldenActive:false,submitted:false,submissionPending:false};
- ['hud'].forEach(id=>$(id).classList.remove('hidden'));show(null);last=performance.now();requestAnimationFrame(loop)
+
+ // Reset score submission UI/lock for the new run
+ submitInFlight=false;
+
+ const submitBtn=$('submit');
+ if(submitBtn){
+   submitBtn.disabled=false;
+   submitBtn.style.pointerEvents='';
+   submitBtn.textContent='SUBMIT SCORE';
+ }
+
+ unlockAudio().then(()=>startMusic());
+ resetOcclusionWarning();
+
+ const os=$('occStatus');
+ if(os){
+   os.className='occStatus';
+   os.textContent='';
+ }
+
+ paused=false;
+ questionOpen=false;
+
+ $('bossBar').classList.remove('show');
+ $('bossFill').style.width='100%';
+
+ clearObjects(obstacles);
+ clearObjects(oxygens);
+
+ trail.forEach(x=>{
+   scene.remove(x.mesh||x);
+   if(x.mesh&&x.mesh.material)x.mesh.material.dispose()
+ });
+
+ trail.length=0;
+
+ player.position.set(0,0,1);
+ player.rotation.set(-.22,0,0);
+
+ game={
+   score:0,
+   dist:0,
+   oxy:100,
+   hits:0,
+   knowledge:0,
+   qcount:0,
+   elapsed:0,
+   spawn:.7,
+   oSpawn:.8,
+   qTimer:5,
+   stage:0,
+   vessel:5.9,
+   alive:true,
+   inputX:0,
+   inputY:0,
+   vx:0,
+   vy:0,
+   boss:false,
+   trailTimer:0,
+   questionDeck:Array.from(
+     {length:50},
+     (_,i)=>i*2+(Math.random()<.5?0:1)
+   ).sort(()=>Math.random()-.5),
+   event:null,
+   eventTimer:0,
+   eventDuration:0,
+   eventWave:0,
+   eventHeme:0,
+   nextMajor:1200,
+   nextMinor:650,
+   majorIndex:0,
+   hypoxiaCollected:0,
+   rushCollected:0,
+   keRemaining:0,
+   keCorrect:0,
+   currentEmergency:false,
+   goldenActive:false,
+
+   // New run gets a fresh submission state
+   submitted:false,
+   submissionPending:false
+ };
+
+ ['hud'].forEach(id=>$(id).classList.remove('hidden'));
+ show(null);
+ last=performance.now();
+ requestAnimationFrame(loop)
 }
 function setStage(){
  let old=game.stage;game.stage=game.dist<700?0:game.dist<1600?1:game.dist<2800?2:game.dist<4300?3:4;
