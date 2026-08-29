@@ -29,7 +29,7 @@ p{color:#aeb7c6;line-height:1.5}
 .hudTop{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;display:flex;gap:8px;align-items:start}.hudStats{display:flex;align-items:center;gap:10px;min-width:188px}.hudStat{min-width:0}.hudStat small{display:block}.hudDivider{width:1px;height:30px;background:#ffffff17}.hudStat strong{font-size:17px;white-space:nowrap}
 .hudBox{background:#070b13e8;border:1px solid #ffffff18;border-radius:16px;padding:9px 11px;box-shadow:0 12px 35px #0007;min-width:0;backdrop-filter:blur(10px)}
 .hudBox small{display:block;color:#8994a6;font-size:9px;text-transform:uppercase;letter-spacing:1px}.hudBox strong{font-size:20px}
-#o2{position:absolute;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(310px,46vw);text-align:center;padding:9px 13px 10px}.survivalMeta{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;font-size:9px;font-weight:900;letter-spacing:.9px;color:#aeb7c6;text-transform:uppercase}.survivalMeta .dot{opacity:.35}.occStatus{display:none;color:#ff9cae}.occStatus.show{display:inline}.occStatus.danger{color:#ff647f}.occStatus.critical{color:#fff;background:#ff315833;border:1px solid #ff315866;padding:2px 6px;border-radius:999px}
+#o2{position:absolute;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(310px,46vw);text-align:center;padding:9px 13px 10px}.survivalMeta{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;font-size:9px;font-weight:900;letter-spacing:.9px;color:#aeb7c6;text-transform:uppercase}.survivalMeta .dot{opacity:.35}.o2Reason{margin-top:5px;font-size:8px;line-height:1.25;color:#8190a5;letter-spacing:.45px;font-weight:800;text-transform:uppercase;min-height:10px}.o2Reason.rising{color:#ffbe73}.o2Reason.high{color:#ff7f95}.occStatus{display:none;color:#ff9cae}.occStatus.show{display:inline}.occStatus.danger{color:#ff647f}.occStatus.critical{color:#fff;background:#ff315833;border:1px solid #ff315866;padding:2px 6px;border-radius:999px}
 .meter{height:9px;width:100%;background:#252c38;border-radius:99px;overflow:hidden;margin-top:6px}.meter i{display:block;height:100%;width:100%;background:var(--cyan);transition:.15s}
 #o2.low .meter i{background:#ff9c42}#o2.critical .meter i{background:var(--red)}
 #stage{position:static;background:none;border:0;border-radius:0;padding:0;font-size:9px;font-weight:900;letter-spacing:.9px;color:#aeb7c6;white-space:nowrap}
@@ -61,7 +61,7 @@ p{color:#aeb7c6;line-height:1.5}
 table{width:100%;border-collapse:collapse}td{padding:10px 4px;border-bottom:1px solid #ffffff0b}td:last-child{text-align:right;font-weight:900}
 input{width:100%;padding:13px;border-radius:12px;background:#141a25;color:#fff;border:1px solid #ffffff18;font-size:16px;outline:0}
 .note{font-size:12px;color:#7f8a9c}.submitStatus{min-height:20px;margin-top:10px;font-size:12px;line-height:1.4;color:#9ca8ba}.submitStatus.good{color:#7fe2b8}.submitStatus.warn{color:#ffb5c2}
-@media(max-width:520px){.answers{grid-template-columns:1fr}.panel{padding:22px}.hudTop{right:7px;top:max(8px,env(safe-area-inset-top));gap:6px}.hudStats{min-width:142px;gap:7px;padding:7px 9px}.hudStat strong{font-size:14px}.hudDivider{height:25px}#pause{height:42px;padding:8px 11px}#o2{left:8px;transform:none;width:154px;top:max(8px,env(safe-area-inset-top));padding:7px 9px}.survivalMeta{font-size:7px;gap:4px;letter-spacing:.55px;flex-wrap:wrap}.meter{height:7px}#bossBar{bottom:max(12px,calc(env(safe-area-inset-bottom) + 6px));width:min(320px,76vw);font-size:9px;padding:7px 9px}#portrait{width:162px;height:62px;left:5px;bottom:max(6px,env(safe-area-inset-bottom));grid-template-columns:46px 1fr;padding:5px 8px}.faceHex{width:40px;height:40px}.faceWrap{width:35px;height:35px}.face{width:30px;height:22px}.rankName{font-size:7px}.skinName{font-size:11px}.ptitle{font-size:7px}#toast{right:7px;top:31%;font-size:10px;max-width:48vw;padding:7px 9px}}
+@media(max-width:520px){.answers{grid-template-columns:1fr}.panel{padding:22px}.hudTop{right:7px;top:max(8px,env(safe-area-inset-top));gap:6px}.hudStats{min-width:142px;gap:7px;padding:7px 9px}.hudStat strong{font-size:14px}.hudDivider{height:25px}#pause{height:42px;padding:8px 11px}#o2{left:8px;transform:none;width:154px;top:max(8px,env(safe-area-inset-top));padding:7px 9px}.survivalMeta{font-size:7px;gap:4px;letter-spacing:.55px;flex-wrap:wrap}.o2Reason{font-size:6.5px;line-height:1.2;margin-top:4px;letter-spacing:.2px}.meter{height:7px}#bossBar{bottom:max(12px,calc(env(safe-area-inset-bottom) + 6px));width:min(320px,76vw);font-size:9px;padding:7px 9px}#portrait{width:162px;height:62px;left:5px;bottom:max(6px,env(safe-area-inset-bottom));grid-template-columns:46px 1fr;padding:5px 8px}.faceHex{width:40px;height:40px}.faceWrap{width:35px;height:35px}.face{width:30px;height:22px}.rankName{font-size:7px}.skinName{font-size:11px}.ptitle{font-size:7px}#toast{right:7px;top:31%;font-size:10px;max-width:48vw;padding:7px 9px}}
 
 /* ---- FINAL UI POLISH ---- */
 .screen{background:radial-gradient(circle at 50% 18%,#31101a88 0,#080b12d9 35%,#04060bed 76%),linear-gradient(180deg,#080b12dd,#030509f5)}
@@ -97,9 +97,18 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 #boardScreen tr.podium1 td{background:linear-gradient(135deg,#3a2b0d,#191711);border-color:#ffdc6a66;color:#ffe89a;box-shadow:0 8px 25px #0005}#boardScreen tr.podium1 td:first-child::before{content:'👑';margin-right:7px}
 #boardScreen tr.podium2 td{background:linear-gradient(135deg,#252b34,#13171d);border-color:#dce6f455;color:#edf3ff}#boardScreen tr.podium2 td:first-child::before{content:'🥈';margin-right:7px}
 #boardScreen tr.podium3 td{background:linear-gradient(135deg,#352117,#171210);border-color:#d69b7455;color:#e8b89d}#boardScreen tr.podium3 td:first-child::before{content:'🥉';margin-right:7px}
-.podiumTag{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;font-size:8px;letter-spacing:.9px;font-weight:950;vertical-align:2px;background:#ffffff10;border:1px solid #ffffff16;color:inherit}
+.podiumTag{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;font-size:8px;letter-spacing:.9px;font-weight:950;vertical-align:2px;background:#ffffff10;border:1px solid #ffffff16;color:inherit}.leaderTitle{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;font-size:8px;letter-spacing:.55px;font-weight:900;vertical-align:2px;background:#62eaff12;border:1px solid #62eaff28;color:#bff7ff;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #playerRankStatus{display:none;margin:14px 0 8px;padding:13px 14px;border-radius:15px;background:linear-gradient(180deg,#111b29,#0b121d);border:1px solid #62eaff30;color:#dce8f5;font-size:13px;font-weight:800;line-height:1.4}#playerRankStatus.show{display:block}#playerRankStatus.top50{border-color:#62eaff55;background:linear-gradient(180deg,#10252d,#0a171d);color:#bff7ff}#playerRankStatus.outside{border-color:#ffffff18;color:#c8d0dc}
 @media(max-width:520px){.prizeTitle{font-size:17px}.prizeBanner{padding:14px}.prizeSub{font-size:11px}#boardScreen tr td{padding:12px 9px}}
+#menu .panel{overflow:visible;width:min(96vw,940px)}
+.menuSplit{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:18px;align-items:center}
+.menuPrimary{min-width:0}.menuPrimary p{max-width:540px}
+.menuAside{display:flex;justify-content:flex-end}
+.codeTilt{transform:rotate(5deg);transform-origin:center;filter:drop-shadow(0 16px 32px #0006)}
+.codeSticker{margin:0 0 9px auto;padding:8px 12px;border-radius:999px;background:linear-gradient(135deg,#1c2b43,#142031);border:1px solid #62eaff33;color:#dff8ff;font-size:10px;font-weight:950;letter-spacing:1.1px;text-transform:uppercase;box-shadow:0 8px 24px #0005}
+.codeUnlock{margin-top:0;padding:13px 14px;border-radius:20px;background:linear-gradient(180deg,#101826,#0a111b);border:1px solid #ffffff16;min-width:260px;max-width:280px;position:relative;overflow:hidden}.codeUnlock::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#ffffff10,transparent 42%);pointer-events:none}.codeLabel{font-size:9px;font-weight:950;letter-spacing:1.45px;color:#ffd96a;margin-bottom:7px}.codeHelper{font-size:11px;line-height:1.35;color:#c8d4e4;margin:0 0 10px}.codeRow{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:center}.codeRow input{min-height:44px;padding:10px 12px}.codeRow .btn{width:auto;min-height:44px;margin:0;padding:10px 14px;font-size:12px}.codeStatus{min-height:16px;margin-top:6px;font-size:10px;color:#7fe2b8}.codeStatus.bad{color:#ff9cae}.orb.rgbOrb{background:conic-gradient(#ff3158,#ffd85b,#65ff8c,#62eaff,#7c6cff,#ff4fd8,#ff3158)!important;animation:rgbSpin 2.4s linear infinite}.orb.lakehawkOrb{background:linear-gradient(135deg,#078348 0 43%,#ffd83d 43% 58%,#1765c1 58% 100%)!important;position:relative;clip-path:polygon(10% 58%,33% 34%,60% 24%,92% 42%,74% 54%,88% 67%,55% 60%,40% 76%,26% 69%)}.orb.lakehawkOrb::after{content:'';position:absolute;right:18%;top:34%;width:18%;height:18%;border-radius:50%;background:#f5f7fb;box-shadow:-12px 10px 0 4px #ffd83d,0 0 0 2px #0d1320}@keyframes rgbSpin{to{filter:hue-rotate(360deg)}}
+@media(max-width:760px){.menuSplit{grid-template-columns:1fr}.menuAside{justify-content:center}.codeTilt{transform:rotate(2deg)}.codeUnlock{max-width:none;width:min(100%,420px)}}
+@media(max-width:520px){.codeRow{grid-template-columns:1fr}.codeRow .btn{width:100%}.codeSticker{font-size:9px;padding:7px 10px}}
 
 </style>
 </head>
@@ -111,7 +120,7 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
   <div class="hudBox hudStats"><div class="hudStat"><small>Score</small><strong id="score">0</strong></div><div class="hudDivider"></div><div class="hudStat"><small>Distance</small><strong id="dist">0 m</strong></div></div>
   <button id="pause">Ⅱ</button>
  </div>
- <div class="hudBox" id="o2"><small>Oxygen</small><strong id="oxy">100%</strong><div class="meter"><i id="oxyBar"></i></div><div class="survivalMeta"><span id="stage">LARGE VESSELS</span><span class="dot">•</span><span id="occStatus" class="occStatus">3 HITS LEFT</span></div></div>
+ <div class="hudBox" id="o2"><small>Oxygen</small><strong id="oxy">100%</strong><div class="meter"><i id="oxyBar"></i></div><div class="survivalMeta"><span id="stage">LARGE VESSELS</span><span class="dot">•</span><span id="occStatus" class="occStatus">3 HITS LEFT</span></div><div class="o2Reason" id="o2Reason">NORMAL FLOW • LOWER O₂ DEMAND</div></div>
  <div id="bossBar"><span id="eventLabel">VASO-OCCLUSION CRISIS</span><div id="bossMeter"><i id="bossFill"></i></div></div>
  <div id="portrait" data-rank="0">
    <div class="frameShell"></div>
@@ -128,12 +137,22 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 
 <div id="menu" class="screen">
  <div class="panel">
-  <div class="logo">🩸 EBNF ARCADE PROJECT</div>
-  <h1>BLOOD<br>RUN 3D</h1>
-  <p>Become the red blood cell. Race through the bloodstream, collect oxygen, avoid sickled cells and obstructions, and answer clinical knowledge drops before the vessel closes in.</p>
-  <button class="btn" id="start">START RUN</button>
-  <div class="row"><button class="btn alt" id="learn">LEARN</button><button class="btn alt" id="lab">RBC LAB</button></div>
-  <button class="btn alt" id="board">🏆 LEADERBOARD</button>
+  <div class="menuSplit">
+   <div class="menuPrimary">
+    <div class="logo">🩸 EBNF ARCADE PROJECT</div>
+    <h1>BLOOD<br>RUN 3D</h1>
+    <p>Become the red blood cell. Race through the bloodstream, collect oxygen, avoid sickled cells and obstructions, and answer clinical knowledge drops before the vessel closes in.</p>
+    <button class="btn" id="start">START RUN</button>
+    <div class="row"><button class="btn alt" id="learn">LEARN</button><button class="btn alt" id="lab">RBC LAB</button></div>
+    <button class="btn alt" id="board">🏆 LEADERBOARD</button>
+   </div>
+   <aside class="menuAside">
+    <div class="codeTilt">
+     <div class="codeSticker">Enter a code for special cosmetics!</div>
+     <div class="codeUnlock" id="codeUnlock"><div class="codeLabel">SPECIAL COSMETIC CODES</div><p class="codeHelper">Enter special codes to permanently unlock exclusive cosmetics and titles.</p><div class="codeRow"><input id="schoolCode" maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="Enter code"><button class="btn alt" id="redeemCode">UNLOCK</button></div><div class="codeStatus" id="codeStatus" aria-live="polite"></div></div>
+    </div>
+   </aside>
+  </div>
  </div>
 </div>
 
@@ -261,14 +280,90 @@ const body=new THREE.Mesh(new THREE.SphereGeometry(1,34,24),rbcmat);body.scale.s
 const dimpleFront=new THREE.Mesh(new THREE.SphereGeometry(.74,24,18),darkmat);dimpleFront.scale.set(1.08,.85,.25);dimpleFront.position.z=.28;player.add(dimpleFront);
 const dimpleBack=new THREE.Mesh(new THREE.SphereGeometry(.74,24,18),darkmat);dimpleBack.scale.set(1.08,.85,.25);dimpleBack.position.z=-.28;player.add(dimpleBack);
 const rim=new THREE.Mesh(new THREE.TorusGeometry(1.03,.14,10,34),rimmat);rim.scale.set(1.2,.88,1);player.add(rim);
+const lakehawk=new THREE.Group();player.add(lakehawk);lakehawk.visible=false;
+const hawkGreen=new THREE.MeshStandardMaterial({color:0x078348,roughness:.35,metalness:.05});
+const hawkBlue=new THREE.MeshStandardMaterial({color:0x1765c1,roughness:.38,metalness:.05});
+const hawkGold=new THREE.MeshStandardMaterial({color:0xffc62f,roughness:.28,metalness:.08});
+const hawkWhite=new THREE.MeshStandardMaterial({color:0xf3f7ff,roughness:.45});
+const hawkOrange=new THREE.MeshStandardMaterial({color:0xd56b19,roughness:.35});
+const hawkDark=new THREE.MeshStandardMaterial({color:0x102030,roughness:.55});
+const hawkBody=new THREE.Mesh(new THREE.SphereGeometry(.78,22,16),hawkBlue);hawkBody.scale.set(1.08,.72,1.55);hawkBody.position.set(0,-.02,.06);lakehawk.add(hawkBody);
+const hawkInnerBody=new THREE.Mesh(new THREE.SphereGeometry(.68,18,14),hawkGreen);hawkInnerBody.scale.set(.95,.58,1.18);hawkInnerBody.position.set(0,-.02,-.06);lakehawk.add(hawkInnerBody);
+const hawkChest=new THREE.Mesh(new THREE.SphereGeometry(.44,16,12),hawkWhite);hawkChest.scale.set(.95,.82,.72);hawkChest.position.set(0,.02,-.54);lakehawk.add(hawkChest);
+const hawkHead=new THREE.Mesh(new THREE.SphereGeometry(.44,18,14),hawkBlue);hawkHead.scale.set(.94,.82,1.02);hawkHead.position.set(0,.20,-1.00);lakehawk.add(hawkHead);
+const hawkFace=new THREE.Mesh(new THREE.SphereGeometry(.30,14,12),hawkWhite);hawkFace.scale.set(1.0,.86,.72);hawkFace.position.set(0,.12,-1.20);lakehawk.add(hawkFace);
+const hawkBeakTop=new THREE.Mesh(new THREE.ConeGeometry(.15,.44,5),hawkGold);hawkBeakTop.rotation.x=-Math.PI/2;hawkBeakTop.position.set(0,.14,-1.48);lakehawk.add(hawkBeakTop);
+const hawkBeakBottom=new THREE.Mesh(new THREE.ConeGeometry(.11,.28,5),hawkGold);hawkBeakBottom.rotation.x=Math.PI/2;hawkBeakBottom.position.set(0,.00,-1.43);lakehawk.add(hawkBeakBottom);
+const hawkBrow=new THREE.Mesh(new THREE.BoxGeometry(.48,.08,.18),hawkGreen);hawkBrow.position.set(0,.36,-1.16);lakehawk.add(hawkBrow);
+const hawkCrestCenter=new THREE.Mesh(new THREE.ConeGeometry(.08,.26,5),hawkGreen);hawkCrestCenter.position.set(0,.60,-1.03);lakehawk.add(hawkCrestCenter);
+const hawkCrestL=new THREE.Mesh(new THREE.ConeGeometry(.07,.22,5),hawkBlue);hawkCrestL.rotation.z=.28;hawkCrestL.position.set(-.14,.56,-1.00);lakehawk.add(hawkCrestL);
+const hawkCrestR=new THREE.Mesh(new THREE.ConeGeometry(.07,.22,5),hawkBlue);hawkCrestR.rotation.z=-.28;hawkCrestR.position.set(.14,.56,-1.00);lakehawk.add(hawkCrestR);
+const hawkWingL=new THREE.Mesh(new THREE.ConeGeometry(.32,1.28,4),hawkBlue);hawkWingL.rotation.z=Math.PI*.60;hawkWingL.rotation.x=.16;hawkWingL.position.set(-1.00,.04,.16);hawkWingL.scale.set(1.0,.52,1.22);lakehawk.add(hawkWingL);
+const hawkWingR=new THREE.Mesh(new THREE.ConeGeometry(.32,1.28,4),hawkBlue);hawkWingR.rotation.z=-Math.PI*.60;hawkWingR.rotation.x=.16;hawkWingR.position.set(1.00,.04,.16);hawkWingR.scale.set(1.0,.52,1.22);lakehawk.add(hawkWingR);
+const hawkFeatherL1=new THREE.Mesh(new THREE.ConeGeometry(.24,.88,4),hawkGreen);hawkFeatherL1.rotation.z=Math.PI*.68;hawkFeatherL1.rotation.x=.14;hawkFeatherL1.position.set(-.68,-.02,-.10);hawkFeatherL1.scale.set(1.0,.50,1.05);lakehawk.add(hawkFeatherL1);
+const hawkFeatherR1=new THREE.Mesh(new THREE.ConeGeometry(.24,.88,4),hawkGreen);hawkFeatherR1.rotation.z=-Math.PI*.68;hawkFeatherR1.rotation.x=.14;hawkFeatherR1.position.set(.68,-.02,-.10);hawkFeatherR1.scale.set(1.0,.50,1.05);lakehawk.add(hawkFeatherR1);
+const hawkFeatherL2=new THREE.Mesh(new THREE.ConeGeometry(.19,.68,4),hawkGreen);hawkFeatherL2.rotation.z=Math.PI*.73;hawkFeatherL2.rotation.x=.18;hawkFeatherL2.position.set(-.44,-.08,.26);hawkFeatherL2.scale.set(1.0,.42,.92);lakehawk.add(hawkFeatherL2);
+const hawkFeatherR2=new THREE.Mesh(new THREE.ConeGeometry(.19,.68,4),hawkGreen);hawkFeatherR2.rotation.z=-Math.PI*.73;hawkFeatherR2.rotation.x=.18;hawkFeatherR2.position.set(.44,-.08,.26);hawkFeatherR2.scale.set(1.0,.42,.92);lakehawk.add(hawkFeatherR2);
+const hawkTail=new THREE.Mesh(new THREE.ConeGeometry(.26,.72,4),hawkGold);hawkTail.rotation.x=Math.PI/2;hawkTail.position.set(0,-.04,1.18);lakehawk.add(hawkTail);
+const hawkEyeL=new THREE.Mesh(new THREE.SphereGeometry(.09,10,8),hawkWhite);hawkEyeL.position.set(-.16,.24,-1.33);lakehawk.add(hawkEyeL);
+const hawkEyeR=new THREE.Mesh(new THREE.SphereGeometry(.09,10,8),hawkWhite);hawkEyeR.position.set(.16,.24,-1.33);lakehawk.add(hawkEyeR);
+const hawkIrisL=new THREE.Mesh(new THREE.SphereGeometry(.05,8,6),hawkOrange);hawkIrisL.position.set(-.16,.24,-1.39);lakehawk.add(hawkIrisL);
+const hawkIrisR=new THREE.Mesh(new THREE.SphereGeometry(.05,8,6),hawkOrange);hawkIrisR.position.set(.16,.24,-1.39);lakehawk.add(hawkIrisR);
+const hawkPupilL=new THREE.Mesh(new THREE.SphereGeometry(.022,8,6),hawkDark);hawkPupilL.position.set(-.16,.24,-1.43);lakehawk.add(hawkPupilL);
+const hawkPupilR=new THREE.Mesh(new THREE.SphereGeometry(.022,8,6),hawkDark);hawkPupilR.position.set(.16,.24,-1.43);lakehawk.add(hawkPupilR);
 player.rotation.x=-.22;
 
 const obstacles=[],oxygens=[],trail=[];
-let profile=JSON.parse(safeStore.get('bloodRun3DProfile','null')||'null')||{heme:0,skin:0,trail:0,title:0,frame:0,theme:0,ownedSkins:[0],ownedTrails:[0],ownedTitles:[0],ownedFrames:[0],ownedThemes:[0],highScore:0};
-profile.ownedSkins=profile.ownedSkins||[0];profile.ownedTrails=profile.ownedTrails||[0];profile.ownedTitles=profile.ownedTitles||[0];profile.ownedFrames=profile.ownedFrames||[0];profile.ownedThemes=profile.ownedThemes||[0];profile.frame=Number.isInteger(profile.frame)?profile.frame:0;profile.theme=Number.isInteger(profile.theme)?profile.theme:0;
-const skins=[['Classic',35,0xff4568,0xb31c3d],['Ruby',55,0xff6b82,0xc91e46],['Gold',90,0xffd65a,0xd08a18],['Plasma',130,0xc978ff,0x7030a6],['Oxygen',165,0x62eaff,0x1a6b88],['Midnight',225,0xc1c7d4,0x454d62]];
+let profile=JSON.parse(safeStore.get('bloodRun3DProfile','null')||'null')||{heme:0,skin:0,trail:0,title:0,frame:0,theme:0,ownedSkins:[0],ownedTrails:[0],ownedTitles:[0],ownedFrames:[0],ownedThemes:[0],highScore:0,lakehawkCodeRedeemed:false};
+profile.ownedSkins=profile.ownedSkins||[0];profile.ownedTrails=profile.ownedTrails||[0];profile.ownedTitles=profile.ownedTitles||[0];profile.ownedFrames=profile.ownedFrames||[0];profile.ownedThemes=profile.ownedThemes||[0];profile.frame=Number.isInteger(profile.frame)?profile.frame:0;profile.theme=Number.isInteger(profile.theme)?profile.theme:0;profile.lakehawkCodeRedeemed=!!profile.lakehawkCodeRedeemed;profile.redeemedCodes=Array.isArray(profile.redeemedCodes)?profile.redeemedCodes:[];
+const skins=[['Classic',35,0xff4568,0xb31c3d],['Ruby',55,0xff6b82,0xc91e46],['Gold',90,0xffd65a,0xd08a18],['Plasma',130,0xc978ff,0x7030a6],['Oxygen',165,0x62eaff,0x1a6b88],['Midnight',225,0xc1c7d4,0x454d62],['RGB Pulse',275,0xff3158,0x62eaff],['Lakehawk',0,0x078348,0x1765c1]];
+const RGB_SKIN_INDEX=6,LAKEHAWK_SKIN_INDEX=7;
 const trails=[['None',0,0],['Ruby Sparks',45,0xff4c70],['Oxygen Stream',80,0x6feaff],['Gold Dust',120,0xffd85b],['Plasma',180,0xc978ff]];
-const titles=[['RBC Runner',0],['Capillary Scout',55],['Vessel Navigator',120],['Oxygen Courier',220],['Vaso-Occlusion Survivor',360],['Hematology Master',550]];
+const titles=[
+ ['RBC Runner',0],
+ ['Capillary Scout',55],
+ ['Vessel Navigator',120],
+ ['Oxygen Courier',220],
+ ['Vaso-Occlusion Survivor',360],
+ ['Hematology Master',550],
+ ['Lake Sumter Nursing',0],
+ ['Autocratic Leader',0],
+ ['6 7',0],
+ ['Door Holder',0],
+ ['EBNF Spring 2026 Champion',0],
+ ['EBNF Spring 2026 Runner-Up',0],
+ ['Auntie',0],
+ ['Final Boss',0],
+ ['PMO',0]
+];
+const LAKEHAWK_TITLE_INDEX=6,AUTOCRATIC_TITLE_INDEX=7,SIX_SEVEN_TITLE_INDEX=8,DOOR_HOLDER_TITLE_INDEX=9,EBNF_CHAMPION_TITLE_INDEX=10,EBNF_RUNNERUP_TITLE_INDEX=11,AUNTIE_TITLE_INDEX=12,FINAL_BOSS_TITLE_INDEX=13,PMO_TITLE_INDEX=14;
+const CODE_TITLE_INDICES=new Set([LAKEHAWK_TITLE_INDEX,AUTOCRATIC_TITLE_INDEX,SIX_SEVEN_TITLE_INDEX,DOOR_HOLDER_TITLE_INDEX,EBNF_CHAMPION_TITLE_INDEX,EBNF_RUNNERUP_TITLE_INDEX,AUNTIE_TITLE_INDEX,FINAL_BOSS_TITLE_INDEX,PMO_TITLE_INDEX]);
+const LEADERBOARD_TITLE_SCALE=100;
+function titleIndexFromName(name){const i=titles.findIndex(t=>t&&t[0]===name);return i>=0?i:0}
+function packLeaderboardDistance(distance,titleName){const base=Math.max(0,Math.floor(Number(distance)||0)),idx=titleIndexFromName(titleName);return base+(idx+1)/LEADERBOARD_TITLE_SCALE}
+function unpackLeaderboardDistance(value){const n=Math.max(0,Number(value)||0),base=Math.floor(n),code=Math.round((n-base)*LEADERBOARD_TITLE_SCALE),idx=code>0&&code<=titles.length?code-1:null;return {distance:base,title:idx===null?'':titles[idx][0]}}
+const SPECIAL_CODES={
+ LSSC:{title:LAKEHAWK_TITLE_INDEX,skin:LAKEHAWK_SKIN_INDEX,label:'Lakehawk + Lake Sumter Nursing'},
+ BRENDAN:{title:AUTOCRATIC_TITLE_INDEX,label:'Autocratic Leader'},
+ IAN:{title:SIX_SEVEN_TITLE_INDEX,label:'6 7'},
+ TYLER:{title:DOOR_HOLDER_TITLE_INDEX,label:'Door Holder'},
+ ASHLEY:{title:EBNF_CHAMPION_TITLE_INDEX,label:'EBNF Spring 2026 Champion'},
+ CHELSEA:{title:EBNF_CHAMPION_TITLE_INDEX,label:'EBNF Spring 2026 Champion'},
+ LUPE:{title:EBNF_CHAMPION_TITLE_INDEX,label:'EBNF Spring 2026 Champion'},
+ MADISON:{title:EBNF_CHAMPION_TITLE_INDEX,label:'EBNF Spring 2026 Champion'},
+ LETIZIA:{title:EBNF_CHAMPION_TITLE_INDEX,label:'EBNF Spring 2026 Champion'},
+ ARIELIS:{title:EBNF_CHAMPION_TITLE_INDEX,label:'EBNF Spring 2026 Champion'},
+ JENNA:{title:EBNF_RUNNERUP_TITLE_INDEX,label:'EBNF Spring 2026 Runner-Up'},
+ ALANNA:{title:EBNF_RUNNERUP_TITLE_INDEX,label:'EBNF Spring 2026 Runner-Up'},
+ BRITNEY:{title:EBNF_RUNNERUP_TITLE_INDEX,label:'EBNF Spring 2026 Runner-Up'},
+ NADIA:{title:EBNF_RUNNERUP_TITLE_INDEX,label:'EBNF Spring 2026 Runner-Up'},
+ RUBY:{title:EBNF_RUNNERUP_TITLE_INDEX,label:'EBNF Spring 2026 Runner-Up'},
+ ALLISON:{title:EBNF_RUNNERUP_TITLE_INDEX,label:'EBNF Spring 2026 Runner-Up'},
+ TARIFAH:{title:AUNTIE_TITLE_INDEX,label:'Auntie'},
+ EVAN:{title:FINAL_BOSS_TITLE_INDEX,label:'Final Boss'},
+ MAKENNA:{title:PMO_TITLE_INDEX,label:'PMO'}
+};
+if(profile.lakehawkCodeRedeemed){if(!profile.ownedSkins.includes(LAKEHAWK_SKIN_INDEX))profile.ownedSkins.push(LAKEHAWK_SKIN_INDEX);if(!profile.ownedTitles.includes(LAKEHAWK_TITLE_INDEX))profile.ownedTitles.push(LAKEHAWK_TITLE_INDEX);if(!profile.redeemedCodes.includes('LSSC'))profile.redeemedCodes.push('LSSC')}
 const themes=[
  ['Classic Bloodstream',0,0x06080d,0x080a10,0x250710,0xff4960,0x992233,0xffb0bd,0x16070b,0xff3158,0x62eaff],
  ['Capillary Glow',120,0x10070b,0x190a12,0x48111f,0xff7591,0xff355f,0xffc3cf,0x31070f,0xff5574,0xffadc0],
@@ -294,7 +389,13 @@ const frames=[
 function currentRankIndex(score=profile.highScore){let r=0;for(let i=0;i<frames.length;i++)if(score>=frames[i][1])r=i;return r}
 function unlockFrames(){let changed=false;for(let i=0;i<frames.length;i++){if(profile.highScore>=frames[i][1]&&!profile.ownedFrames.includes(i)){profile.ownedFrames.push(i);changed=true}}profile.ownedFrames.sort((a,b)=>a-b);if(!profile.ownedFrames.includes(profile.frame))profile.frame=0;return changed}
 function save(){safeStore.set('bloodRun3DProfile',JSON.stringify(profile));updatePortrait();applyTheme();renderShop()}
-function updatePortrait(){unlockFrames();let s=skins[profile.skin]||skins[0],f=frames[profile.frame]||frames[0],t=titles[profile.title]||titles[0];$('portrait').dataset.rank=profile.frame;document.documentElement.style.setProperty('--rankMain',f[2]);document.documentElement.style.setProperty('--rankLight',f[3]);document.documentElement.style.setProperty('--rankDark',f[4]);document.documentElement.style.setProperty('--rankGlow',f[2]+'66');document.documentElement.style.setProperty('--rankStar',f[5]);$('rankName').textContent=f[0];$('skinName').textContent=s[0]+' RBC';$('ptitle').textContent=t[0];$('portraitFace').style.background='#'+s[2].toString(16).padStart(6,'0');$('portraitFace').style.boxShadow='inset -10px -7px 0 #'+s[3].toString(16).padStart(6,'0');body.material.color.setHex(s[2]);dimpleFront.material.color.setHex(s[3]);dimpleBack.material.color.setHex(s[3]);rim.material.color.setHex(s[2])}
+function updatePortrait(){unlockFrames();let s=skins[profile.skin]||skins[0],f=frames[profile.frame]||frames[0],t=titles[profile.title]||titles[0];$('portrait').dataset.rank=profile.frame;document.documentElement.style.setProperty('--rankMain',f[2]);document.documentElement.style.setProperty('--rankLight',f[3]);document.documentElement.style.setProperty('--rankDark',f[4]);document.documentElement.style.setProperty('--rankGlow',f[2]+'66');document.documentElement.style.setProperty('--rankStar',f[5]);$('rankName').textContent=f[0];$('skinName').textContent=profile.skin===LAKEHAWK_SKIN_INDEX?'Lakehawk':s[0]+' RBC';$('ptitle').textContent=t[0];$('portraitFace').style.background='#'+s[2].toString(16).padStart(6,'0');$('portraitFace').style.boxShadow='inset -10px -7px 0 #'+s[3].toString(16).padStart(6,'0');body.visible=dimpleFront.visible=dimpleBack.visible=rim.visible=profile.skin!==LAKEHAWK_SKIN_INDEX;lakehawk.visible=profile.skin===LAKEHAWK_SKIN_INDEX;body.material.color.setHex(s[2]);dimpleFront.material.color.setHex(s[3]);dimpleBack.material.color.setHex(s[3]);rim.material.color.setHex(profile.skin===LAKEHAWK_SKIN_INDEX?0xffd83d:s[2]);if(profile.skin===LAKEHAWK_SKIN_INDEX){$('portraitFace').style.background='linear-gradient(135deg,#078348 0 42%,#ffd83d 42% 57%,#1765c1 57% 100%)';$('portraitFace').style.boxShadow='inset -10px -7px 0 #1765c1';}}
+const dynamicSkinColor=new THREE.Color();
+function updateDynamicSkin(t){
+ if(profile.skin===RGB_SKIN_INDEX){const h=(t*.00012)%1;body.material.color.setHSL(h,.92,.58);dimpleFront.material.color.setHSL((h+.11)%1,.88,.36);dimpleBack.material.color.copy(dimpleFront.material.color);rim.material.color.setHSL((h+.56)%1,.95,.68);const a='#'+body.material.color.getHexString(),b='#'+dimpleFront.material.color.getHexString();$('portraitFace').style.background=a;$('portraitFace').style.boxShadow='inset -10px -7px 0 '+b;}
+ else if(profile.skin===LAKEHAWK_SKIN_INDEX){body.material.color.setHex(0x078348);dimpleFront.material.color.setHex(0x1765c1);dimpleBack.material.color.setHex(0x1765c1);rim.material.color.setHex(0xffd83d);const flap=Math.sin(t*.012)*.18;hawkWingL.rotation.z=Math.PI*.58+flap;hawkWingR.rotation.z=-Math.PI*.58-flap;hawkHead.position.y=.18+Math.sin(t*.008)*.03;hawkTail.rotation.z=Math.sin(t*.01)*.12;$('portraitFace').style.background='linear-gradient(135deg,#078348 0 42%,#ffd83d 42% 57%,#1765c1 57% 100%)';$('portraitFace').style.boxShadow='inset -10px -7px 0 #1765c1';}
+ else{hawkWingL.rotation.z=Math.PI*.58;hawkWingR.rotation.z=-Math.PI*.58;hawkHead.position.y=.18;hawkTail.rotation.z=0;}
+}
 updatePortrait();applyTheme();
 
 let activeTab='skins';
@@ -308,25 +409,68 @@ function renderShop(){
  let arr=activeTab==='skins'?skins:activeTab==='trails'?trails:titles;
  let key='owned'+activeTab[0].toUpperCase()+activeTab.slice(1),owned=profile[key]||[];
  $('shopGrid').innerHTML=arr.map((x,i)=>{
-   let name=x[0],cost=x[1],visual=activeTab==='skins'?`<div class="orb" style="background:#${x[2].toString(16).padStart(6,'0')}"></div>`:`<div style="height:40px;margin-bottom:8px;font-weight:900;color:#${(x[2]||0xff3158).toString(16).padStart(6,'0')}">${activeTab==='titles'?'Aa':'✦'}</div>`;
-   let equipped=profile[activeTab.slice(0,-1)]===i;
-   return `<div class="item ${equipped?'sel':''}">${visual}<b>${name}</b><br><span class="note">${owned.includes(i)?(equipped?'EQUIPPED':'OWNED'):cost+' Heme'}</span><br><button data-buy="${i}">${owned.includes(i)?'EQUIP':'BUY'}</button></div>`
+   let name=x[0],cost=x[1],visual;if(activeTab==='skins'){const cls=i===RGB_SKIN_INDEX?' rgbOrb':i===LAKEHAWK_SKIN_INDEX?' lakehawkOrb':'';visual=`<div class="orb${cls}" style="background:#${x[2].toString(16).padStart(6,'0')}"></div>`}else visual=`<div style="height:40px;margin-bottom:8px;font-weight:900;color:#${(x[2]||0xff3158).toString(16).padStart(6,'0')}">${activeTab==='titles'&&i===LAKEHAWK_TITLE_INDEX?'🦅':activeTab==='titles'&&CODE_TITLE_INDICES.has(i)?'★':activeTab==='titles'?'Aa':'✦'}</div>`;
+   let equipped=profile[activeTab.slice(0,-1)]===i,codeOnly=((activeTab==='skins'&&i===LAKEHAWK_SKIN_INDEX)||(activeTab==='titles'&&CODE_TITLE_INDICES.has(i)))&&!owned.includes(i);
+   const lockedNote=activeTab==='titles'&&CODE_TITLE_INDICES.has(i)
+     ?'Figure out the name of the person associated with this title to unlock it!'
+     :'Unlock with a special code';
+   return `<div class="item ${equipped?'sel':''}">${visual}<b>${name}</b><br><span class="note">${owned.includes(i)?(equipped?'EQUIPPED':'OWNED'):codeOnly?lockedNote:cost+' Heme'}</span><br><button data-buy="${i}" ${codeOnly?'disabled':''}>${owned.includes(i)?'EQUIP':codeOnly?'CODE LOCKED':'BUY'}</button></div>`
  }).join('');
- document.querySelectorAll('[data-buy]').forEach(b=>bindPress(b,()=>{let i=+b.dataset.buy,arr=activeTab==='skins'?skins:activeTab==='trails'?trails:titles,key='owned'+activeTab[0].toUpperCase()+activeTab.slice(1);if(profile[key].includes(i))profile[activeTab.slice(0,-1)]=i;else if(profile.heme>=arr[i][1]){profile.heme-=arr[i][1];profile[key].push(i);profile[activeTab.slice(0,-1)]=i}else{toast('Not enough Heme');return}save();}));
+ document.querySelectorAll('[data-buy]').forEach(b=>{if(b.disabled)return;bindPress(b,()=>{let i=+b.dataset.buy,arr=activeTab==='skins'?skins:activeTab==='trails'?trails:titles,key='owned'+activeTab[0].toUpperCase()+activeTab.slice(1);if(((activeTab==='skins'&&i===LAKEHAWK_SKIN_INDEX)||(activeTab==='titles'&&CODE_TITLE_INDICES.has(i)))&&!profile[key].includes(i)){toast('Enter a special code on the main menu');return}if(profile[key].includes(i))profile[activeTab.slice(0,-1)]=i;else if(profile.heme>=arr[i][1]){profile.heme-=arr[i][1];profile[key].push(i);profile[activeTab.slice(0,-1)]=i}else{toast('Not enough Heme');return}save();})});
 }
 document.querySelectorAll('[data-tab]').forEach(b=>bindPress(b,()=>{activeTab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));renderShop()}));renderShop();
 
 const questions=[["What is the main job of red blood cells?",["Carry oxygen through the body","Make antibodies","Digest nutrients","Produce hormones"],0],["Knowledge check: what is the main job of red blood cells?",["Carry oxygen through the body","Make antibodies","Digest nutrients","Produce hormones"],0],["Which protein in red blood cells carries oxygen?",["Hemoglobin","Collagen","Insulin","Keratin"],0],["Knowledge check: which protein in red blood cells carries oxygen?",["Hemoglobin","Collagen","Insulin","Keratin"],0],["What shape are healthy red blood cells typically?",["Flexible biconcave discs","Rigid cubes","Permanent crescents","Long fibers"],0],["Knowledge check: what shape are healthy red blood cells typically?",["Flexible biconcave discs","Rigid cubes","Permanent crescents","Long fibers"],0],["Why is RBC flexibility important?",["It helps cells pass through tiny vessels","It creates DNA","It strengthens bone","It stops clotting"],0],["Knowledge check: why is RBC flexibility important?",["It helps cells pass through tiny vessels","It creates DNA","It strengthens bone","It stops clotting"],0],["Where do RBCs pick up most oxygen?",["The lungs","The stomach","The skin","The kidneys"],0],["Knowledge check: where do RBCs pick up most oxygen?",["The lungs","The stomach","The skin","The kidneys"],0],["Where do RBCs deliver oxygen?",["Body tissues","Only the lungs","Only the heart","Only bone marrow"],0],["Knowledge check: where do RBCs deliver oxygen?",["Body tissues","Only the lungs","Only the heart","Only bone marrow"],0],["Which vessels are the smallest?",["Capillaries","The aorta","Large veins","Pulmonary trunk"],0],["Knowledge check: which vessels are the smallest?",["Capillaries","The aorta","Large veins","Pulmonary trunk"],0],["What happens to HbS at low oxygen?",["It can form stiff polymers","It turns into glucose","It disappears","It becomes an antibody"],0],["Knowledge check: what happens to HbS at low oxygen?",["It can form stiff polymers","It turns into glucose","It disappears","It becomes an antibody"],0],["HbS polymerization makes RBCs more...",["Rigid","Flexible","Transparent","Nucleated"],0],["Knowledge check: hbS polymerization makes RBCs more...",["Rigid","Flexible","Transparent","Nucleated"],0],["What shape can sickled RBCs take?",["Crescent or sickle shape","Perfect square","Spiral","Cube"],0],["Knowledge check: what shape can sickled RBCs take?",["Crescent or sickle shape","Perfect square","Spiral","Cube"],0],["Sickle cell disease is...",["An inherited group of blood disorders","A contagious infection","A bone disorder","A food allergy"],0],["Knowledge check: sickle cell disease is...",["An inherited group of blood disorders","A contagious infection","A bone disorder","A food allergy"],0],["Can sickle cell disease spread person to person?",["No","Yes by coughing","Yes by touch","Yes by food"],0],["Knowledge check: can sickle cell disease spread person to person?",["No","Yes by coughing","Yes by touch","Yes by food"],0],["Vaso-occlusion means...",["Blood flow is blocked or slowed","Blood becomes bone","Lungs stop existing","Veins turn into arteries"],0],["Knowledge check: vaso-occlusion means...",["Blood flow is blocked or slowed","Blood becomes bone","Lungs stop existing","Veins turn into arteries"],0],["Why can vaso-occlusion cause pain?",["Reduced blood flow can cause ischemia","It increases oxygen delivery","It makes RBCs softer","It creates more capillaries"],0],["Knowledge check: why can vaso-occlusion cause pain?",["Reduced blood flow can cause ischemia","It increases oxygen delivery","It makes RBCs softer","It creates more capillaries"],0],["A painful sickle cell episode is also called...",["A vaso-occlusive crisis","A sprain","A migraine aura","A skin allergy"],0],["Knowledge check: a painful sickle cell episode is also called...",["A vaso-occlusive crisis","A sprain","A migraine aura","A skin allergy"],0],["Which condition can promote sickling?",["Low oxygen","High flexibility","Extra plasma","Normal HbA"],0],["Knowledge check: which condition can promote sickling?",["Low oxygen","High flexibility","Extra plasma","Normal HbA"],0],["Which factor can trigger a pain crisis?",["Dehydration","Healthy hydration","Normal flexibility","More HbA"],0],["Knowledge check: which factor can trigger a pain crisis?",["Dehydration","Healthy hydration","Normal flexibility","More HbA"],0],["What is hemolysis?",["Breakdown of red blood cells","Bone formation","Fat digestion","Heart contraction"],0],["Knowledge check: what is hemolysis?",["Breakdown of red blood cells","Bone formation","Fat digestion","Heart contraction"],0],["Early RBC breakdown can contribute to...",["Anemia","Stronger bones","Better vision","More oxygen delivery"],0],["Knowledge check: early RBC breakdown can contribute to...",["Anemia","Stronger bones","Better vision","More oxygen delivery"],0],["A common effect of anemia is...",["Fatigue","Instant muscle growth","More oxygen delivery","Faster bone growth"],0],["Knowledge check: a common effect of anemia is...",["Fatigue","Instant muscle growth","More oxygen delivery","Faster bone growth"],0],["Which organ helps remove old RBCs?",["The spleen","The appendix","The thyroid","The bladder"],0],["Knowledge check: which organ helps remove old RBCs?",["The spleen","The appendix","The thyroid","The bladder"],0],["Reduced spleen function can increase risk of...",["Serious infections","Stronger immunity","Faster growth","Better oxygenation"],0],["Knowledge check: reduced spleen function can increase risk of...",["Serious infections","Stronger immunity","Faster growth","Better oxygenation"],0],["Sickle cell disease can increase risk of...",["Stroke","Only cavities","Only sprains","Only sunburn"],0],["Knowledge check: sickle cell disease can increase risk of...",["Stroke","Only cavities","Only sprains","Only sunburn"],0],["Dactylitis is...",["Painful swelling of hands and feet","A vision test","A heart rhythm","A skin pigment"],0],["Knowledge check: dactylitis is...",["Painful swelling of hands and feet","A vision test","A heart rhythm","A skin pigment"],0],["Acute chest syndrome mainly involves the...",["Lungs","Teeth","Toenails","Hair"],0],["Knowledge check: acute chest syndrome mainly involves the...",["Lungs","Teeth","Toenails","Hair"],0],["Sickle cell trait is...",["Different from sickle cell disease","Always severe disease","Contagious","No sickle gene present"],0],["Knowledge check: sickle cell trait is...",["Different from sickle cell disease","Always severe disease","Contagious","No sickle gene present"],0],["Genes are instructions made of...",["DNA","Calcium","Oxygen","Cholesterol"],0],["Knowledge check: genes are instructions made of...",["DNA","Calcium","Oxygen","Cholesterol"],0],["A mutation is...",["A change in genetic material","A blood vessel","A lung chamber","A meal"],0],["Knowledge check: a mutation is...",["A change in genetic material","A blood vessel","A lung chamber","A meal"],0],["Hemoglobin is mainly found inside...",["Red blood cells","Platelets","Bone cells","Fat cells"],0],["Knowledge check: hemoglobin is mainly found inside...",["Red blood cells","Platelets","Bone cells","Fat cells"],0],["As tissues use oxygen, hemoglobin tends to...",["Release oxygen","Create DNA","Make platelets","Become bone"],0],["Knowledge check: as tissues use oxygen, hemoglobin tends to...",["Release oxygen","Create DNA","Make platelets","Become bone"],0],["What does microcirculation mean?",["Blood flow through the smallest vessels","Air flow in lungs","Food movement","Nerve impulses"],0],["Knowledge check: what does microcirculation mean?",["Blood flow through the smallest vessels","Air flow in lungs","Food movement","Nerve impulses"],0],["What connects arterioles and venules?",["Capillaries","The aorta","Heart valves","Large veins"],0],["Knowledge check: what connects arterioles and venules?",["Capillaries","The aorta","Heart valves","Large veins"],0],["Arterioles are...",["Small branches of arteries","Heart chambers","RBC types","Lung sacs"],0],["Knowledge check: arterioles are...",["Small branches of arteries","Heart chambers","RBC types","Lung sacs"],0],["Venules are...",["Small vessels collecting blood from capillaries","Large arteries","Bone cells","Airways"],0],["Knowledge check: venules are...",["Small vessels collecting blood from capillaries","Large arteries","Bone cells","Airways"],0],["The pulmonary artery carries blood toward the...",["Lungs","Liver","Brain","Kidneys"],0],["Knowledge check: the pulmonary artery carries blood toward the...",["Lungs","Liver","Brain","Kidneys"],0],["Pulmonary veins carry blood toward the...",["Heart","Skin","Spleen","Intestines"],0],["Knowledge check: pulmonary veins carry blood toward the...",["Heart","Skin","Spleen","Intestines"],0],["The aorta is the largest...",["Artery","Vein","Capillary","Lymph node"],0],["Knowledge check: the aorta is the largest...",["Artery","Vein","Capillary","Lymph node"],0],["Which side of the heart pumps oxygenated blood to the body?",["Left side","Right side","Neither side","Only the atria"],0],["Knowledge check: which side of the heart pumps oxygenated blood to the body?",["Left side","Right side","Neither side","Only the atria"],0],["Which side of the heart pumps blood to the lungs?",["Right side","Left side","Neither side","Only the aorta"],0],["Knowledge check: which side of the heart pumps blood to the lungs?",["Right side","Left side","Neither side","Only the aorta"],0],["Gas exchange occurs mainly across...",["Thin capillary walls","Bones","Tendons","Heart valves"],0],["Knowledge check: gas exchange occurs mainly across...",["Thin capillary walls","Bones","Tendons","Heart valves"],0],["Oxygen moves from blood into tissues mainly by...",["Diffusion","Platelet pumping","DNA replication","Bone contraction"],0],["Knowledge check: oxygen moves from blood into tissues mainly by...",["Diffusion","Platelet pumping","DNA replication","Bone contraction"],0],["What does oxygen saturation describe?",["How much hemoglobin is carrying oxygen","How many bones have marrow","How many veins exist","Stomach emptying speed"],0],["Knowledge check: what does oxygen saturation describe?",["How much hemoglobin is carrying oxygen","How many bones have marrow","How many veins exist","Stomach emptying speed"],0],["Repeated vaso-occlusion can contribute to...",["Organ damage","Stronger capillaries","More HbA","Permanent flexibility"],0],["Knowledge check: repeated vaso-occlusion can contribute to...",["Organ damage","Stronger capillaries","More HbA","Permanent flexibility"],0],["What does chronic mean?",["Long-lasting or recurring","Always contagious","Only bacterial","Lasting seconds"],0],["Knowledge check: what does chronic mean?",["Long-lasting or recurring","Always contagious","Only bacterial","Lasting seconds"],0],["Sickle cell disease is generally...",["A lifelong condition","A one-day infection","A broken bone","A food allergy"],0],["Knowledge check: sickle cell disease is generally...",["A lifelong condition","A one-day infection","A broken bone","A food allergy"],0],["Erythropoietin helps regulate production of...",["Red blood cells","Teeth","Skin pigment","Bile"],0],["Knowledge check: erythropoietin helps regulate production of...",["Red blood cells","Teeth","Skin pigment","Bile"],0],["Which organ makes most erythropoietin in adults?",["Kidneys","Stomach","Spleen","Pancreas"],0],["Knowledge check: which organ makes most erythropoietin in adults?",["Kidneys","Stomach","Spleen","Pancreas"],0],["Reticulocytes are...",["Young red blood cells","Mature neurons","Platelet fragments","Bone cells"],0],["Knowledge check: reticulocytes are...",["Young red blood cells","Mature neurons","Platelet fragments","Bone cells"],0],["Bilirubin can rise when many RBCs...",["Break down","Gain nuclei","Enter lungs","Turn into platelets"],0],["Knowledge check: bilirubin can rise when many RBCs...",["Break down","Gain nuclei","Enter lungs","Turn into platelets"],0],["Hemolytic anemia involves...",["RBCs breaking down too quickly","Too much bone growth","Too much oxygen","Too many platelets only"],0],["Knowledge check: hemolytic anemia involves...",["RBCs breaking down too quickly","Too much bone growth","Too much oxygen","Too many platelets only"],0]];
 let game=null,paused=false,last=0,questionOpen=false,questionTimerId=null,questionTimerEnd=0,questionTimerTotal=0,questionAnswered=false;
 function clearObjects(a){for(const x of a)scene.remove(x.mesh);a.length=0}
-function spawnObstacle(){
- let type=Math.random()<.6?'sickle':Math.random()<.5?'clot':'narrow';
- let m=new THREE.MeshStandardMaterial({color:type==='sickle'?0xff986e:type==='clot'?0xd84a58:0x9ba5b5,roughness:.65});
- let mesh=new THREE.Mesh(type==='sickle'?new THREE.TorusGeometry(.72,.24,10,20,Math.PI*1.55):type==='clot'?new THREE.IcosahedronGeometry(.75,1):new THREE.BoxGeometry(1.2,.55,.55),m);
- if(type==='narrow')mesh.rotation.z=Math.random()*Math.PI;
- mesh.position.set((Math.random()-.5)*4.7,(Math.random()-.5)*3.1,-58);mesh.userData={type};scene.add(mesh);obstacles.push({mesh,type,r:.88})
+// Three-lane runner geometry shared by mobile and desktop.
+// Every gameplay object stores a lane (-1, 0, +1), so narrowing vessels can
+// squeeze the lane positions inward without ever drifting objects between lanes.
+function laneSpacing(vessel=game?.vessel||5.9){return Math.max(1.5,Math.min(2.15,vessel-1.55))}
+function laneX(lane,vessel=game?.vessel||5.9){return clamp(lane,-1,1)*laneSpacing(vessel)}
+function randomLane(){return Math.floor(Math.random()*3)-1}
+function obstacleMaterial(color,roughness=.65,emissive=0){return new THREE.MeshStandardMaterial({color,roughness,emissive,emissiveIntensity:emissive?.2:0})}
+let raftSerial=0;
+function makeFibrinGate(){
+ const g=new THREE.Group(),mat=obstacleMaterial(0xe8b8c3,.72),knot=obstacleMaterial(0xb96b7e,.78);
+ const beam=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,1.62,10),mat);beam.rotation.z=Math.PI/2;beam.position.y=.72;g.add(beam);
+ for(const x of [-.68,.68]){const cord=new THREE.Mesh(new THREE.CylinderGeometry(.065,.075,1.2,8),mat);cord.position.set(x,1.22,0);g.add(cord);const n=new THREE.Mesh(new THREE.SphereGeometry(.14,8,6),knot);n.position.set(x,.67,0);g.add(n)}
+ for(const x of [-.38,0,.38]){const strand=new THREE.Mesh(new THREE.CylinderGeometry(.035,.045,.52,7),mat);strand.position.set(x,.98,0);g.add(strand)}
+ return g;
 }
-function spawnOxygen(){let m=new THREE.MeshBasicMaterial({color:0x6feaff});let mesh=new THREE.Mesh(new THREE.SphereGeometry(.3,12,8),m);mesh.position.set((Math.random()-.5)*4.7,(Math.random()-.5)*3.1,-58);scene.add(mesh);oxygens.push({mesh,r:.5})}
+function makeThrombusRaft(hasRamp=true,length=8.4){
+ const g=new THREE.Group(),platelet=obstacleMaterial(0x873446,.86),fibrin=obstacleMaterial(0xd39aa8,.8),dark=obstacleMaterial(0x5f1d2c,.9);
+ const bodyMesh=new THREE.Mesh(new THREE.BoxGeometry(1.58,1.48,length),platelet);bodyMesh.position.y=.05;g.add(bodyMesh);
+ const top=new THREE.Mesh(new THREE.BoxGeometry(1.64,.16,length*.94),fibrin);top.position.y=.86;g.add(top);
+ for(let i=0;i<8;i++){const p=new THREE.Mesh(new THREE.SphereGeometry(.17+(i%3)*.035,8,6),i%2?dark:fibrin);p.position.set((i%2?-.48:.48),.86+(i%3)*.09,-length*.38+i*(length*.76/7));g.add(p)}
+ if(hasRamp){const rampLen=2.8,ramp=new THREE.Mesh(new THREE.BoxGeometry(1.56,.18,rampLen),fibrin);ramp.rotation.x=-Math.atan2(.82,rampLen);ramp.position.set(0,.42,length/2+rampLen*.46);g.add(ramp);g.userData.rampLen=rampLen}
+ return g;
+}
+function spawnSurfaceContent(raft){
+ const count=2+Math.floor(Math.random()*2),used=[];
+ const start=raft.hasRamp?-raft.length*.34:-raft.length*.30;
+ const end=raft.hasRamp?-raft.length*.02:raft.length*.24;
+ for(let i=0;i<count;i++){
+  const zOffset=start+(end-start)*(count===1?.5:i/Math.max(1,count-1));used.push(zOffset);
+  if(Math.random()<.56){spawnOxygen(raft.lane,raft.topY+.62,raft.mesh.position.z+zOffset,{raftId:raft.raftId})}
+  else {const type=Math.random()<.58?'sickle':'clot',m=obstacleMaterial(type==='sickle'?0xff986e:0xd84a58,.65),mesh=new THREE.Mesh(type==='sickle'?new THREE.TorusGeometry(.58,.20,10,18,Math.PI*1.55):new THREE.IcosahedronGeometry(.58,1),m);mesh.position.set(laneX(raft.lane),raft.topY+.48,raft.mesh.position.z+zOffset);scene.add(mesh);obstacles.push({mesh,type,lane:raft.lane,y:raft.topY+.48,r:.72,spin:true,hitZ:1.0,raftTop:true,raftId:raft.raftId})}
+ }
+}
+function spawnRaftCluster(primaryLane=randomLane()){
+ const lanes=[primaryLane],adj=primaryLane===0?(Math.random()<.5?-1:1):(Math.random()<.68?0:-primaryLane);
+ if(Math.random()<.62&&!lanes.includes(adj))lanes.push(adj);
+ lanes.forEach((lane,i)=>{const length=8+Math.random()*1.8,hasRamp=i===0||Math.random()<.48,z=-58-(i*3.1),mesh=makeThrombusRaft(hasRamp,length),raftId=++raftSerial,topY=.96;mesh.position.set(laneX(lane),0,z);mesh.userData={type:'thrombusRaft',raftId};scene.add(mesh);const raft={mesh,type:'thrombusRaft',lane,y:0,r:1,spin:false,hitZ:length*.5+.8,length,hasRamp,topY,raftId,platform:true};obstacles.push(raft);spawnSurfaceContent(raft)})
+}
+function spawnObstacle(){
+ const lane=randomLane(),r=Math.random(),specials=game&&game.dist>500;
+ if(specials&&r<.13){spawnRaftCluster(lane);return}
+ let type,mesh,y=0,spin=true,hitZ=1.18;
+ if(specials&&r<.28){type='fibrinGate';spin=false;y=0;mesh=makeFibrinGate()}
+ else if(specials&&r<.40){type='plaqueRidge';spin=false;y=-.48;mesh=new THREE.Mesh(new THREE.BoxGeometry(1.55,.72,1.15),obstacleMaterial(0xc58b62,.86))}
+ else{type=r<.70?'sickle':r<.88?'clot':'narrow';const m=obstacleMaterial(type==='sickle'?0xff986e:type==='clot'?0xd84a58:0x9ba5b5,.65);mesh=new THREE.Mesh(type==='sickle'?new THREE.TorusGeometry(.72,.24,10,20,Math.PI*1.55):type==='clot'?new THREE.IcosahedronGeometry(.75,1):new THREE.BoxGeometry(1.2,.55,.55),m);if(type==='narrow')mesh.rotation.z=Math.random()*Math.PI}
+ mesh.position.set(laneX(lane),y,-58);mesh.userData={type};scene.add(mesh);obstacles.push({mesh,type,lane,y,r:.88,spin,hitZ})
+}
+function spawnOxygen(lane=randomLane(),y=0,z=-58,extra={}){let m=new THREE.MeshBasicMaterial({color:0x6feaff});let mesh=new THREE.Mesh(new THREE.SphereGeometry(.3,12,8),m);mesh.position.set(laneX(lane),y,z);scene.add(mesh);oxygens.push({mesh,r:.5,lane,y,...extra})}
 // Cosmetic trail system. Each equipped trail creates short-lived particles
 // behind the RBC; particles fade and shrink so the effect stays smooth and bounded.
 const trailGeo={
@@ -441,6 +585,8 @@ function startGame(){
    lane:0,
    jumpT:0,
    duckT:0,
+   supportY:0,
+   onRaft:null,
    boss:false,
    trailTimer:0,
    questionDeck:Array.from(
@@ -461,6 +607,7 @@ function startGame(){
    keCorrect:0,
    currentEmergency:false,
    goldenActive:false,
+   oxygenDemandLevel:0,
 
    // New run gets a fresh submission state
    submitted:false,
@@ -469,13 +616,26 @@ function startGame(){
 
  ['hud'].forEach(id=>$(id).classList.remove('hidden'));
  show(null);
+ updateOxygenDemand(true);
  last=performance.now();
  requestAnimationFrame(loop)
 }
+const oxygenDemandStages=[
+ {name:'LARGE VESSELS',mult:1.00,reason:'Normal flow • lower O₂ demand',message:'O₂ DEMAND: NORMAL FLOW • oxygen delivery is efficient in large vessels'},
+ {name:'ARTERIOLES',mult:1.28,reason:'Smaller vessels • resistance rising',message:'O₂ DEMAND RISING • smaller vessels increase resistance, so oxygen is used faster'},
+ {name:'CAPILLARY NETWORK',mult:1.58,reason:'Tissue exchange • O₂ unloading faster',message:'O₂ DEMAND RISING • capillaries unload oxygen directly into tissues'},
+ {name:'HYPOXIC TISSUE',mult:1.98,reason:'Low tissue O₂ • stronger gradient',message:'HYPOXIC TISSUE • low oxygen drives faster unloading from hemoglobin'},
+ {name:'VASO-OCCLUSION',mult:2.38,reason:'Impaired flow • delivery less efficient',message:'VASO-OCCLUSION • impaired blood flow makes oxygen delivery less efficient'}
+];
+function updateOxygenDemand(force=false){
+ if(!game)return;const d=oxygenDemandStages[game.stage]||oxygenDemandStages[0],reason=$('o2Reason');
+ if(reason){reason.textContent=d.reason;reason.className='o2Reason'+(game.stage>=4?' high':game.stage>=2?' rising':'')}
+ if(force||game.oxygenDemandLevel!==game.stage){game.oxygenDemandLevel=game.stage;if(game.stage>0){toast(d.message);sfxStage()}}
+}
 function setStage(){
  let old=game.stage;game.stage=game.dist<700?0:game.dist<1600?1:game.dist<2800?2:game.dist<4300?3:4;
- if(old!==game.stage){sfxStage()}
- $('stage').textContent=['LARGE VESSELS','ARTERIOLES','CAPILLARY NETWORK','HYPOXIC TISSUE','VASO-OCCLUSION'][game.stage]
+ $('stage').textContent=oxygenDemandStages[game.stage].name;
+ if(old!==game.stage)updateOxygenDemand();
 }
 function eventBanner(label,duration){$('eventLabel').textContent=label;$('bossFill').style.width='100%';$('bossBar').classList.add('show');game.eventDuration=duration;game.eventTimer=duration;sfxStage();if(/CRISIS|HYPOXIA|CAPILLARY/.test(label))setTimeout(sfxEventAlarm,180)}
 function awardEvent(label,score,heme,oxy=0){game.score+=score;game.eventHeme+=heme;game.oxy=Math.min(100,game.oxy+oxy);toast(`${label}  +${score.toLocaleString()}  •  +${heme} Heme`);sfxCorrect();setTimeout(sfxPrize,140)}
@@ -493,8 +653,19 @@ function startMajorEvent(){
  else if(type==='capillary'){eventBanner('CAPILLARY SQUEEZE • STAY CENTERED',10)}
  else {game.hypoxiaCollected=0;eventBanner('HYPOXIA ZONE • COLLECT 6 O₂',11)}
 }
-function spawnBossWave(){let gap=(Math.floor(Math.random()*5)-2)*1.05;for(let i=-2;i<=2;i++){let x=i*1.05;if(Math.abs(x-gap)<.55)continue;let m=new THREE.MeshStandardMaterial({color:i%2?0xff8b6d:0xb82e46,roughness:.7});let mesh=new THREE.Mesh(i%2?new THREE.TorusGeometry(.75,.26,10,20,Math.PI*1.55):new THREE.IcosahedronGeometry(.82,1),m);mesh.position.set(x,(Math.random()-.5)*1.4,-48-Math.random()*4);scene.add(mesh);obstacles.push({mesh,type:'sickle',r:.92,boss:true})}}
-function spawnGoldenRBC(){let m=new THREE.MeshStandardMaterial({color:0xffd85b,emissive:0x6d4800,emissiveIntensity:1.1,roughness:.25});let mesh=new THREE.Mesh(new THREE.TorusGeometry(.48,.18,12,28),m);mesh.scale.y=.7;mesh.position.set((Math.random()-.5)*3.8,(Math.random()-.5)*2.5,-50);scene.add(mesh);oxygens.push({mesh,r:.65,golden:true});game.goldenActive=true}
+function spawnBossWave(){
+ // One clearly readable safe lane per crisis wave. No five-object random cloud.
+ const safe=randomLane();
+ for(const lane of [-1,0,1]){
+  if(lane===safe)continue;
+  const useSickle=Math.random()<.55;
+  let m=obstacleMaterial(useSickle?0xff8b6d:0xb82e46,.72);
+  let mesh=new THREE.Mesh(useSickle?new THREE.TorusGeometry(.78,.27,10,20,Math.PI*1.55):new THREE.IcosahedronGeometry(.84,1),m);
+  mesh.position.set(laneX(lane),0,-49);scene.add(mesh);
+  obstacles.push({mesh,type:useSickle?'sickle':'clot',lane,y:0,r:.92,boss:true,spin:true,hitZ:1.18})
+ }
+}
+function spawnGoldenRBC(){let lane=randomLane(),m=new THREE.MeshStandardMaterial({color:0xffd85b,emissive:0x6d4800,emissiveIntensity:1.1,roughness:.25});let mesh=new THREE.Mesh(new THREE.TorusGeometry(.48,.18,12,28),m);mesh.scale.y=.7;mesh.position.set(laneX(lane),0,-50);scene.add(mesh);oxygens.push({mesh,r:.65,golden:true,lane,y:0});game.goldenActive=true}
 function startMinorEvent(){
  if(game.event||questionOpen)return;game.nextMinor=game.dist+700+Math.random()*350;const roll=Math.floor(Math.random()*3);
  if(roll===0){game.event='oxygenrush';game.rushCollected=0;eventBanner('OXYGEN RUSH • COLLECT O₂',7)}
@@ -524,154 +695,98 @@ function answer(i,q,timedOut=false){
  const emergency=game.currentEmergency;if(emergency&&correct)game.keCorrect++;
  setTimeout(()=>{questionOpen=false;if(!game||!game.alive)return;if(emergency){game.keRemaining--;let done=3-game.keRemaining;$('eventLabel').textContent=`🧠 KNOWLEDGE EMERGENCY ${done}/3`;$('bossFill').style.width=(game.keRemaining/3*100)+'%';if(game.keRemaining>0){maybeQuestion(true);return}let score=game.keCorrect===3?1100:game.keCorrect*250,heme=game.keCorrect===3?30:game.keCorrect*6,oxy=game.keCorrect===3?15:game.keCorrect*3;awardEvent(game.keCorrect===3?'PERFECT KNOWLEDGE':'KNOWLEDGE COMPLETE',score,heme,oxy);game.event=null;game.currentEmergency=false;$('bossBar').classList.remove('show');game.nextMinor=game.dist+650;}show(null);['hud'].forEach(id=>$(id).classList.remove('hidden'));last=performance.now()},timedOut?900:700)
 }
-function move(x,y){if(!game||paused||questionOpen)return;game.inputX=clamp(x,-1,1);game.inputY=clamp(y,-1,1)}
-function release(){if(game){game.inputX*=.48;game.inputY*=.48}}
-const keysHeld=new Set();
-function keyboardVector(){
- let x=0,y=0;
- if(keysHeld.has('ArrowLeft'))x-=1;
- if(keysHeld.has('ArrowRight'))x+=1;
- // Camera/game coordinates: positive Y appears upward on screen.
- if(keysHeld.has('ArrowUp'))y+=1;
- if(keysHeld.has('ArrowDown'))y-=1;
- const len=Math.hypot(x,y);
- if(len>1){x/=len;y/=len}
- return {x,y};
-}
-function applyKeyboard(){if(!game||paused||questionOpen)return;const v=keyboardVector();if(v.x||v.y){game.inputX=v.x;game.inputY=v.y}}
-
-// Mobile runner controls: discrete three-lane swipes + jump / duck.
-// Touch devices no longer use analog finger-follow steering, which removes
-// lag, drifting, and the floating-center "snap" correction behavior.
-const touchControls=('ontouchstart' in window)||matchMedia('(pointer:coarse)').matches;
-let dragging=false,dragPointer=null,dragTouch=null,dragStartX=0,dragStartY=0;
-const MOBILE_SWIPE_MIN=24;
-const MOBILE_JUMP_TIME=.62;
-const MOBILE_DUCK_TIME=.52;
-function uiTouchTarget(target){return target.closest('button,input,.panel,#pause,#knowledge,.screen');}
-function mobileLaneStep(dir){
+function runnerLaneStep(dir){
  if(!game||paused||questionOpen)return;
  game.lane=clamp((game.lane|0)+dir,-1,1);
 }
-function mobileJump(){
+const RUNNER_JUMP_TIME=.62,RUNNER_DUCK_TIME=.52,SWIPE_MIN=24;
+function runnerJump(){if(!game||paused||questionOpen)return;if((game.jumpT||0)<.12)game.jumpT=RUNNER_JUMP_TIME;game.duckT=0}
+function runnerDuck(){if(!game||paused||questionOpen)return;game.duckT=RUNNER_DUCK_TIME;game.jumpT=0}
+const touchControls=('ontouchstart' in window)||matchMedia('(pointer:coarse)').matches;
+let dragging=false,dragPointer=null,dragTouch=null,dragStartX=0,dragStartY=0;
+function uiTouchTarget(target){return target.closest('button,input,.panel,#pause,#knowledge,.screen')}
+function commitRunnerSwipe(clientX,clientY){
  if(!game||paused||questionOpen)return;
- if((game.jumpT||0)<.12)game.jumpT=MOBILE_JUMP_TIME;
- game.duckT=0;
+ const dx=clientX-dragStartX,dy=clientY-dragStartY,ax=Math.abs(dx),ay=Math.abs(dy);
+ if(Math.max(ax,ay)<SWIPE_MIN)return;
+ if(ax>ay)runnerLaneStep(dx>0?1:-1);else if(dy<0)runnerJump();else runnerDuck();
 }
-function mobileDuck(){
- if(!game||paused||questionOpen)return;
- game.duckT=MOBILE_DUCK_TIME;
- game.jumpT=0;
-}
-function commitMobileSwipe(clientX,clientY){
- if(!game||paused||questionOpen)return;
- const dx=clientX-dragStartX,dy=clientY-dragStartY;
- const ax=Math.abs(dx),ay=Math.abs(dy);
- if(Math.max(ax,ay)<MOBILE_SWIPE_MIN)return;
- if(ax>ay){mobileLaneStep(dx>0?1:-1)}
- else if(dy<0){mobileJump()}
- else{mobileDuck()}
-}
-
-// Native touch path for phones/tablets. The action fires once, on release,
-// like a lane-based endless runner instead of continuously tracking the thumb.
+// Touch: one discrete action per released swipe.
 app.addEventListener('touchstart',e=>{
  if(!touchControls||!game||paused||questionOpen||uiTouchTarget(e.target)||dragTouch!==null)return;
- const t=e.changedTouches[0];dragging=true;dragTouch=t.identifier;dragStartX=t.clientX;dragStartY=t.clientY;
- unlockAudio();e.preventDefault();
+ const t=e.changedTouches[0];dragging=true;dragTouch=t.identifier;dragStartX=t.clientX;dragStartY=t.clientY;unlockAudio();e.preventDefault();
 },{passive:false});
-app.addEventListener('touchmove',e=>{
- if(!touchControls||!dragging||dragTouch===null||!game||paused||questionOpen)return;
- for(const p of e.changedTouches)if(p.identifier===dragTouch){e.preventDefault();break}
-},{passive:false});
-function finishTouch(e){
- if(dragTouch===null)return;
- for(const p of e.changedTouches)if(p.identifier===dragTouch){
-  commitMobileSwipe(p.clientX,p.clientY);
-  dragging=false;dragTouch=null;e.preventDefault();break
- }
-}
+app.addEventListener('touchmove',e=>{if(!touchControls||!dragging||dragTouch===null)return;for(const p of e.changedTouches)if(p.identifier===dragTouch){e.preventDefault();break}},{passive:false});
+function finishTouch(e){if(dragTouch===null)return;for(const p of e.changedTouches)if(p.identifier===dragTouch){commitRunnerSwipe(p.clientX,p.clientY);dragging=false;dragTouch=null;e.preventDefault();break}}
 app.addEventListener('touchend',finishTouch,{passive:false});
 app.addEventListener('touchcancel',e=>{if(dragTouch!==null){dragging=false;dragTouch=null;e.preventDefault()}},{passive:false});
-
-// Pointer path remains unchanged for mouse/pen and non-touch fallbacks.
-function setSwipeInput(clientX,clientY){
- if(!game||paused||questionOpen)return;
- let dx=clientX-dragStartX,dy=clientY-dragStartY;
- const dist=Math.hypot(dx,dy),dead=2,radius=42;
- if(dist<=dead){game.inputX=0;game.inputY=0;return}
- const nx=dx/dist,ny=dy/dist;
- const raw=clamp((dist-dead)/(radius-dead),0,1);
- const power=Math.pow(raw,.62);
- game.inputX=nx*power;game.inputY=-ny*power;
- if(dist>radius){dragStartX=clientX-nx*radius;dragStartY=clientY-ny*radius}
-}
+// Desktop mouse/pen uses the exact same discrete swipe language.
 app.addEventListener('pointerdown',e=>{
- if(touchControls&&e.pointerType==='touch')return;
- if(!game||paused||questionOpen||uiTouchTarget(e.target))return;
- dragging=true;dragPointer=e.pointerId;dragStartX=e.clientX;dragStartY=e.clientY;
- try{app.setPointerCapture&&app.setPointerCapture(e.pointerId)}catch(_){}
- unlockAudio();e.preventDefault();
+ if(touchControls&&e.pointerType==='touch')return;if(!game||paused||questionOpen||uiTouchTarget(e.target))return;
+ dragging=true;dragPointer=e.pointerId;dragStartX=e.clientX;dragStartY=e.clientY;try{app.setPointerCapture&&app.setPointerCapture(e.pointerId)}catch(_){}unlockAudio();e.preventDefault();
 },{passive:false});
-app.addEventListener('pointermove',e=>{
- if(touchControls&&e.pointerType==='touch')return;
- if(!dragging||e.pointerId!==dragPointer||!game||paused||questionOpen)return;
- e.preventDefault();setSwipeInput(e.clientX,e.clientY);
-},{passive:false});
-function finishSwipe(e){
- if(touchControls&&e.pointerType==='touch')return;
- if(!dragging||e.pointerId!==dragPointer)return;
- dragging=false;dragPointer=null;
- try{app.releasePointerCapture&&app.releasePointerCapture(e.pointerId)}catch(_){}
- release();
+function finishPointer(e){
+ if(touchControls&&e.pointerType==='touch')return;if(!dragging||e.pointerId!==dragPointer)return;
+ commitRunnerSwipe(e.clientX,e.clientY);dragging=false;dragPointer=null;try{app.releasePointerCapture&&app.releasePointerCapture(e.pointerId)}catch(_){}e.preventDefault();
 }
-['pointerup','pointercancel','lostpointercapture'].forEach(ev=>app.addEventListener(ev,finishSwipe,{passive:false}));
-addEventListener('keydown',e=>{if(e.key.startsWith('Arrow')){e.preventDefault();keysHeld.add(e.key);applyKeyboard()}});
-addEventListener('keyup',e=>{if(e.key.startsWith('Arrow')){keysHeld.delete(e.key);const v=keyboardVector();if(game){if(v.x||v.y){game.inputX=v.x;game.inputY=v.y}else release()}}});
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>app.addEventListener(ev,finishPointer,{passive:false}));
+// Desktop keyboard: left/right = lanes, up = jump, down = duck.
+addEventListener('keydown',e=>{
+ if(!game||paused||questionOpen||!e.key.startsWith('Arrow'))return;e.preventDefault();if(e.repeat)return;
+ if(e.key==='ArrowLeft')runnerLaneStep(-1);else if(e.key==='ArrowRight')runnerLaneStep(1);else if(e.key==='ArrowUp')runnerJump();else if(e.key==='ArrowDown')runnerDuck();
+});
 
 function loop(t){
  if(!game||!game.alive)return;let dt=Math.min((t-last)/1000,.033);last=t;
  if(!paused&&!questionOpen){
   game.elapsed+=dt;let speed=17+Math.min(25,game.dist*.0042);game.dist+=speed*dt*2.2;game.score+=speed*dt*2;if(!game.event&&game.dist>=game.nextMajor)startMajorEvent();else if(!game.event&&game.dist>=game.nextMinor)startMinorEvent();
   if(game.event&&game.event!=='knowledge'){game.eventTimer-=dt;if(game.eventDuration>0)$('bossFill').style.width=Math.max(0,game.eventTimer/game.eventDuration*100)+'%';if(game.event==='crisis'){game.eventWave-=dt;if(game.eventWave<=0){spawnBossWave();game.eventWave=1.12}}if(game.event==='golden'&&game.eventTimer<=0){game.event=null;game.goldenActive=false;$('bossBar').classList.remove('show');toast('Golden RBC escaped');}else if(game.eventTimer<=0&&game.event!=='golden')finishEvent(true)}
-  if(keysHeld.size)applyKeyboard();
-  let baseVessel=Math.max(2.75,5.9-game.dist/1800);let targetVessel=baseVessel;if(game.event==='crisis')targetVessel=Math.max(2.4,baseVessel-.72);if(game.event==='capillary')targetVessel=2.15;game.vessel+=(Math.max(2.1,targetVessel)-game.vessel)*Math.min(1,dt*2.8);let scale=game.vessel/5.9;tubeGroup.scale.x+=(scale-tubeGroup.scale.x)*.08;tubeGroup.scale.y+=(scale-tubeGroup.scale.y)*.08;
-  if(touchControls){
-   const laneX=Math.max(1.05,Math.min(2.15,game.vessel-1.18));
-   const targetX=(game.lane|0)*laneX;
-   const prevX=player.position.x;
-   player.position.x+=(targetX-player.position.x)*Math.min(1,dt*17.5);
-   game.vx=(player.position.x-prevX)/Math.max(dt,.001);
-   game.vy=0;game.inputX=0;game.inputY=0;
-   if(game.jumpT>0)game.jumpT=Math.max(0,game.jumpT-dt);
-   if(game.duckT>0)game.duckT=Math.max(0,game.duckT-dt);
-   const jp=game.jumpT>0?1-game.jumpT/MOBILE_JUMP_TIME:0;
-   const jumpY=game.jumpT>0?Math.sin(jp*Math.PI)*2.45:0;
-   const dp=game.duckT>0?1-game.duckT/MOBILE_DUCK_TIME:0;
-   const duckY=game.duckT>0?-Math.sin(dp*Math.PI)*1.15:0;
-   player.position.y=jumpY+duckY;
-  }else{
-   let steerResponse=7.6;game.vx+=(game.inputX*11.8-game.vx)*Math.min(1,dt*steerResponse);game.vy+=(game.inputY*10.2-game.vy)*Math.min(1,dt*steerResponse);
-   if(!dragging&&!keysHeld.size){game.inputX*=Math.pow(.78,dt*60);game.inputY*=Math.pow(.78,dt*60)}
-   player.position.x+=game.vx*dt;player.position.y+=game.vy*dt;
+  // Three lanes remain physically usable at every stage. Constriction narrows
+  // the corridor, but never below the width needed for fair lane changes.
+  let baseVessel=Math.max(3.45,5.9-game.dist/1800);let targetVessel=baseVessel;if(game.event==='crisis')targetVessel=Math.max(3.2,baseVessel-.48);if(game.event==='capillary')targetVessel=3.08;game.vessel+=(targetVessel-game.vessel)*Math.min(1,dt*2.8);let scale=game.vessel/5.9;tubeGroup.scale.x+=(scale-tubeGroup.scale.x)*.08;tubeGroup.scale.y+=(scale-tubeGroup.scale.y)*.08;
+  const targetX=laneX(game.lane|0,game.vessel),prevX=player.position.x;
+  player.position.x+=(targetX-player.position.x)*Math.min(1,dt*17.5);game.vx=(player.position.x-prevX)/Math.max(dt,.001);game.vy=0;game.inputX=0;game.inputY=0;
+  if(game.jumpT>0)game.jumpT=Math.max(0,game.jumpT-dt);if(game.duckT>0)game.duckT=Math.max(0,game.duckT-dt);
+  // Long thrombus rafts are playable surfaces. A ramp smoothly raises the RBC
+  // onto the raft; while on top, lane changes and jumps can transfer to a nearby raft.
+  let support=0,onRaft=null,rampSupport=0;
+  for(const o of obstacles){if(!o.platform||o.lane!==(game.lane|0))continue;const rel=player.position.z-o.mesh.position.z,half=o.length*.5;
+   if(rel<=half+.15&&rel>=-half-.15){support=Math.max(support,o.topY);onRaft=o}
+   else if(o.hasRamp&&rel>half&&rel<half+2.9){const p=clamp((half+2.9-rel)/2.9,0,1);rampSupport=Math.max(rampSupport,o.topY*p);if(p>.12)onRaft=o}
   }
+  game.supportY=Math.max(support,rampSupport);game.onRaft=onRaft?onRaft.raftId:null;
+  const jp=game.jumpT>0?1-game.jumpT/RUNNER_JUMP_TIME:0,jumpY=game.jumpT>0?Math.sin(jp*Math.PI)*2.45:0;
+  const dp=game.duckT>0?1-game.duckT/RUNNER_DUCK_TIME:0,duckY=game.duckT>0?-Math.sin(dp*Math.PI)*1.15:0;
+  player.position.y=game.supportY+jumpY+duckY;
   updateTrail(dt);
-  player.position.x=clamp(player.position.x,-game.vessel+1,game.vessel-1);player.position.y=clamp(player.position.y,-Math.max(1.7,game.vessel*.55),Math.max(2.55,game.vessel*.55));if(game.boss)$('bossFill').style.width=Math.max(0,game.bossTimer/9*100)+'%';
-  let oxyDrain=(.8+game.dist/9000)*(game.event==='hypoxia'?3.15:1);game.oxy-=dt*oxyDrain;game.spawn-=dt;game.oSpawn-=dt;game.qTimer-=dt;
+  player.position.x=clamp(player.position.x,-game.vessel+1,game.vessel-1);player.position.y=clamp(player.position.y,-Math.max(1.7,game.vessel*.55),Math.max(3.7,game.vessel*.55));if(game.boss)$('bossFill').style.width=Math.max(0,game.bossTimer/9*100)+'%';
+  const demand=oxygenDemandStages[game.stage]||oxygenDemandStages[0];let oxyDrain=(.72+game.dist/15000)*demand.mult*(game.event==='hypoxia'?2.15:1);game.oxy-=dt*oxyDrain;game.spawn-=dt;game.oSpawn-=dt;game.qTimer-=dt;
   if(game.spawn<=0){spawnObstacle();game.spawn=Math.max(.33,1.08-game.dist/7000)}
   if(game.oSpawn<=0){spawnOxygen();game.oSpawn=(game.event==='oxygenrush'?0.18:game.event==='hypoxia'?0.32:.65)+Math.random()*(game.event==='oxygenrush'?.18:game.event==='hypoxia'?.25:.8)}
   if(game.qTimer<=0&&game.dist>350&&!game.event){maybeQuestion();game.qTimer=13+Math.random()*8}
-  obstacles.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.rotation.x+=dt*.9;o.mesh.rotation.y+=dt*.7});
-  oxygens.forEach(o=>o.mesh.position.z+=speed*dt);
-  for(const o of obstacles)if(!o.hit&&o.mesh.position.z>-.2&&o.mesh.position.z<2&&o.mesh.position.distanceTo(player.position)<1.33){o.hit=true;game.hits++;game.oxy-=o.type==='sickle'?17:o.type==='clot'?13:9;game.score=Math.max(0,game.score-150);sfxHit();updateOcclusionWarning();if(game.hits<5)toast(o.type==='sickle'?'Sickled cell hit':'Vessel obstruction')}
-  for(const o of oxygens)if(!o.hit&&o.mesh.position.z>-.2&&o.mesh.position.z<2&&o.mesh.position.distanceTo(player.position)<.92){o.hit=true;if(o.golden){game.score+=700;game.eventHeme+=25;game.goldenActive=false;game.event=null;$('bossBar').classList.remove('show');sfxCorrect();toast('GOLDEN RBC • +700 • +25 Heme')}else{game.oxy=Math.min(100,game.oxy+13);game.score+=120;if(game.event==='hypoxia')game.hypoxiaCollected++;if(game.event==='oxygenrush')game.rushCollected++;sfxPickup();toast(game.event==='hypoxia'?`O₂ ${game.hypoxiaCollected}/6`:'+ O₂')}}
+  obstacles.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.position.x=laneX(o.lane,game.vessel);if(o.spin!==false&&!o.platform){o.mesh.rotation.x+=dt*.9;o.mesh.rotation.y+=dt*.7}});
+  oxygens.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.position.x=laneX(o.lane,game.vessel);o.mesh.position.y=o.y||0});
+  function obstacleHitsPlayer(o){
+   if(o.hit||o.platform)return false;
+   if(Math.abs(o.mesh.position.z-player.position.z)>(o.hitZ||1.18))return false;
+   if(Math.abs(o.mesh.position.x-player.position.x)>1.05)return false;
+   if(o.raftTop&&game.onRaft===o.raftId&&game.supportY<(o.y||0)-.2)return false;
+   if(o.type==='fibrinGate')return !(game.duckT>0&&player.position.y<game.supportY-.42);
+   if(o.type==='plaqueRidge')return !(game.jumpT>0&&player.position.y>game.supportY+.82);
+   return Math.abs((o.y||0)-player.position.y)<1.28;
+  }
+  // A raft without a ramp is a solid front wall; a ramped raft is enterable from the front.
+  for(const o of obstacles){if(!o.platform||o.hit||o.lane!==(game.lane|0)||o.hasRamp)continue;const front=o.mesh.position.z+o.length*.5;if(front>-.25&&front<2.05&&Math.abs(player.position.y)<.9){o.hit=true;game.hits++;game.oxy-=15;game.score=Math.max(0,game.score-150);sfxHit();updateOcclusionWarning();if(game.hits<5)toast('Dense thrombus raft — find a ramp or change lanes')}}
+  for(const o of obstacles)if(obstacleHitsPlayer(o)){o.hit=true;game.hits++;game.oxy-=o.type==='sickle'?17:o.type==='clot'?13:9;game.score=Math.max(0,game.score-150);sfxHit();updateOcclusionWarning();if(game.hits<5)toast(o.type==='fibrinGate'?'Duck under the fibrin gate':o.type==='plaqueRidge'?'Jump the plaque ridge':o.type==='sickle'?'Sickled cell hit':'Vessel obstruction')}
+  for(const o of oxygens)if(!o.hit&&o.mesh.position.z>-.2&&o.mesh.position.z<2&&Math.abs(o.mesh.position.x-player.position.x)<.8&&(!o.raftId||game.onRaft===o.raftId||game.supportY>=(o.y||0)-.2)&&Math.abs((o.y||0)-player.position.y)<.95){o.hit=true;if(o.golden){game.score+=700;game.eventHeme+=25;game.goldenActive=false;game.event=null;$('bossBar').classList.remove('show');sfxCorrect();toast('GOLDEN RBC • +700 • +25 Heme')}else{game.oxy=Math.min(100,game.oxy+13);game.score+=120;if(game.event==='hypoxia')game.hypoxiaCollected++;if(game.event==='oxygenrush')game.rushCollected++;sfxPickup();toast(game.event==='hypoxia'?`O₂ ${game.hypoxiaCollected}/6`:'+ O₂')}}
   for(let i=obstacles.length-1;i>=0;i--)if(obstacles[i].mesh.position.z>8){scene.remove(obstacles[i].mesh);obstacles.splice(i,1)}
   for(let i=oxygens.length-1;i>=0;i--)if(oxygens[i].mesh.position.z>8){scene.remove(oxygens[i].mesh);oxygens.splice(i,1)}
   setStage();updateHud();if(game.oxy<=0)return endGame('Oxygen critically depleted.');if(game.hits>=8)return endGame('Too many vessel obstructions.');
  }
  camera.position.x+=(player.position.x*.22-camera.position.x)*.08;camera.position.y+=(7.1+player.position.y*.16-camera.position.y)*.08;camera.position.z+=(10.2-camera.position.z)*.08;camera.lookAt(player.position.x*.26,player.position.y*.14,-14);
- player.rotation.z+=(game?(-game.vx*.026)-player.rotation.z:0)*.10;const mobilePitch=touchControls&&game?((game.jumpT>0?-.08:0)+(game.duckT>0?.10:0)):0;player.rotation.x+=((-0.22+game.inputY*.035+mobilePitch)-player.rotation.x)*.08;player.rotation.y=Math.sin(t*.004)*.07;
+ player.rotation.z+=(game?(-game.vx*.026)-player.rotation.z:0)*.10;const runnerPitch=game?((game.jumpT>0?-.08:0)+(game.duckT>0?.10:0)):0;player.rotation.x+=((-0.22+runnerPitch)-player.rotation.x)*.08;player.rotation.y=Math.sin(t*.004)*.07;
  body.scale.z=game&&game.event==='capillary'?.34:(game&&game.oxy<35)?.42:.5;body.scale.x=game&&game.event==='capillary'?1.72:1.55;body.scale.y=game&&game.event==='capillary'?1.02:1.15;rim.scale.set(1.2+.06*Math.sin(t*.01),.88+.04*Math.cos(t*.009),1);dimpleFront.scale.z=dimpleBack.scale.z=(game&&game.oxy<35)?.22:.25;
+ updateDynamicSkin(t);
  renderer.render(scene,camera);requestAnimationFrame(loop)
 }
 let occlusionWarningTimer=null;
@@ -789,9 +904,17 @@ async function uploadScoreRecord(key,scoreData){
     const err=firebaseAuthError||new Error('Firebase anonymous sign-in is unavailable');
     throw err;
   }
-  // The UID lets database rules verify who created the record. The stable key
-  // makes retries idempotent instead of creating a second leaderboard row.
-  const payload={...scoreData,uid:user.uid};
+  // Keep the live Firebase record on the original rule-compatible schema.
+  // The equipped title is encoded in the fractional part of distance, then
+  // decoded by the leaderboard. This avoids adding a new `title` child that
+  // older Firebase validation rules may reject with PERMISSION_DENIED.
+  const payload={
+    name:scoreData.name,
+    score:scoreData.score,
+    distance:packLeaderboardDistance(scoreData.distance,scoreData.title),
+    time:scoreData.time,
+    uid:user.uid
+  };
   await set(ref(db,'leaderboard/'+key),payload);
   return payload;
 }
@@ -858,11 +981,16 @@ function renderBoard(){
       .replace(/[&<>"']/g,'')
       .slice(0,12);
 
+    const packed=unpackLeaderboardDistance(x.distance);
+    let safeTitle=String(x.title||packed.title||'')
+      .replace(/[&<>"']/g,'')
+      .slice(0,36);
+    let titleTag=safeTitle?`<span class="leaderTitle">${safeTitle}</span>`:'';
     let safeScore=Math.max(0,Math.floor(Number(x.score)||0));
 
     return `
       <tr class="${cls}">
-        <td>${i+1}. ${safeName} ${tag}</td>
+        <td>${i+1}. ${safeName}${titleTag} ${tag}</td>
         <td>${safeScore.toLocaleString()}</td>
       </tr>
     `;
@@ -960,8 +1088,10 @@ bindPress('submit',async()=>{
       .slice(0,12)
       .replace(/[&<>"']/g,'');
 
+    const equippedTitle=(titles[profile.title]||titles[0])[0];
     game.pendingScoreData={
       name:n||'RBC Runner',
+      title:String(equippedTitle||'RBC Runner').slice(0,36),
       score:Math.max(0,Math.floor(Number(game.score)||0)),
       distance:Math.max(0,Math.floor(Number(game.dist)||0)),
       time:Date.now()
@@ -1033,6 +1163,28 @@ bindPress('submit',async()=>{
   }
 });
 
+function refreshCodeUnlock(message='',bad=false){
+ const status=$('codeStatus');if(!status)return;
+ $('schoolCode').disabled=false;$('redeemCode').disabled=false;$('redeemCode').textContent='UNLOCK';
+ status.className='codeStatus'+(bad?' bad':'');
+ status.textContent=message||'Codes permanently unlock special cosmetics and titles.';
+}
+function redeemSchoolCode(){
+ const input=$('schoolCode'),code=(input.value||'').trim().toUpperCase(),reward=SPECIAL_CODES[code];
+ if(!reward){refreshCodeUnlock('Code not recognized',true);sfxWrong();return}
+ const already=profile.redeemedCodes.includes(code);
+ if(reward.skin!==undefined&&!profile.ownedSkins.includes(reward.skin))profile.ownedSkins.push(reward.skin);
+ if(reward.title!==undefined&&!profile.ownedTitles.includes(reward.title))profile.ownedTitles.push(reward.title);
+ if(!already)profile.redeemedCodes.push(code);
+ if(code==='LSSC')profile.lakehawkCodeRedeemed=true;
+ if(reward.skin!==undefined)profile.skin=reward.skin;
+ if(reward.title!==undefined)profile.title=reward.title;
+ save();input.value='';
+ const msg=already?`✓ ${reward.label} already unlocked`:`✓ ${reward.label} unlocked + equipped`;
+ refreshCodeUnlock(msg,false);sfxCorrect();toast(already?'CODE ALREADY REDEEMED':reward.label.toUpperCase()+' UNLOCKED!');
+}
+refreshCodeUnlock();
+bindPress('redeemCode',redeemSchoolCode);
 bindPress('start',startGame);bindPress('learn',()=>show('learnScreen'));bindPress('lab',()=>{renderShop();show('labScreen')});bindPress('board',()=>{renderBoard();show('boardScreen');setTimeout(sfxPrize,80)});
 bindPress('backLearn',()=>show('menu'));bindPress('backLab',()=>show('menu'));bindPress('backBoard',()=>show('menu'));bindPress('again',startGame);bindPress('home',()=>show('menu'));
 bindPress('pause',()=>{if(!game)return;paused=true;show('pauseScreen')});bindPress('resume',()=>{paused=false;show(null);['hud'].forEach(id=>$(id).classList.remove('hidden'));last=performance.now()});bindPress('quit',()=>{paused=false;endGame('Run ended by player.')});
