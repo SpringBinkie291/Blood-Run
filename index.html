@@ -133,14 +133,13 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
   <button class="btn" id="start">START RUN</button>
   <div class="row"><button class="btn alt" id="learn">LEARN</button><button class="btn alt" id="lab">RBC LAB</button></div>
   <button class="btn alt" id="board">🏆 LEADERBOARD</button>
-  <p class="note">Mobile-ready: menu taps work even when browser storage is unavailable. Drag anywhere during a run for smooth analog steering.</p>
  </div>
 </div>
 
 <div id="learnScreen" class="screen hidden"><div class="panel"><div class="logo">LEARNING CORE</div><h2>Why do RBCs sickle?</h2>
 <p><b>HbS → deoxygenation → polymerization → sickling → impaired flow.</b></p>
 <p>In sickle cell disease, deoxygenated HbS can polymerize. This contributes to rigid, sickle-shaped RBCs that can obstruct small vessels and impair oxygen delivery.</p>
-<p class="note">For the final EBNF presentation, these statements should be linked to your required recent peer-reviewed sources.</p><button class="btn" id="backLearn">BACK</button></div></div>
+<button class="btn" id="backLearn">BACK</button></div></div>
 
 <div id="labScreen" class="screen hidden"><div class="panel"><div class="logo">RBC LAB</div><h2>Customize your runner</h2><p><span class="badge">🩸 Heme <b id="heme">0</b></span></p>
 <div class="row"><button class="btn alt tab active" data-tab="skins">RBCs</button><button class="btn alt tab" data-tab="trails">Trails</button></div>
@@ -148,9 +147,9 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 <div class="row"><button class="btn alt tab" data-tab="themes">Vessel Themes</button></div>
 <div id="shopGrid"></div><button class="btn" id="backLab">BACK</button></div></div>
 
-<div id="boardScreen" class="screen hidden"><div class="panel"><div class="logo">EBNF POSTER PROJECT DAY</div><h2>🏆 Leaderboard</h2><div class="prizeBanner"><div class="prizeEyebrow">🏅 Finish the day in 1st place</div><div class="prizeTitle">Win a <strong>$25 Chick-fil-A gift card</strong></div><div class="prizeSub">The player holding the #1 leaderboard spot at the end of EBNF poster project day takes the prize. Keep running, keep learning, and protect that high score.</div></div><table><tbody id="rows"></tbody></table><p class="note">Scores are stored on this device in the prototype. For a shared live competition, connect the leaderboard to your GitHub-hosted realtime score backend.</p><button class="btn" id="backBoard">BACK</button></div></div>
+<div id="boardScreen" class="screen hidden"><div class="panel"><div class="logo">EBNF POSTER PROJECT DAY</div><h2>🏆 Leaderboard</h2><div class="prizeBanner"><div class="prizeEyebrow">🏅 Finish the day in 1st place</div><div class="prizeTitle">Win a <strong>$25 Chick-fil-A gift card</strong></div><div class="prizeSub">The player holding the #1 leaderboard spot at the end of EBNF poster project day takes the prize. Keep running, keep learning, and protect that high score.</div></div><table><tbody id="rows"></tbody></table><button class="btn" id="backBoard">BACK</button></div></div>
 
-<div id="knowledge" class="screen hidden"><div class="panel"><div class="logo">🧠 KNOWLEDGE DROP</div><h2 id="question"></h2><div id="questionTimer"><div class="timerClock"><span id="timerSeconds">10</span>s</div><div style="flex:1;min-width:0"><div class="timerText">TIME REMAINING</div><div class="timerTrack"><i id="questionTimerFill"></i></div></div></div><div class="answers" id="answers"></div><p class="note">Answer before time expires. Correct answers earn score and oxygen.</p></div></div>
+<div id="knowledge" class="screen hidden"><div class="panel"><div class="logo">🧠 KNOWLEDGE DROP</div><h2 id="question"></h2><div id="questionTimer"><div class="timerClock"><span id="timerSeconds">10</span>s</div><div style="flex:1;min-width:0"><div class="timerText">TIME REMAINING</div><div class="timerTrack"><i id="questionTimerFill"></i></div></div></div><div class="answers" id="answers"></div></div></div>
 
 <div id="pauseScreen" class="screen hidden"><div class="panel"><h2>Paused</h2><button class="btn" id="resume">RESUME</button><button class="btn alt" id="quit">QUIT RUN</button></div></div>
 
