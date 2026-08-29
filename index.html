@@ -554,14 +554,37 @@ function saveLocalScore(scoreData){
 
 function renderBoard(){
   const source=(firebaseReady&&leaderboardConnected)?liveScores:getLocalScores();
-  let a=[...source].filter(x=>x&&Number.isFinite(Number(x.score))).sort((x,y)=>Number(y.score)-Number(x.score)).slice(0,10);
+
+  let a=[...source]
+    .filter(x=>x&&Number.isFinite(Number(x.score)))
+    .sort((x,y)=>Number(y.score)-Number(x.score))
+    .slice(0,50);
+
   $('rows').innerHTML=a.length?a.map((x,i)=>{
     let cls=i===0?'podium1':i===1?'podium2':i===2?'podium3':'';
-    let tag=i===0?'<span class="podiumTag">PRIZE POSITION</span>':i===1?'<span class="podiumTag">2ND</span>':i===2?'<span class="podiumTag">3RD</span>':'';
-    let safeName=String(x.name||'RBC Runner').replace(/[&<>"']/g,'').slice(0,12);
+
+    let tag=i===0
+      ?'<span class="podiumTag">PRIZE POSITION</span>'
+      :i===1
+      ?'<span class="podiumTag">2ND</span>'
+      :i===2
+      ?'<span class="podiumTag">3RD</span>'
+      :'';
+
+    let safeName=String(x.name||'RBC Runner')
+      .replace(/[&<>"']/g,'')
+      .slice(0,12);
+
     let safeScore=Math.max(0,Math.floor(Number(x.score)||0));
-    return `<tr class="${cls}"><td>${i+1}. ${safeName} ${tag}</td><td>${safeScore.toLocaleString()}</td></tr>`
-  }).join(''):'<tr><td colspan="2">No scores yet — be the first to set one.</td></tr>';
+
+    return `
+      <tr class="${cls}">
+        <td>${i+1}. ${safeName} ${tag}</td>
+        <td>${safeScore.toLocaleString()}</td>
+      </tr>
+    `;
+  }).join('')
+  :'<tr><td colspan="2">No scores yet — be the first to set one.</td></tr>';
 }
 
 function startLiveLeaderboard(){
