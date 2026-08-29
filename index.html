@@ -60,7 +60,7 @@ p{color:#aeb7c6;line-height:1.5}
 .themePreview::after{content:'✦  ·  ✦';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--themeParticle);font-size:12px;letter-spacing:8px;text-shadow:0 0 9px currentColor}
 table{width:100%;border-collapse:collapse}td{padding:10px 4px;border-bottom:1px solid #ffffff0b}td:last-child{text-align:right;font-weight:900}
 input{width:100%;padding:13px;border-radius:12px;background:#141a25;color:#fff;border:1px solid #ffffff18;font-size:16px;outline:0}
-.note{font-size:12px;color:#7f8a9c}
+.note{font-size:12px;color:#7f8a9c}.submitStatus{min-height:20px;margin-top:10px;font-size:12px;line-height:1.4;color:#9ca8ba}.submitStatus.good{color:#7fe2b8}.submitStatus.warn{color:#ffb5c2}
 @media(max-width:520px){.answers{grid-template-columns:1fr}.panel{padding:22px}.hudTop{right:7px;top:max(8px,env(safe-area-inset-top));gap:6px}.hudStats{min-width:142px;gap:7px;padding:7px 9px}.hudStat strong{font-size:14px}.hudDivider{height:25px}#pause{height:42px;padding:8px 11px}#o2{left:8px;transform:none;width:154px;top:max(8px,env(safe-area-inset-top));padding:7px 9px}.survivalMeta{font-size:7px;gap:4px;letter-spacing:.55px;flex-wrap:wrap}.meter{height:7px}#bossBar{bottom:max(12px,calc(env(safe-area-inset-bottom) + 6px));width:min(320px,76vw);font-size:9px;padding:7px 9px}#portrait{width:162px;height:62px;left:5px;bottom:max(6px,env(safe-area-inset-bottom));grid-template-columns:46px 1fr;padding:5px 8px}.faceHex{width:40px;height:40px}.faceWrap{width:35px;height:35px}.face{width:30px;height:22px}.rankName{font-size:7px}.skinName{font-size:11px}.ptitle{font-size:7px}#toast{right:7px;top:31%;font-size:10px;max-width:48vw;padding:7px 9px}}
 
 /* ---- FINAL UI POLISH ---- */
@@ -157,7 +157,7 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 <div id="gameover" class="screen hidden"><div class="panel"><div class="logo">RUN COMPLETE</div><h2 id="reason">Run over</h2>
 <div class="row"><div class="badge">Score <b id="finalScore">0</b></div><div class="badge">Distance <b id="finalDist">0 m</b></div></div>
 <p>Knowledge: <b id="knowledgeScore">0%</b> • Heme earned: <b id="earned">0</b></p>
-<input id="name" maxlength="12" placeholder="Enter nickname"><button class="btn" id="submit">SUBMIT SCORE</button><button class="btn alt" id="again">RUN AGAIN</button><button class="btn alt" id="home">MAIN MENU</button>
+<input id="name" maxlength="12" placeholder="Enter nickname"><div id="submitStatus" class="submitStatus" aria-live="polite"></div><button class="btn" id="submit">SUBMIT SCORE</button><button class="btn alt" id="again">RUN AGAIN</button><button class="btn alt" id="home">MAIN MENU</button>
 </div></div>
 </div>
 
@@ -167,6 +167,7 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // ─────────────────────────────────────────────────────────────
 // FIREBASE SETUP
@@ -185,8 +186,11 @@ const firebaseConfig = {
 };
 
 let db = null;
+let auth = null;
 let firebaseReady = false;
 let firebaseUnsubscribe = null;
+let firebaseAuthError = null;
+let authSignInPromise = null;
 
 function firebaseConfigIsFilledIn(){
   return !Object.values(firebaseConfig).some(v => String(v).includes("YOUR_"));
@@ -196,8 +200,23 @@ if(firebaseConfigIsFilledIn()){
   try{
     const firebaseApp = initializeApp(firebaseConfig);
     db = getDatabase(firebaseApp);
+    auth = getAuth(firebaseApp);
     firebaseReady = true;
-    console.log("Blood Run live leaderboard connected to Firebase.");
+    console.log("Blood Run Firebase initialized.");
+
+    // Start anonymous sign-in immediately. Realtime Database writes wait for this
+    // promise, so mobile browsers cannot race a score write before auth exists.
+    authSignInPromise = signInAnonymously(auth)
+      .then(credential=>{
+        firebaseAuthError = null;
+        console.log("Blood Run anonymous Firebase auth ready.", credential.user.uid);
+        return credential.user;
+      })
+      .catch(error=>{
+        firebaseAuthError = error;
+        console.error("Anonymous Firebase authentication failed.", error);
+        return null;
+      });
   }catch(error){
     console.error("Firebase initialization failed; using local leaderboard fallback.", error);
   }
@@ -624,7 +643,7 @@ function updateOcclusionWarning(){
  occlusionWarningTimer=setTimeout(()=>{w.className='';occlusionWarningTimer=null;},1000);
 }
 function updateHud(){if(!game)return;let liveScore=Math.floor(game.score);$('score').textContent=liveScore.toLocaleString();$('dist').textContent=Math.floor(game.dist)+' m';$('oxy').textContent=Math.max(0,Math.floor(game.oxy))+'%';$('oxyBar').style.width=Math.max(0,game.oxy)+'%';$('o2').classList.toggle('low',game.oxy<55);$('o2').classList.toggle('critical',game.oxy<25)}
-function endGame(reason){stopQuestionTimer();if(!game||!game.alive)return;game.alive=false;paused=false;resetOcclusionWarning();['hud'].forEach(id=>$(id).classList.add('hidden'));$('bossBar').classList.remove('show');let score=Math.floor(game.score),dist=Math.floor(game.dist),baseEarned=Math.max(26,Math.floor(dist/52)+game.knowledge*18),earned=baseEarned+(game.eventHeme||0);profile.heme+=earned;profile.highScore=Math.max(profile.highScore,score);let newlyUnlocked=unlockFrames();save();if(newlyUnlocked)toast('NEW FRAME UNLOCKED!');$('reason').textContent=reason;$('finalScore').textContent=score.toLocaleString();$('finalDist').textContent=dist+' m';$('knowledgeScore').textContent=(game.qcount?Math.round(game.knowledge/game.qcount*100):100)+'%';$('earned').textContent=earned;$('name').value='';show('gameover')}
+function endGame(reason){stopQuestionTimer();if(!game||!game.alive)return;game.alive=false;paused=false;resetOcclusionWarning();['hud'].forEach(id=>$(id).classList.add('hidden'));$('bossBar').classList.remove('show');let score=Math.floor(game.score),dist=Math.floor(game.dist),baseEarned=Math.max(26,Math.floor(dist/52)+game.knowledge*18),earned=baseEarned+(game.eventHeme||0);profile.heme+=earned;profile.highScore=Math.max(profile.highScore,score);let newlyUnlocked=unlockFrames();save();if(newlyUnlocked)toast('NEW FRAME UNLOCKED!');$('reason').textContent=reason;$('finalScore').textContent=score.toLocaleString();$('finalDist').textContent=dist+' m';$('knowledgeScore').textContent=(game.qcount?Math.round(game.knowledge/game.qcount*100):100)+'%';$('earned').textContent=earned;$('name').value='';const ss=$('submitStatus');if(ss){ss.className='submitStatus';ss.textContent='';}show('gameover')}
 let liveScores=[];
 let leaderboardConnected=false;
 
@@ -666,11 +685,105 @@ function getLocalScores(){
   try{return JSON.parse(safeStore.get('bloodRun3DScores','[]')||'[]')}catch(e){return []}
 }
 
-function saveLocalScore(scoreData){
+function saveLocalScore(scoreData,localKey=null){
   let a=getLocalScores();
-  a.push(scoreData);
+  // A stable local key prevents RETRY SUBMIT from duplicating the same run locally.
+  if(localKey&&a.some(x=>x&&x._localKey===localKey))return;
+  a.push({...scoreData,...(localKey?{_localKey:localKey}:{})});
   safeStore.set('bloodRun3DScores',JSON.stringify(a.sort((x,y)=>y.score-x.score).slice(0,100)));
 }
+
+const PENDING_SCORE_KEY='bloodRun3DPendingScoresV1';
+let pendingFlushInFlight=false;
+
+function getPendingScores(){
+  try{
+    const parsed=JSON.parse(safeStore.get(PENDING_SCORE_KEY,'[]')||'[]');
+    return Array.isArray(parsed)?parsed:[];
+  }catch(e){ return []; }
+}
+
+function savePendingScores(items){
+  safeStore.set(PENDING_SCORE_KEY,JSON.stringify(items.slice(-25)));
+}
+
+function queuePendingScore(key,scoreData){
+  const items=getPendingScores();
+  const i=items.findIndex(x=>x&&x.key===key);
+  const record={key,scoreData:{...scoreData}};
+  if(i>=0)items[i]=record;else items.push(record);
+  savePendingScores(items);
+}
+
+function removePendingScore(key){
+  savePendingScores(getPendingScores().filter(x=>x&&x.key!==key));
+}
+
+function friendlyFirebaseCode(error){
+  return String(error&&error.code?error.code:'unknown')
+    .replace('database/','')
+    .replace('auth/','')
+    .toUpperCase();
+}
+
+async function ensureFirebaseAuth(){
+  if(!firebaseReady||!auth)return null;
+  if(auth.currentUser)return auth.currentUser;
+  if(authSignInPromise){
+    const existing=await authSignInPromise;
+    if(existing)return existing;
+  }
+  authSignInPromise=signInAnonymously(auth)
+    .then(credential=>{firebaseAuthError=null;return credential.user;})
+    .catch(error=>{firebaseAuthError=error;console.error('Anonymous auth retry failed:',error);return null;});
+  return await authSignInPromise;
+}
+
+async function uploadScoreRecord(key,scoreData){
+  if(!firebaseReady||!db)throw new Error('Firebase database is unavailable');
+  const user=await ensureFirebaseAuth();
+  if(!user){
+    const err=firebaseAuthError||new Error('Firebase anonymous sign-in is unavailable');
+    throw err;
+  }
+  // The UID lets database rules verify who created the record. The stable key
+  // makes retries idempotent instead of creating a second leaderboard row.
+  const payload={...scoreData,uid:user.uid};
+  await set(ref(db,'leaderboard/'+key),payload);
+  return payload;
+}
+
+async function flushPendingScores(showNotice=false){
+  if(pendingFlushInFlight||!firebaseReady||!db||!navigator.onLine)return;
+  const items=getPendingScores();
+  if(!items.length)return;
+  pendingFlushInFlight=true;
+  let uploaded=0;
+  try{
+    for(const item of items){
+      if(!item||!item.key||!item.scoreData)continue;
+      try{
+        await uploadScoreRecord(item.key,item.scoreData);
+        removePendingScore(item.key);
+        rememberDeviceRun(item.key,item.scoreData);
+        uploaded++;
+      }catch(error){
+        console.warn('Queued score still waiting to upload:',friendlyFirebaseCode(error),error);
+        // Stop here: repeated attempts are unlikely to help until auth/network/rules change.
+        break;
+      }
+    }
+  }finally{
+    pendingFlushInFlight=false;
+  }
+  if(uploaded){
+    leaderboardConnected=true;
+    if(showNotice)try{notify(uploaded===1?'SAVED SCORE POSTED LIVE':`${uploaded} SAVED SCORES POSTED LIVE`,'good')}catch(e){}
+  }
+}
+
+window.addEventListener('online',()=>setTimeout(()=>flushPendingScores(true),300));
+setTimeout(()=>flushPendingScores(false),1200);
 
 function sortedLeaderboardScores(source){
   return [...source]
@@ -773,8 +886,8 @@ bindPress('submit',async()=>{
   if(!game)return;
 
   const submitBtn=$('submit');
+  const submitStatus=$('submitStatus');
 
-  // A finished run may submit exactly once. Pending/in-flight only blocks duplicate taps.
   if(game.submitted){
     if(submitBtn){
       submitBtn.disabled=true;
@@ -793,57 +906,59 @@ bindPress('submit',async()=>{
     submitBtn.style.pointerEvents='none';
     submitBtn.textContent='SUBMITTING...';
   }
+  if(submitStatus){
+    submitStatus.className='submitStatus';
+    submitStatus.textContent='Saving your run…';
+  }
 
-  const n=($('name').value.trim()||'RBC Runner')
-    .slice(0,12)
-    .replace(/[&<>"']/g,'');
+  // Build a run only once. RETRY SUBMIT reuses the exact same timestamp/key/data.
+  if(!game.pendingScoreData){
+    const n=($('name').value.trim()||'RBC Runner')
+      .slice(0,12)
+      .replace(/[&<>"']/g,'');
 
-  const scoreData={
-    name:n||'RBC Runner',
-    score:Math.max(0,Math.floor(Number(game.score)||0)),
-    distance:Math.max(0,Math.floor(Number(game.dist)||0)),
-    time:Date.now()
-  };
+    game.pendingScoreData={
+      name:n||'RBC Runner',
+      score:Math.max(0,Math.floor(Number(game.score)||0)),
+      distance:Math.max(0,Math.floor(Number(game.dist)||0)),
+      time:Date.now()
+    };
+
+    // Firebase push() creates a collision-resistant key locally; it does not need
+    // to upload anything yet. Fall back to a safe key only if Firebase did not init.
+    game.pendingSubmissionKey=(firebaseReady&&db)
+      ?push(ref(db,'leaderboard')).key
+      :('run_'+Date.now()+'_'+Math.random().toString(36).slice(2,10));
+
+    // Save FIRST, before any network operation. A browser/Wi-Fi failure cannot erase the run.
+    queuePendingScore(game.pendingSubmissionKey,game.pendingScoreData);
+    try{saveLocalScore(game.pendingScoreData,game.pendingSubmissionKey)}
+    catch(localError){console.warn('Local score backup failed:',localError)}
+  }
+
+  const key=game.pendingSubmissionKey;
+  const scoreData=game.pendingScoreData;
 
   try{
-    if(firebaseReady&&db){
-      // Generate a unique Firebase key, save the score, THEN persist that exact run locally.
-      // Persisting only after await set() succeeds prevents a failed attempt from replacing
-      // the player's previously saved rank information.
-      const newScoreRef=push(ref(db,'leaderboard'));
-      console.log('Submitting leaderboard score',newScoreRef.key,scoreData);
-      await set(newScoreRef,scoreData);
-      console.log('Leaderboard score saved',newScoreRef.key);
-      leaderboardConnected=true;
-      rememberDeviceRun(newScoreRef.key,scoreData);
-      // Do NOT manually push scoreData into liveScores here.
-      // Firebase onValue() is the single source of truth; manually adding it
-      // causes a temporary duplicate until the listener refreshes.
-    }else{
-      // Offline/local fallback can still remember the latest local run on this device.
-      rememberDeviceRun(null,scoreData);
-    }
+    await uploadScoreRecord(key,scoreData);
 
-    // Local backup is best-effort and must never turn a successful Firebase write into an error.
-    try{ saveLocalScore(scoreData); }
-    catch(localError){ console.warn('Local score backup failed:',localError); }
-
+    removePendingScore(key);
+    rememberDeviceRun(key,scoreData);
+    leaderboardConnected=true;
     game.submitted=true;
 
     if(submitBtn){
       submitBtn.disabled=true;
       submitBtn.style.pointerEvents='none';
-      submitBtn.textContent=(firebaseReady&&db)?'SCORE SUBMITTED ✓':'SCORE SAVED ✓';
+      submitBtn.textContent='SCORE SUBMITTED ✓';
+    }
+    if(submitStatus){
+      submitStatus.className='submitStatus good';
+      submitStatus.textContent='Posted to the live leaderboard.';
     }
 
-    try{
-      notify((firebaseReady&&db)?'SCORE POSTED LIVE':'SCORE SAVED LOCALLY',(firebaseReady&&db)?'good':'warn');
-    }catch(uiError){
-      console.warn('Score notification failed:',uiError);
-    }
-
-    try{ sfxPrize(); }
-    catch(audioError){ console.warn('Prize sound failed:',audioError); }
+    try{notify('SCORE POSTED LIVE','good')}catch(uiError){}
+    try{sfxPrize()}catch(audioError){}
 
     renderBoard();
     show('boardScreen');
@@ -854,23 +969,22 @@ bindPress('submit',async()=>{
     console.error('Firebase error message:',error&&error.message);
 
     game.submitted=false;
-    // Keep the previously successful saved rank if this new write fails.
+    const code=friendlyFirebaseCode(error);
 
+    // The run remains in localStorage and in the retry queue.
     if(submitBtn){
       submitBtn.disabled=false;
       submitBtn.style.pointerEvents='';
       submitBtn.textContent='RETRY SUBMIT';
     }
+    if(submitStatus){
+      submitStatus.className='submitStatus warn';
+      submitStatus.textContent=`Saved on this device. Live upload failed (${code}). We’ll retry automatically when possible.`;
+    }
 
-    const code=String(error&&error.code?error.code:'unknown')
-      .replace('database/','')
-      .toUpperCase();
-
-    try{ notify('SUBMIT FAILED — '+code,'warn'); }
-    catch(uiError){ console.warn('Submit failure notification failed:',uiError); }
+    try{notify('SAVED LOCALLY — '+code,'warn')}catch(uiError){}
 
   }finally{
-    // Always release per-run locks, even if Firebase/UI/audio code throws.
     game.submissionPending=false;
     submitInFlight=false;
   }
