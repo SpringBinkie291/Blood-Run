@@ -362,7 +362,7 @@ function startGame(){
  clearObjects(obstacles);clearObjects(oxygens);trail.forEach(x=>{scene.remove(x.mesh||x);if(x.mesh&&x.mesh.material)x.mesh.material.dispose()});trail.length=0;
  player.position.set(0,0,1);player.rotation.set(-.22,0,0);
  game={score:0,dist:0,oxy:100,hits:0,knowledge:0,qcount:0,elapsed:0,spawn:.7,oSpawn:.8,qTimer:5,stage:0,vessel:5.9,alive:true,inputX:0,inputY:0,vx:0,vy:0,boss:false,trailTimer:0,questionDeck:Array.from({length:50},(_,i)=>i*2+(Math.random()<.5?0:1)).sort(()=>Math.random()-.5),event:null,eventTimer:0,eventDuration:0,eventWave:0,eventHeme:0,nextMajor:1200,nextMinor:650,majorIndex:0,hypoxiaCollected:0,rushCollected:0,keRemaining:0,keCorrect:0,currentEmergency:false,goldenActive:false,runId:(crypto.randomUUID?crypto.randomUUID():'run-'+Date.now()+'-'+Math.random().toString(36).slice(2)),submitted:false,submissionPending:false};
- const submitBtn=$('submit');if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='SUBMIT SCORE';} ['hud'].forEach(id=>$(id).classList.remove('hidden'));show(null);last=performance.now();requestAnimationFrame(loop)
+ const submitBtn=$('submit');if(submitBtn){submitBtn.disabled=false;submitBtn.style.pointerEvents='';submitBtn.textContent='SUBMIT SCORE';} ['hud'].forEach(id=>$(id).classList.remove('hidden'));show(null);last=performance.now();requestAnimationFrame(loop)
 }
 function setStage(){
  let old=game.stage;game.stage=game.dist<700?0:game.dist<1600?1:game.dist<2800?2:game.dist<4300?3:4;
@@ -590,11 +590,28 @@ function startLiveLeaderboard(){
 
 startLiveLeaderboard();
 
+// Hard run-level submission lock. Mobile browsers can emit touch, pointer, and
+// delayed click events for one tap, so the run itself is locked before any await.
+const submittedRunIds=new Set();
+let submitInFlight=false;
+
 bindPress('submit',async()=>{
-  if(!game||game.submitted||game.submissionPending)return;
-  game.submissionPending=true;
+  if(!game)return;
+  const runId=String(game.runId||'');
   const submitBtn=$('submit');
-  if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='SUBMITTING...';}
+
+  if(!runId||game.submitted||game.submissionPending||submitInFlight||submittedRunIds.has(runId)){
+    if(submitBtn){submitBtn.disabled=true;submitBtn.style.pointerEvents='none';submitBtn.textContent='SCORE SUBMITTED ✓';}
+    notify('THIS RUN IS ALREADY SUBMITTED','good');
+    return;
+  }
+
+  // Lock synchronously on the first event. Nothing else for this run can pass.
+  game.submitted=true;
+  game.submissionPending=true;
+  submitInFlight=true;
+  submittedRunIds.add(runId);
+  if(submitBtn){submitBtn.disabled=true;submitBtn.style.pointerEvents='none';submitBtn.textContent='SUBMITTING...';}
 
   let n=($('name').value.trim()||'RBC Runner').slice(0,12).replace(/[&<>"']/g,'');
   const scoreData={
@@ -602,34 +619,37 @@ bindPress('submit',async()=>{
     score:Math.max(0,Math.floor(Number(game.score)||0)),
     distance:Math.max(0,Math.floor(Number(game.dist)||0)),
     time:Date.now(),
-    runId:game.runId
+    runId
   };
 
-  if(firebaseReady&&db){
-    try{
-      // The run ID is the Firebase key, so the same run cannot create a second entry.
-      await set(ref(db,'leaderboard/'+game.runId),scoreData);
-      saveLocalScore(scoreData);
-      game.submitted=true;
+  try{
+    if(firebaseReady&&db){
+      // Fixed Firebase key = fixed run. Repeated network sends can only target
+      // this one record, never create another leaderboard row.
+      await set(ref(db,'leaderboard/'+runId),scoreData);
       leaderboardConnected=true;
+      saveLocalScore(scoreData);
       if(submitBtn)submitBtn.textContent='SCORE SUBMITTED ✓';
       notify('SCORE POSTED LIVE','good');
       sfxPrize();
-    }catch(error){
-      console.error('Score submission failed.',error);
-      game.submissionPending=false;
-      if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='RETRY SUBMIT';}
-      notify('COULD NOT SUBMIT — CHECK CONNECTION','warn');
-      return;
+    }else{
+      saveLocalScore(scoreData);
+      if(submitBtn)submitBtn.textContent='SCORE SAVED ✓';
+      notify('LOCAL LEADERBOARD — FIREBASE OFFLINE','warn');
     }
-  }else{
-    saveLocalScore(scoreData);
-    game.submitted=true;
-    if(submitBtn)submitBtn.textContent='SCORE SAVED ✓';
-    notify('LOCAL LEADERBOARD — FIREBASE OFFLINE','warn');
+  }catch(error){
+    console.error('Score submission failed.',error);
+    // A real failure is the only situation where a retry is allowed.
+    game.submitted=false;
+    submittedRunIds.delete(runId);
+    if(submitBtn){submitBtn.disabled=false;submitBtn.style.pointerEvents='';submitBtn.textContent='RETRY SUBMIT';}
+    notify('COULD NOT SUBMIT — CHECK CONNECTION','warn');
+    return;
+  }finally{
+    game.submissionPending=false;
+    submitInFlight=false;
   }
 
-  game.submissionPending=false;
   renderBoard();
   show('boardScreen');
 });
