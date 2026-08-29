@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Blood Run 3D</title>
+<style>
+:root{--red:#ff3158;--cyan:#62eaff;--bg:#06080d;--rankMain:#8f5444;--rankLight:#d6b2a2;--rankDark:#4f2a21;--rankGlow:#a56b5b66;--rankStar:#f3d4c5}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;overscroll-behavior:none}
+body{touch-action:manipulation}
+#app{position:fixed;inset:0;overflow:hidden;touch-action:none}
+#scene{position:absolute;inset:0;z-index:0;pointer-events:none}
+canvas{display:block;width:100%;height:100%}
+.screen{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg,#05070bcc,#05070d99);pointer-events:auto}
+.hidden{display:none!important}
+.panel{width:min(92vw,560px);max-height:90vh;overflow:auto;padding:30px;border-radius:28px;background:linear-gradient(180deg,#111725f7,#080c14f7);border:1px solid #ffffff16;box-shadow:0 30px 100px #000c;backdrop-filter:blur(22px)}
+.logo{color:var(--red);font-weight:950;letter-spacing:2px;font-size:14px}
+h1{font-size:clamp(52px,14vw,86px);line-height:.82;letter-spacing:-5px;margin:10px 0 18px}
+h2{font-size:30px;letter-spacing:-1px;margin:0 0 12px}
+p{color:#aeb7c6;line-height:1.5}
+.btn,.ctrl,button,input{touch-action:manipulation}
+.btn{width:100%;border:0;border-radius:16px;padding:15px 18px;margin-top:10px;color:white;font-weight:850;font-size:17px;background:linear-gradient(135deg,#ff4165,#d71945);box-shadow:0 12px 30px #ff31582b;cursor:pointer}
+.btn.alt{background:#171e2b;box-shadow:none;border:1px solid #ffffff0d}
+.btn:active,.ctrl:active{transform:translateY(1px)}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.badge{display:inline-flex;gap:7px;align-items:center;border:1px solid #ffffff12;background:#131a27;padding:7px 11px;border-radius:999px;color:#d9deea;font-size:12px}
+#hud{position:absolute;z-index:10;inset:0;pointer-events:none}
+.hudTop{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;display:grid;grid-template-columns:104px 104px 48px;gap:8px;align-items:start}
+.hudBox{background:#070b13e8;border:1px solid #ffffff18;border-radius:16px;padding:9px 11px;box-shadow:0 12px 35px #0007;min-width:0;backdrop-filter:blur(10px)}
+.hudBox small{display:block;color:#8994a6;font-size:9px;text-transform:uppercase;letter-spacing:1px}.hudBox strong{font-size:20px}
+#o2{position:absolute;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(290px,44vw);text-align:center}
+.meter{height:9px;width:100%;background:#252c38;border-radius:99px;overflow:hidden;margin-top:6px}.meter i{display:block;height:100%;width:100%;background:var(--cyan);transition:.15s}
+#o2.low .meter i{background:#ff9c42}#o2.critical .meter i{background:var(--red)}
+#stage{position:absolute;top:max(78px,calc(env(safe-area-inset-top) + 64px));left:50%;transform:translateX(-50%);background:#070b13cc;border:1px solid #ffffff12;border-radius:999px;padding:7px 13px;font-size:10px;font-weight:900;letter-spacing:1.2px;color:#d2d7e2;white-space:nowrap}
+#bossBar{position:absolute;top:max(112px,calc(env(safe-area-inset-top) + 98px));left:50%;transform:translateX(-50%);width:min(360px,78vw);padding:7px 10px;border-radius:13px;background:#220910e8;border:1px solid #ff315855;text-align:center;font-size:10px;font-weight:950;letter-spacing:1px;opacity:0;transition:.2s}
+#bossBar.show{opacity:1}#bossMeter{height:6px;background:#40151d;border-radius:99px;overflow:hidden;margin-top:5px}#bossMeter i{display:block;height:100%;background:#ff3158;width:100%}
+#pause{pointer-events:auto;border:1px solid #ffffff12;border-radius:14px;background:#070b13e8;color:#fff;padding:10px 13px;font-weight:900;cursor:pointer;height:48px}
+#portrait{position:absolute;left:12px;bottom:max(12px,env(safe-area-inset-bottom));width:238px;height:92px;display:grid;grid-template-columns:72px 1fr;align-items:center;padding:10px 14px;background:linear-gradient(180deg,#111725f2,#080c14f2);border:3px solid var(--rankMain);border-radius:20px;box-shadow:0 14px 36px #000b,inset 0 0 0 2px var(--rankLight),0 0 18px var(--rankGlow);pointer-events:none;overflow:hidden}#portrait::before,#portrait::after{content:'';position:absolute;width:24px;height:24px}#portrait::before{left:5px;top:5px;border-left:3px solid var(--rankLight);border-top:3px solid var(--rankLight);border-radius:11px 0 0 0}#portrait::after{right:5px;bottom:5px;border-right:3px solid var(--rankLight);border-bottom:3px solid var(--rankLight);border-radius:0 0 11px 0}#portrait .frameShell{position:absolute;inset:4px;border:1px solid #ffffff16;border-radius:14px}.frameWing,.frameCrown,.stars{display:none}.faceHex{position:relative;width:58px;height:58px;display:flex;align-items:center;justify-content:center;z-index:2;border-radius:50%;background:#080d16;border:3px solid var(--rankLight);box-shadow:0 0 14px var(--rankGlow)}.faceWrap{width:48px;height:48px;display:flex;align-items:center;justify-content:center}.face{width:40px;height:29px;border-radius:50%;background:#ff3d62;box-shadow:inset -10px -7px 0 #a91837;transform:rotate(-12deg)}.playerMeta{position:relative;z-index:2;min-width:0}.rankName{font-size:9px;letter-spacing:1.4px;font-weight:950;color:var(--rankLight);text-transform:uppercase}.skinName{font-size:15px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ptitle{font-size:9px;color:#d4dae6;font-weight:850;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#controls{position:absolute;z-index:11;bottom:max(15px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:10px;pointer-events:auto}
+.ctrl{width:58px;height:58px;border-radius:50%;border:1px solid #ffffff1a;background:#070b13d8;color:#fff;font-size:24px;font-weight:900;box-shadow:0 10px 30px #0008;cursor:pointer}
+#toast{position:absolute;z-index:40;left:50%;top:21%;transform:translateX(-50%);opacity:0;background:#f4f6fa;color:#0a0c11;padding:10px 16px;border-radius:999px;font-weight:900;white-space:nowrap;transition:.2s;pointer-events:none}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}.answer{border:1px solid #ffffff12;background:#151c29;color:#fff;border-radius:14px;padding:14px;text-align:left;font-weight:750;cursor:pointer}.answer.correct{background:#145c43}.answer.wrong{background:#74243a}
+#shopGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.item{padding:13px;border-radius:16px;background:#121925;border:1px solid #ffffff0d}.item.sel{border-color:var(--red)}.item button{border:0;background:#252d3b;color:#fff;padding:7px 10px;border-radius:9px;margin-top:7px;width:100%}.orb{width:40px;height:40px;border-radius:50%;margin-bottom:8px}
+.frameMini{position:relative;height:46px;margin-bottom:8px;border:2px solid #fff3;clip-path:polygon(26% 4%,74% 4%,95% 50%,74% 96%,26% 96%,5% 50%);background:linear-gradient(180deg,var(--miniLight),var(--miniMain));box-shadow:0 0 12px var(--miniGlow)}
+.frameMini::before,.frameMini::after{content:'';position:absolute;bottom:12px;width:15px;height:16px;background:var(--miniMain);border:2px solid var(--miniDark)}
+.frameMini::before{left:-6px;clip-path:polygon(0 50%,40% 0,100% 18%,70% 50%,100% 82%,38% 100%,10% 66%)}
+.frameMini::after{right:-6px;clip-path:polygon(100% 50%,60% 0,0 18%,30% 50%,0 82%,62% 100%,90% 66%)}
+table{width:100%;border-collapse:collapse}td{padding:10px 4px;border-bottom:1px solid #ffffff0b}td:last-child{text-align:right;font-weight:900}
+input{width:100%;padding:13px;border-radius:12px;background:#141a25;color:#fff;border:1px solid #ffffff18;font-size:16px;outline:0}
+.note{font-size:12px;color:#7f8a9c}
+@media(max-width:520px){.answers{grid-template-columns:1fr}.panel{padding:22px}.hudTop{grid-template-columns:86px 86px 44px;right:8px}.hudBox strong{font-size:17px}#o2{left:10px;transform:none;width:150px;top:max(68px,calc(env(safe-area-inset-top) + 54px))}#stage{top:max(126px,calc(env(safe-area-inset-top) + 112px));max-width:80vw;overflow:hidden;text-overflow:ellipsis}#bossBar{top:max(158px,calc(env(safe-area-inset-top) + 144px))}#portrait{width:210px;height:84px;left:6px;bottom:max(8px,env(safe-area-inset-bottom));grid-template-columns:62px 1fr;padding:8px 11px}.faceHex{width:52px;height:52px}.skinName{font-size:13px}.ptitle{font-size:8px}.ctrl{width:56px;height:56px}}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="scene"></div>
+<div id="hud" class="hidden">
+ <div class="hudTop">
+  <div class="hudBox"><small>Score</small><strong id="score">0</strong></div>
+  <div class="hudBox"><small>Distance</small><strong id="dist">0 m</strong></div>
+  <button id="pause">Ⅱ</button>
+ </div>
+ <div class="hudBox" id="o2"><small>Oxygen</small><strong id="oxy">100%</strong><div class="meter"><i id="oxyBar"></i></div></div>
+ <div id="stage">LARGE VESSELS</div>
+ <div id="bossBar">VASO-OCCLUSION SURGE<div id="bossMeter"><i id="bossFill"></i></div></div>
+ <div id="portrait" data-rank="0">
+   <div class="frameShell"></div>
+   <div class="frameWing left"></div>
+   <div class="frameWing right"></div>
+   <div class="frameCrown"></div>
+   <div class="faceHex"><div class="faceWrap"><div class="face" id="portraitFace"></div></div></div>
+   <div class="playerMeta"><div class="rankName" id="rankName">Bronze Cell</div><div class="skinName" id="skinName">Classic RBC</div><div class="ptitle" id="ptitle">RBC RUNNER</div></div>
+   <div class="stars">★ ★ ★ ★ ★</div>
+ </div>
+</div>
+<div id="controls" class="hidden">
+ <button class="ctrl" data-x="-1" data-y="0">←</button><button class="ctrl" data-x="0" data-y="-1">↑</button>
+ <button class="ctrl" data-x="0" data-y="1">↓</button><button class="ctrl" data-x="1" data-y="0">→</button>
+</div>
+<div id="toast"></div>
+
+<div id="menu" class="screen">
+ <div class="panel">
+  <div class="logo">🩸 EBNF ARCADE PROJECT</div>
+  <h1>BLOOD<br>RUN 3D</h1>
+  <p>Become the red blood cell. Race through the bloodstream, collect oxygen, avoid sickled cells and obstructions, and answer clinical knowledge drops before the vessel closes in.</p>
+  <button class="btn" id="start">START RUN</button>
+  <div class="row"><button class="btn alt" id="learn">LEARN</button><button class="btn alt" id="lab">RBC LAB</button></div>
+  <button class="btn alt" id="board">🏆 LEADERBOARD</button>
+  <p class="note">Mobile-ready: menu taps work even when browser storage is unavailable. Drag anywhere during a run for smooth analog steering.</p>
+ </div>
+</div>
+
+<div id="learnScreen" class="screen hidden"><div class="panel"><div class="logo">LEARNING CORE</div><h2>Why do RBCs sickle?</h2>
+<p><b>HbS → deoxygenation → polymerization → sickling → impaired flow.</b></p>
+<p>In sickle cell disease, deoxygenated HbS can polymerize. This contributes to rigid, sickle-shaped RBCs that can obstruct small vessels and impair oxygen delivery.</p>
+<p class="note">For the final EBNF presentation, these statements should be linked to your required recent peer-reviewed sources.</p><button class="btn" id="backLearn">BACK</button></div></div>
+
+<div id="labScreen" class="screen hidden"><div class="panel"><div class="logo">RBC LAB</div><h2>Customize your runner</h2><p><span class="badge">🩸 Heme <b id="heme">0</b></span></p>
+<div class="row"><button class="btn alt tab active" data-tab="skins">RBCs</button><button class="btn alt tab" data-tab="trails">Trails</button></div>
+<div class="row"><button class="btn alt tab" data-tab="titles">Titles</button><button class="btn alt tab" data-tab="frames">Rank Frames</button></div>
+<div id="shopGrid"></div><button class="btn" id="backLab">BACK</button></div></div>
+
+<div id="boardScreen" class="screen hidden"><div class="panel"><div class="logo">LIVE SCORE READY</div><h2>🏆 Leaderboard</h2><table><tbody id="rows"></tbody></table><p class="note">This prototype stores scores locally. The presentation build can connect this exact screen to a free realtime database for QR-code play.</p><button class="btn" id="backBoard">BACK</button></div></div>
+
+<div id="knowledge" class="screen hidden"><div class="panel"><div class="logo">🧠 KNOWLEDGE DROP</div><h2 id="question"></h2><div class="answers" id="answers"></div><p class="note">Answer correctly for bonus score and oxygen.</p></div></div>
+
+<div id="pauseScreen" class="screen hidden"><div class="panel"><h2>Paused</h2><button class="btn" id="resume">RESUME</button><button class="btn alt" id="quit">QUIT RUN</button></div></div>
+
+<div id="gameover" class="screen hidden"><div class="panel"><div class="logo">RUN COMPLETE</div><h2 id="reason">Run over</h2>
+<div class="row"><div class="badge">Score <b id="finalScore">0</b></div><div class="badge">Distance <b id="finalDist">0 m</b></div></div>
+<p>Knowledge: <b id="knowledgeScore">0%</b> • Heme earned: <b id="earned">0</b></p>
+<input id="name" maxlength="12" placeholder="Enter nickname"><button class="btn" id="submit">SUBMIT SCORE</button><button class="btn alt" id="again">RUN AGAIN</button><button class="btn alt" id="home">MAIN MENU</button>
+</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), app=$('app');
+const screens=['menu','learnScreen','labScreen','boardScreen','knowledge','pauseScreen','gameover'];
+function show(id){screens.forEach(s=>$(s).classList.toggle('hidden',s!==id));}
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+const safeStore={get(k,fallback=null){try{return localStorage.getItem(k)??fallback}catch(e){return fallback}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}};
+function bindPress(id,fn){const el=typeof id==='string'?$(id):id;let lastTap=0;const run=e=>{if(e){e.preventDefault();e.stopPropagation();}const now=Date.now();if(now-lastTap<240)return;lastTap=now;unlockAudio();fn(e);};['click','pointerup','touchend'].forEach(type=>el.addEventListener(type,run,{passive:false}));}
+if(!window.THREE){alert('Three.js failed to load. Open this file with internet access to play the 3D version.');}
+
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x080a10,.023);
+const camera=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,.1,250);
+camera.position.set(0,7.2,10.2);camera.lookAt(0,.3,-14);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;$('scene').appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xffb0bd,0x16070b,2.2));
+const redLight=new THREE.PointLight(0xff3158,26,60);redLight.position.set(0,6,6);scene.add(redLight);
+const fillLight=new THREE.PointLight(0x62eaff,10,50);fillLight.position.set(0,4,-10);scene.add(fillLight);
+
+let tubeGroup=new THREE.Group();scene.add(tubeGroup);
+function makeTube(){
+ tubeGroup.clear();
+ const mat=new THREE.MeshStandardMaterial({color:0x250710,roughness:.72,metalness:.04,side:THREE.BackSide});
+ const geo=new THREE.CylinderGeometry(8,8,170,56,1,true);const tube=new THREE.Mesh(geo,mat);tube.rotation.x=Math.PI/2;tubeGroup.add(tube);
+ const ringMat=new THREE.MeshBasicMaterial({color:0xff4960,transparent:true,opacity:.14,side:THREE.DoubleSide});
+ for(let z=-82;z<18;z+=9.5){let ring=new THREE.Mesh(new THREE.RingGeometry(5.8,6.05,48),ringMat);ring.rotation.x=Math.PI/2;ring.position.z=z;tubeGroup.add(ring)}
+ const pulseMat=new THREE.MeshBasicMaterial({color:0x992233,transparent:true,opacity:.06});
+ for(let i=0;i<32;i++){let blob=new THREE.Mesh(new THREE.SphereGeometry(.2+Math.random()*.35,8,6),pulseMat);blob.position.set((Math.random()-.5)*9,(Math.random()-.5)*6,-80+Math.random()*98);tubeGroup.add(blob)}
+}
+makeTube();
+
+const player=new THREE.Group();scene.add(player);player.position.set(0,0,1);
+const rbcmat=new THREE.MeshStandardMaterial({color:0xff4b68,roughness:.3,metalness:.06});
+const darkmat=new THREE.MeshStandardMaterial({color:0xb01f3f,roughness:.5,metalness:.04});
+const rimmat=new THREE.MeshStandardMaterial({color:0xff9ab2,roughness:.25,metalness:.08,transparent:true,opacity:.35});
+const body=new THREE.Mesh(new THREE.SphereGeometry(1,34,24),rbcmat);body.scale.set(1.55,1.15,.5);player.add(body);
+const dimpleFront=new THREE.Mesh(new THREE.SphereGeometry(.74,24,18),darkmat);dimpleFront.scale.set(1.08,.85,.25);dimpleFront.position.z=.28;player.add(dimpleFront);
+const dimpleBack=new THREE.Mesh(new THREE.SphereGeometry(.74,24,18),darkmat);dimpleBack.scale.set(1.08,.85,.25);dimpleBack.position.z=-.28;player.add(dimpleBack);
+const rim=new THREE.Mesh(new THREE.TorusGeometry(1.03,.14,10,34),rimmat);rim.scale.set(1.2,.88,1);player.add(rim);
+player.rotation.x=-.22;
+
+const obstacles=[],oxygens=[],trail=[];
+let profile=JSON.parse(safeStore.get('bloodRun3DProfile','null')||'null')||{heme:0,skin:0,trail:0,title:0,frame:0,ownedSkins:[0],ownedTrails:[0],ownedTitles:[0],ownedFrames:[0],highScore:0};
+profile.ownedSkins=profile.ownedSkins||[0];profile.ownedTrails=profile.ownedTrails||[0];profile.ownedTitles=profile.ownedTitles||[0];profile.ownedFrames=profile.ownedFrames||[0];profile.frame=Number.isInteger(profile.frame)?profile.frame:0;
+const skins=[['Classic',35,0xff4568,0xb31c3d],['Ruby',55,0xff6b82,0xc91e46],['Gold',90,0xffd65a,0xd08a18],['Plasma',130,0xc978ff,0x7030a6],['Oxygen',165,0x62eaff,0x1a6b88],['Midnight',225,0xc1c7d4,0x454d62]];
+const trails=[['None',0,0],['Ruby Sparks',45,0xff4c70],['Oxygen Stream',80,0x6feaff],['Gold Dust',120,0xffd85b],['Plasma',180,0xc978ff]];
+const titles=[['RBC Runner',0],['Capillary Scout',55],['Vessel Navigator',120],['Oxygen Courier',220],['Vaso-Occlusion Survivor',360],['Hematology Master',550]];
+const frames=[
+ ['Bronze Cell',0,'#8e5b4a','#ddc3b3','#4b2a22','#f3d6c8'],
+ ['Silver Flow',1800,'#7d838d','#eef2f6','#3c4148','#dce4f6'],
+ ['Gold Pulse',4200,'#b99843','#f4efb2','#675118','#fcf6b0'],
+ ['Platinum Drift',7000,'#8b99a4','#f0f4f8','#4b5663','#f7f3d4'],
+ ['Diamond Surge',9800,'#879df6','#edf0ff','#35459c','#c6d2ff'],
+ ['Mythic Vessel',13500,'#8b57ff','#f1d6ff','#391a74','#ffd4ff']
+];
+function currentRankIndex(score=profile.highScore){let r=0;for(let i=0;i<frames.length;i++)if(score>=frames[i][1])r=i;return r}
+function unlockFrames(){let changed=false;for(let i=0;i<frames.length;i++){if(profile.highScore>=frames[i][1]&&!profile.ownedFrames.includes(i)){profile.ownedFrames.push(i);changed=true}}profile.ownedFrames.sort((a,b)=>a-b);if(!profile.ownedFrames.includes(profile.frame))profile.frame=0;return changed}
+function save(){safeStore.set('bloodRun3DProfile',JSON.stringify(profile));updatePortrait();renderShop()}
+function updatePortrait(){unlockFrames();let s=skins[profile.skin]||skins[0],f=frames[profile.frame]||frames[0],t=titles[profile.title]||titles[0];$('portrait').dataset.rank=profile.frame;document.documentElement.style.setProperty('--rankMain',f[2]);document.documentElement.style.setProperty('--rankLight',f[3]);document.documentElement.style.setProperty('--rankDark',f[4]);document.documentElement.style.setProperty('--rankGlow',f[2]+'66');document.documentElement.style.setProperty('--rankStar',f[5]);$('rankName').textContent=f[0];$('skinName').textContent=s[0]+' RBC';$('ptitle').textContent=t[0];$('portraitFace').style.background='#'+s[2].toString(16).padStart(6,'0');$('portraitFace').style.boxShadow='inset -10px -7px 0 #'+s[3].toString(16).padStart(6,'0');body.material.color.setHex(s[2]);dimpleFront.material.color.setHex(s[3]);dimpleBack.material.color.setHex(s[3]);rim.material.color.setHex(s[2])}
+updatePortrait();
+
+let activeTab='skins';
+function renderShop(){
+ $('heme').textContent=profile.heme;
+ if(activeTab==='frames'){unlockFrames();$('shopGrid').innerHTML=frames.map((x,i)=>{let owned=profile.ownedFrames.includes(i),equipped=profile.frame===i;return `<div class="item ${equipped?'sel':''}"><div class="frameMini" style="--miniMain:${x[2]};--miniLight:${x[3]};--miniDark:${x[4]};--miniGlow:${x[2]}66"></div><b>${x[0]}</b><br><span class="note">${owned?(equipped?'EQUIPPED':'UNLOCKED'):'Reach '+x[1].toLocaleString()+' high score'}</span><br><button data-frame="${i}" ${owned?'':'disabled'}>${owned?(equipped?'EQUIPPED':'EQUIP'):'LOCKED'}</button></div>`}).join('');document.querySelectorAll('[data-frame]').forEach(b=>{if(!b.disabled)bindPress(b,()=>{profile.frame=+b.dataset.frame;save()})});return; }
+ let arr=activeTab==='skins'?skins:activeTab==='trails'?trails:titles;
+ let key='owned'+activeTab[0].toUpperCase()+activeTab.slice(1),owned=profile[key]||[];
+ $('shopGrid').innerHTML=arr.map((x,i)=>{
+   let name=x[0],cost=x[1],visual=activeTab==='skins'?`<div class="orb" style="background:#${x[2].toString(16).padStart(6,'0')}"></div>`:`<div style="height:40px;margin-bottom:8px;font-weight:900;color:#${(x[2]||0xff3158).toString(16).padStart(6,'0')}">${activeTab==='titles'?'Aa':'✦'}</div>`;
+   let equipped=profile[activeTab.slice(0,-1)]===i;
+   return `<div class="item ${equipped?'sel':''}">${visual}<b>${name}</b><br><span class="note">${owned.includes(i)?(equipped?'EQUIPPED':'OWNED'):cost+' Heme'}</span><br><button data-buy="${i}">${owned.includes(i)?'EQUIP':'BUY'}</button></div>`
+ }).join('');
+ document.querySelectorAll('[data-buy]').forEach(b=>bindPress(b,()=>{let i=+b.dataset.buy,arr=activeTab==='skins'?skins:activeTab==='trails'?trails:titles,key='owned'+activeTab[0].toUpperCase()+activeTab.slice(1);if(profile[key].includes(i))profile[activeTab.slice(0,-1)]=i;else if(profile.heme>=arr[i][1]){profile.heme-=arr[i][1];profile[key].push(i);profile[activeTab.slice(0,-1)]=i}else{toast('Not enough Heme');return}save();}));
+}
+document.querySelectorAll('[data-tab]').forEach(b=>bindPress(b,()=>{activeTab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));renderShop()}));renderShop();
+
+const questions=[["What is the main job of red blood cells?",["Carry oxygen through the body","Make antibodies","Digest nutrients","Produce hormones"],0],["Knowledge check: what is the main job of red blood cells?",["Carry oxygen through the body","Make antibodies","Digest nutrients","Produce hormones"],0],["Which protein in red blood cells carries oxygen?",["Hemoglobin","Collagen","Insulin","Keratin"],0],["Knowledge check: which protein in red blood cells carries oxygen?",["Hemoglobin","Collagen","Insulin","Keratin"],0],["What shape are healthy red blood cells typically?",["Flexible biconcave discs","Rigid cubes","Permanent crescents","Long fibers"],0],["Knowledge check: what shape are healthy red blood cells typically?",["Flexible biconcave discs","Rigid cubes","Permanent crescents","Long fibers"],0],["Why is RBC flexibility important?",["It helps cells pass through tiny vessels","It creates DNA","It strengthens bone","It stops clotting"],0],["Knowledge check: why is RBC flexibility important?",["It helps cells pass through tiny vessels","It creates DNA","It strengthens bone","It stops clotting"],0],["Where do RBCs pick up most oxygen?",["The lungs","The stomach","The skin","The kidneys"],0],["Knowledge check: where do RBCs pick up most oxygen?",["The lungs","The stomach","The skin","The kidneys"],0],["Where do RBCs deliver oxygen?",["Body tissues","Only the lungs","Only the heart","Only bone marrow"],0],["Knowledge check: where do RBCs deliver oxygen?",["Body tissues","Only the lungs","Only the heart","Only bone marrow"],0],["Which vessels are the smallest?",["Capillaries","The aorta","Large veins","Pulmonary trunk"],0],["Knowledge check: which vessels are the smallest?",["Capillaries","The aorta","Large veins","Pulmonary trunk"],0],["What happens to HbS at low oxygen?",["It can form stiff polymers","It turns into glucose","It disappears","It becomes an antibody"],0],["Knowledge check: what happens to HbS at low oxygen?",["It can form stiff polymers","It turns into glucose","It disappears","It becomes an antibody"],0],["HbS polymerization makes RBCs more...",["Rigid","Flexible","Transparent","Nucleated"],0],["Knowledge check: hbS polymerization makes RBCs more...",["Rigid","Flexible","Transparent","Nucleated"],0],["What shape can sickled RBCs take?",["Crescent or sickle shape","Perfect square","Spiral","Cube"],0],["Knowledge check: what shape can sickled RBCs take?",["Crescent or sickle shape","Perfect square","Spiral","Cube"],0],["Sickle cell disease is...",["An inherited group of blood disorders","A contagious infection","A bone disorder","A food allergy"],0],["Knowledge check: sickle cell disease is...",["An inherited group of blood disorders","A contagious infection","A bone disorder","A food allergy"],0],["Can sickle cell disease spread person to person?",["No","Yes by coughing","Yes by touch","Yes by food"],0],["Knowledge check: can sickle cell disease spread person to person?",["No","Yes by coughing","Yes by touch","Yes by food"],0],["Vaso-occlusion means...",["Blood flow is blocked or slowed","Blood becomes bone","Lungs stop existing","Veins turn into arteries"],0],["Knowledge check: vaso-occlusion means...",["Blood flow is blocked or slowed","Blood becomes bone","Lungs stop existing","Veins turn into arteries"],0],["Why can vaso-occlusion cause pain?",["Reduced blood flow can cause ischemia","It increases oxygen delivery","It makes RBCs softer","It creates more capillaries"],0],["Knowledge check: why can vaso-occlusion cause pain?",["Reduced blood flow can cause ischemia","It increases oxygen delivery","It makes RBCs softer","It creates more capillaries"],0],["A painful sickle cell episode is also called...",["A vaso-occlusive crisis","A sprain","A migraine aura","A skin allergy"],0],["Knowledge check: a painful sickle cell episode is also called...",["A vaso-occlusive crisis","A sprain","A migraine aura","A skin allergy"],0],["Which condition can promote sickling?",["Low oxygen","High flexibility","Extra plasma","Normal HbA"],0],["Knowledge check: which condition can promote sickling?",["Low oxygen","High flexibility","Extra plasma","Normal HbA"],0],["Which factor can trigger a pain crisis?",["Dehydration","Healthy hydration","Normal flexibility","More HbA"],0],["Knowledge check: which factor can trigger a pain crisis?",["Dehydration","Healthy hydration","Normal flexibility","More HbA"],0],["What is hemolysis?",["Breakdown of red blood cells","Bone formation","Fat digestion","Heart contraction"],0],["Knowledge check: what is hemolysis?",["Breakdown of red blood cells","Bone formation","Fat digestion","Heart contraction"],0],["Early RBC breakdown can contribute to...",["Anemia","Stronger bones","Better vision","More oxygen delivery"],0],["Knowledge check: early RBC breakdown can contribute to...",["Anemia","Stronger bones","Better vision","More oxygen delivery"],0],["A common effect of anemia is...",["Fatigue","Instant muscle growth","More oxygen delivery","Faster bone growth"],0],["Knowledge check: a common effect of anemia is...",["Fatigue","Instant muscle growth","More oxygen delivery","Faster bone growth"],0],["Which organ helps remove old RBCs?",["The spleen","The appendix","The thyroid","The bladder"],0],["Knowledge check: which organ helps remove old RBCs?",["The spleen","The appendix","The thyroid","The bladder"],0],["Reduced spleen function can increase risk of...",["Serious infections","Stronger immunity","Faster growth","Better oxygenation"],0],["Knowledge check: reduced spleen function can increase risk of...",["Serious infections","Stronger immunity","Faster growth","Better oxygenation"],0],["Sickle cell disease can increase risk of...",["Stroke","Only cavities","Only sprains","Only sunburn"],0],["Knowledge check: sickle cell disease can increase risk of...",["Stroke","Only cavities","Only sprains","Only sunburn"],0],["Dactylitis is...",["Painful swelling of hands and feet","A vision test","A heart rhythm","A skin pigment"],0],["Knowledge check: dactylitis is...",["Painful swelling of hands and feet","A vision test","A heart rhythm","A skin pigment"],0],["Acute chest syndrome mainly involves the...",["Lungs","Teeth","Toenails","Hair"],0],["Knowledge check: acute chest syndrome mainly involves the...",["Lungs","Teeth","Toenails","Hair"],0],["Sickle cell trait is...",["Different from sickle cell disease","Always severe disease","Contagious","No sickle gene present"],0],["Knowledge check: sickle cell trait is...",["Different from sickle cell disease","Always severe disease","Contagious","No sickle gene present"],0],["Genes are instructions made of...",["DNA","Calcium","Oxygen","Cholesterol"],0],["Knowledge check: genes are instructions made of...",["DNA","Calcium","Oxygen","Cholesterol"],0],["A mutation is...",["A change in genetic material","A blood vessel","A lung chamber","A meal"],0],["Knowledge check: a mutation is...",["A change in genetic material","A blood vessel","A lung chamber","A meal"],0],["Hemoglobin is mainly found inside...",["Red blood cells","Platelets","Bone cells","Fat cells"],0],["Knowledge check: hemoglobin is mainly found inside...",["Red blood cells","Platelets","Bone cells","Fat cells"],0],["As tissues use oxygen, hemoglobin tends to...",["Release oxygen","Create DNA","Make platelets","Become bone"],0],["Knowledge check: as tissues use oxygen, hemoglobin tends to...",["Release oxygen","Create DNA","Make platelets","Become bone"],0],["What does microcirculation mean?",["Blood flow through the smallest vessels","Air flow in lungs","Food movement","Nerve impulses"],0],["Knowledge check: what does microcirculation mean?",["Blood flow through the smallest vessels","Air flow in lungs","Food movement","Nerve impulses"],0],["What connects arterioles and venules?",["Capillaries","The aorta","Heart valves","Large veins"],0],["Knowledge check: what connects arterioles and venules?",["Capillaries","The aorta","Heart valves","Large veins"],0],["Arterioles are...",["Small branches of arteries","Heart chambers","RBC types","Lung sacs"],0],["Knowledge check: arterioles are...",["Small branches of arteries","Heart chambers","RBC types","Lung sacs"],0],["Venules are...",["Small vessels collecting blood from capillaries","Large arteries","Bone cells","Airways"],0],["Knowledge check: venules are...",["Small vessels collecting blood from capillaries","Large arteries","Bone cells","Airways"],0],["The pulmonary artery carries blood toward the...",["Lungs","Liver","Brain","Kidneys"],0],["Knowledge check: the pulmonary artery carries blood toward the...",["Lungs","Liver","Brain","Kidneys"],0],["Pulmonary veins carry blood toward the...",["Heart","Skin","Spleen","Intestines"],0],["Knowledge check: pulmonary veins carry blood toward the...",["Heart","Skin","Spleen","Intestines"],0],["The aorta is the largest...",["Artery","Vein","Capillary","Lymph node"],0],["Knowledge check: the aorta is the largest...",["Artery","Vein","Capillary","Lymph node"],0],["Which side of the heart pumps oxygenated blood to the body?",["Left side","Right side","Neither side","Only the atria"],0],["Knowledge check: which side of the heart pumps oxygenated blood to the body?",["Left side","Right side","Neither side","Only the atria"],0],["Which side of the heart pumps blood to the lungs?",["Right side","Left side","Neither side","Only the aorta"],0],["Knowledge check: which side of the heart pumps blood to the lungs?",["Right side","Left side","Neither side","Only the aorta"],0],["Gas exchange occurs mainly across...",["Thin capillary walls","Bones","Tendons","Heart valves"],0],["Knowledge check: gas exchange occurs mainly across...",["Thin capillary walls","Bones","Tendons","Heart valves"],0],["Oxygen moves from blood into tissues mainly by...",["Diffusion","Platelet pumping","DNA replication","Bone contraction"],0],["Knowledge check: oxygen moves from blood into tissues mainly by...",["Diffusion","Platelet pumping","DNA replication","Bone contraction"],0],["What does oxygen saturation describe?",["How much hemoglobin is carrying oxygen","How many bones have marrow","How many veins exist","Stomach emptying speed"],0],["Knowledge check: what does oxygen saturation describe?",["How much hemoglobin is carrying oxygen","How many bones have marrow","How many veins exist","Stomach emptying speed"],0],["Repeated vaso-occlusion can contribute to...",["Organ damage","Stronger capillaries","More HbA","Permanent flexibility"],0],["Knowledge check: repeated vaso-occlusion can contribute to...",["Organ damage","Stronger capillaries","More HbA","Permanent flexibility"],0],["What does chronic mean?",["Long-lasting or recurring","Always contagious","Only bacterial","Lasting seconds"],0],["Knowledge check: what does chronic mean?",["Long-lasting or recurring","Always contagious","Only bacterial","Lasting seconds"],0],["Sickle cell disease is generally...",["A lifelong condition","A one-day infection","A broken bone","A food allergy"],0],["Knowledge check: sickle cell disease is generally...",["A lifelong condition","A one-day infection","A broken bone","A food allergy"],0],["Erythropoietin helps regulate production of...",["Red blood cells","Teeth","Skin pigment","Bile"],0],["Knowledge check: erythropoietin helps regulate production of...",["Red blood cells","Teeth","Skin pigment","Bile"],0],["Which organ makes most erythropoietin in adults?",["Kidneys","Stomach","Spleen","Pancreas"],0],["Knowledge check: which organ makes most erythropoietin in adults?",["Kidneys","Stomach","Spleen","Pancreas"],0],["Reticulocytes are...",["Young red blood cells","Mature neurons","Platelet fragments","Bone cells"],0],["Knowledge check: reticulocytes are...",["Young red blood cells","Mature neurons","Platelet fragments","Bone cells"],0],["Bilirubin can rise when many RBCs...",["Break down","Gain nuclei","Enter lungs","Turn into platelets"],0],["Knowledge check: bilirubin can rise when many RBCs...",["Break down","Gain nuclei","Enter lungs","Turn into platelets"],0],["Hemolytic anemia involves...",["RBCs breaking down too quickly","Too much bone growth","Too much oxygen","Too many platelets only"],0],["Knowledge check: hemolytic anemia involves...",["RBCs breaking down too quickly","Too much bone growth","Too much oxygen","Too many platelets only"],0]];
+let game=null,paused=false,last=0,questionOpen=false;
+function clearObjects(a){for(const x of a)scene.remove(x.mesh);a.length=0}
+function spawnObstacle(){
+ let type=Math.random()<.6?'sickle':Math.random()<.5?'clot':'narrow';
+ let m=new THREE.MeshStandardMaterial({color:type==='sickle'?0xff986e:type==='clot'?0xd84a58:0x9ba5b5,roughness:.65});
+ let mesh=new THREE.Mesh(type==='sickle'?new THREE.TorusGeometry(.72,.24,10,20,Math.PI*1.55):type==='clot'?new THREE.IcosahedronGeometry(.75,1):new THREE.BoxGeometry(1.2,.55,.55),m);
+ if(type==='narrow')mesh.rotation.z=Math.random()*Math.PI;
+ mesh.position.set((Math.random()-.5)*4.7,(Math.random()-.5)*3.1,-58);mesh.userData={type};scene.add(mesh);obstacles.push({mesh,type,r:.88})
+}
+function spawnOxygen(){let m=new THREE.MeshBasicMaterial({color:0x6feaff});let mesh=new THREE.Mesh(new THREE.SphereGeometry(.3,12,8),m);mesh.position.set((Math.random()-.5)*4.7,(Math.random()-.5)*3.1,-58);scene.add(mesh);oxygens.push({mesh,r:.5})}
+function startGame(){
+ unlockAudio();startMusic();paused=false;questionOpen=false;$('bossBar').classList.remove('show');$('bossFill').style.width='100%';
+ clearObjects(obstacles);clearObjects(oxygens);trail.forEach(x=>scene.remove(x));trail.length=0;
+ player.position.set(0,0,1);player.rotation.set(-.22,0,0);
+ game={score:0,dist:0,oxy:100,hits:0,knowledge:0,qcount:0,elapsed:0,spawn:.7,oSpawn:.8,qTimer:5,stage:0,vessel:5.9,alive:true,inputX:0,inputY:0,vx:0,vy:0,boss:false,bossTimer:0,bossWave:0,nextBoss:1400,questionDeck:Array.from({length:50},(_,i)=>i*2+(Math.random()<.5?0:1)).sort(()=>Math.random()-.5)};
+ ['hud','controls'].forEach(id=>$(id).classList.remove('hidden'));show(null);last=performance.now();requestAnimationFrame(loop)
+}
+function setStage(){
+ let old=game.stage;game.stage=game.dist<700?0:game.dist<1600?1:game.dist<2800?2:game.dist<4300?3:4;
+ if(old!==game.stage){toast(['LARGE VESSELS','ARTERIOLES','CAPILLARY NETWORK','HYPOXIC TISSUE','VASO-OCCLUSION'][game.stage]);sfxStage()}
+ $('stage').textContent=['LARGE VESSELS','ARTERIOLES','CAPILLARY NETWORK','HYPOXIC TISSUE','VASO-OCCLUSION'][game.stage]
+}
+function startBoss(){game.boss=true;game.bossTimer=9;game.bossWave=.15;game.nextBoss+=1600;$('bossBar').classList.add('show');toast('⚠ VASO-OCCLUSION SURGE');sfxStage()}
+function spawnBossWave(){let gap=(Math.floor(Math.random()*5)-2)*1.05;for(let i=-2;i<=2;i++){let x=i*1.05;if(Math.abs(x-gap)<.55)continue;let m=new THREE.MeshStandardMaterial({color:i%2?0xff8b6d:0xb82e46,roughness:.7});let mesh=new THREE.Mesh(i%2?new THREE.TorusGeometry(.75,.26,10,20,Math.PI*1.55):new THREE.IcosahedronGeometry(.82,1),m);mesh.position.set(x,(Math.random()-.5)*1.4,-48-Math.random()*4);scene.add(mesh);obstacles.push({mesh,type:'sickle',r:.92,boss:true})}}
+function maybeQuestion(){if(game.qcount>=12||!game.questionDeck.length)return;game.qcount++;let q=questions[game.questionDeck.pop()];let order=q[1].map((_,i)=>i).sort(()=>Math.random()-.5),correct=order.indexOf(q[2]);q=[q[0],order.map(i=>q[1][i]),correct];$('question').textContent=q[0];$('answers').innerHTML=q[1].map((a,i)=>`<button class="answer" data-a="${i}">${String.fromCharCode(65+i)}. ${a}</button>`).join('');document.querySelectorAll('[data-a]').forEach(b=>bindPress(b,()=>answer(+b.dataset.a,q)));show('knowledge');questionOpen=true}
+function answer(i,q){document.querySelectorAll('.answer').forEach((b,j)=>{b.disabled=true;if(j===q[2])b.classList.add('correct');if(j===i&&i!==q[2])b.classList.add('wrong')});if(i===q[2]){game.knowledge++;game.score+=500;game.oxy=Math.min(100,game.oxy+8);sfxCorrect();toast('CORRECT • +500')}else{game.oxy=Math.max(0,game.oxy-12);game.score=Math.max(0,game.score-250);sfxWrong();toast('NOT QUITE • O₂ -12%')}setTimeout(()=>{questionOpen=false;if(game&&game.alive){show(null);['hud','controls'].forEach(id=>$(id).classList.remove('hidden'));last=performance.now()}},750)}
+function move(x,y){if(!game||paused||questionOpen)return;game.inputX=clamp(x,-1,1);game.inputY=clamp(y,-1,1)}
+function release(){if(game){game.inputX*=.55;game.inputY*=.55}}
+const ctrlPointers=new Map(), keysHeld=new Set();
+function digitalVector(){
+ let x=0,y=0;
+ for(const v of ctrlPointers.values()){x+=v.x;y+=v.y}
+ if(keysHeld.has('ArrowLeft'))x-=1;if(keysHeld.has('ArrowRight'))x+=1;if(keysHeld.has('ArrowUp'))y-=1;if(keysHeld.has('ArrowDown'))y+=1;
+ return {x:clamp(x,-1,1),y:clamp(y,-1,1)};
+}
+function applyDigital(){if(!game||paused||questionOpen)return;const v=digitalVector();if(v.x||v.y){game.inputX=v.x;game.inputY=v.y}}
+document.querySelectorAll('.ctrl').forEach(b=>{
+ b.addEventListener('pointerdown',e=>{e.preventDefault();ctrlPointers.set(e.pointerId,{x:+b.dataset.x,y:+b.dataset.y});try{b.setPointerCapture&&b.setPointerCapture(e.pointerId)}catch(_){}applyDigital()},{passive:false});
+ const up=e=>{e.preventDefault();ctrlPointers.delete(e.pointerId);try{b.releasePointerCapture&&b.releasePointerCapture(e.pointerId)}catch(_){}const v=digitalVector();if(game){if(v.x||v.y){game.inputX=v.x;game.inputY=v.y}else release()} };
+ ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,up,{passive:false}));
+});
+let dragging=false,lastPX=0,lastPY=0;
+function uiTouchTarget(target){return target.closest('button,input,.panel,#pause,.ctrl,#knowledge,.screen');}
+app.addEventListener('pointerdown',e=>{if(!game||paused||questionOpen||uiTouchTarget(e.target))return;dragging=true;lastPX=e.clientX;lastPY=e.clientY;try{app.setPointerCapture&&app.setPointerCapture(e.pointerId)}catch(_){}unlockAudio();},{passive:false});
+app.addEventListener('pointermove',e=>{if(!dragging||!game||paused||questionOpen)return;e.preventDefault();const dx=e.clientX-lastPX,dy=e.clientY-lastPY;lastPX=e.clientX;lastPY=e.clientY;game.inputX=clamp(game.inputX+dx/36,-1,1);game.inputY=clamp(game.inputY+dy/36,-1,1)},{passive:false});
+['pointerup','pointercancel'].forEach(ev=>app.addEventListener(ev,e=>{dragging=false;try{app.releasePointerCapture&&app.releasePointerCapture(e.pointerId)}catch(_){}release();},{passive:false}));
+app.addEventListener('touchmove',e=>{if(game&&!paused&&!questionOpen&&!uiTouchTarget(e.target))e.preventDefault()},{passive:false});
+addEventListener('keydown',e=>{if(e.key.startsWith('Arrow')){e.preventDefault();keysHeld.add(e.key);applyDigital()}});
+addEventListener('keyup',e=>{if(e.key.startsWith('Arrow')){keysHeld.delete(e.key);const v=digitalVector();if(game){if(v.x||v.y){game.inputX=v.x;game.inputY=v.y}else release()}}});
+
+function loop(t){
+ if(!game||!game.alive)return;let dt=Math.min((t-last)/1000,.033);last=t;
+ if(!paused&&!questionOpen){
+  game.elapsed+=dt;let speed=17+Math.min(25,game.dist*.0042);game.dist+=speed*dt*2.2;game.score+=speed*dt*2;if(!game.boss&&game.dist>=game.nextBoss)startBoss();
+  if(game.boss){game.bossTimer-=dt;game.bossWave-=dt;if(game.bossWave<=0){spawnBossWave();game.bossWave=1.2}if(game.bossTimer<=0){game.boss=false;$('bossBar').classList.remove('show');game.score+=750;game.oxy=Math.min(100,game.oxy+10);toast('SURGE CLEARED • +750')}}
+  if(ctrlPointers.size||keysHeld.size)applyDigital();
+  game.vx+=(game.inputX*11.8-game.vx)*Math.min(1,dt*7.6);game.vy+=(game.inputY*10.2-game.vy)*Math.min(1,dt*7.6);
+  if(!dragging&&!ctrlPointers.size&&!keysHeld.size){game.inputX*=Math.pow(.80,dt*60);game.inputY*=Math.pow(.80,dt*60)}
+  player.position.x+=game.vx*dt;player.position.y+=game.vy*dt;
+  let baseVessel=Math.max(2.75,5.9-game.dist/1800);let surge=game.boss?.65:0;game.vessel+=(Math.max(2.55,baseVessel-surge)-game.vessel)*Math.min(1,dt*2.5);let scale=game.vessel/5.9;tubeGroup.scale.x+=(scale-tubeGroup.scale.x)*.08;tubeGroup.scale.y+=(scale-tubeGroup.scale.y)*.08;
+  player.position.x=clamp(player.position.x,-game.vessel+1,game.vessel-1);player.position.y=clamp(player.position.y,-Math.max(1.7,game.vessel*.55),Math.max(1.7,game.vessel*.55));if(game.boss)$('bossFill').style.width=Math.max(0,game.bossTimer/9*100)+'%';
+  game.oxy-=dt*(.8+game.dist/9000);game.spawn-=dt;game.oSpawn-=dt;game.qTimer-=dt;
+  if(game.spawn<=0){spawnObstacle();game.spawn=Math.max(.33,1.08-game.dist/7000)}
+  if(game.oSpawn<=0){spawnOxygen();game.oSpawn=.65+Math.random()*.8}
+  if(game.qTimer<=0&&game.dist>350){maybeQuestion();game.qTimer=13+Math.random()*8}
+  obstacles.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.rotation.x+=dt*.9;o.mesh.rotation.y+=dt*.7});
+  oxygens.forEach(o=>o.mesh.position.z+=speed*dt);
+  for(const o of obstacles)if(!o.hit&&o.mesh.position.z>-.2&&o.mesh.position.z<2&&o.mesh.position.distanceTo(player.position)<1.33){o.hit=true;game.hits++;game.oxy-=o.type==='sickle'?17:o.type==='clot'?13:9;game.score=Math.max(0,game.score-150);sfxHit();toast(o.type==='sickle'?'SICKLED CELL':'VESSEL OBSTRUCTION')}
+  for(const o of oxygens)if(!o.hit&&o.mesh.position.z>-.2&&o.mesh.position.z<2&&o.mesh.position.distanceTo(player.position)<.92){o.hit=true;game.oxy=Math.min(100,game.oxy+13);game.score+=120;sfxPickup();toast('+ O₂')}
+  for(let i=obstacles.length-1;i>=0;i--)if(obstacles[i].mesh.position.z>8){scene.remove(obstacles[i].mesh);obstacles.splice(i,1)}
+  for(let i=oxygens.length-1;i>=0;i--)if(oxygens[i].mesh.position.z>8){scene.remove(oxygens[i].mesh);oxygens.splice(i,1)}
+  setStage();updateHud();if(game.oxy<=0)return endGame('Oxygen critically depleted.');if(game.hits>=8)return endGame('Too many vessel obstructions.');
+ }
+ camera.position.x+=(player.position.x*.22-camera.position.x)*.08;camera.position.y+=(7.1+player.position.y*.16-camera.position.y)*.08;camera.position.z+=(10.2-camera.position.z)*.08;camera.lookAt(player.position.x*.26,player.position.y*.14,-14);
+ player.rotation.z+=(game?(-game.vx*.026)-player.rotation.z:0)*.10;player.rotation.x+=((-0.22+game.inputY*.035)-player.rotation.x)*.08;player.rotation.y=Math.sin(t*.004)*.07;
+ body.scale.z=(game&&game.oxy<35)?.42:.5;rim.scale.set(1.2+.06*Math.sin(t*.01),.88+.04*Math.cos(t*.009),1);dimpleFront.scale.z=dimpleBack.scale.z=(game&&game.oxy<35)?.22:.25;
+ renderer.render(scene,camera);requestAnimationFrame(loop)
+}
+function updateHud(){if(!game)return;let liveScore=Math.floor(game.score);$('score').textContent=liveScore.toLocaleString();$('dist').textContent=Math.floor(game.dist)+' m';$('oxy').textContent=Math.max(0,Math.floor(game.oxy))+'%';$('oxyBar').style.width=Math.max(0,game.oxy)+'%';$('o2').classList.toggle('low',game.oxy<55);$('o2').classList.toggle('critical',game.oxy<25)}
+function endGame(reason){if(!game||!game.alive)return;game.alive=false;paused=false;['hud','controls'].forEach(id=>$(id).classList.add('hidden'));$('bossBar').classList.remove('show');let score=Math.floor(game.score),dist=Math.floor(game.dist),earned=Math.max(26,Math.floor(dist/52)+game.knowledge*18);profile.heme+=earned;profile.highScore=Math.max(profile.highScore,score);let newlyUnlocked=unlockFrames();save();if(newlyUnlocked)toast('NEW FRAME UNLOCKED!');$('reason').textContent=reason;$('finalScore').textContent=score.toLocaleString();$('finalDist').textContent=dist+' m';$('knowledgeScore').textContent=(game.qcount?Math.round(game.knowledge/game.qcount*100):100)+'%';$('earned').textContent=earned;$('name').value='';show('gameover')}
+function getScores(){return JSON.parse(safeStore.get('bloodRun3DScores','[]')||'[]')}
+function renderBoard(){let a=getScores().sort((x,y)=>y.score-x.score).slice(0,10);$('rows').innerHTML=a.length?a.map((x,i)=>`<tr><td>${i+1}. ${String(x.name).replace(/[&<>"']/g,'')}</td><td>${x.score.toLocaleString()}</td></tr>`).join(''):'<tr><td colspan="2">No scores yet.</td></tr>'}
+bindPress('submit',()=>{if(!game)return;let n=($('name').value.trim()||'RBC Runner').slice(0,12),a=getScores();a.push({name:n,score:Math.floor(game.score),distance:Math.floor(game.dist),time:Date.now()});safeStore.set('bloodRun3DScores',JSON.stringify(a.sort((x,y)=>y.score-x.score).slice(0,100)));renderBoard();show('boardScreen')});
+bindPress('start',startGame);bindPress('learn',()=>show('learnScreen'));bindPress('lab',()=>{renderShop();show('labScreen')});bindPress('board',()=>{renderBoard();show('boardScreen')});
+bindPress('backLearn',()=>show('menu'));bindPress('backLab',()=>show('menu'));bindPress('backBoard',()=>show('menu'));bindPress('again',startGame);bindPress('home',()=>show('menu'));
+bindPress('pause',()=>{if(!game)return;paused=true;show('pauseScreen')});bindPress('resume',()=>{paused=false;show(null);['hud','controls'].forEach(id=>$(id).classList.remove('hidden'));last=performance.now()});bindPress('quit',()=>{paused=false;endGame('Run ended by player.')});
+
+let audio=null,master=null,musicGain=null,musicLoop=null;
+function unlockAudio(){if(audio)return startMusic();try{audio=new (window.AudioContext||window.webkitAudioContext)();master=audio.createGain();master.gain.value=.5;master.connect(audio.destination);musicGain=audio.createGain();musicGain.gain.value=.09;musicGain.connect(master);audio.resume();startMusic()}catch(e){}}
+function beep(f,d,type='sine',v=.05,delay=0){if(!audio)return;let o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=f;g.gain.value=Math.max(.0001,v);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+delay+d);o.connect(g).connect(master);o.start(audio.currentTime+delay);o.stop(audio.currentTime+delay+d)}
+function sfxPickup(){beep(720,.08,'sine',.05);beep(980,.08,'sine',.04,.045)}
+function sfxHit(){beep(90,.16,'sawtooth',.06);beep(66,.24,'triangle',.03,.02)}
+function sfxCorrect(){beep(620,.08,'triangle',.04);beep(820,.12,'sine',.04,.06)}
+function sfxWrong(){beep(160,.2,'square',.04);beep(120,.16,'square',.03,.06)}
+function sfxStage(){beep(260,.11,'triangle',.05);beep(390,.15,'triangle',.04,.08)}
+function pulseNote(freq,when,dur=.38,vol=.02,type='sine'){if(!audio)return;const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(freq,audio.currentTime+when);g.gain.setValueAtTime(.0001,audio.currentTime+when);g.gain.linearRampToValueAtTime(vol,audio.currentTime+when+.02);g.gain.exponentialRampToValueAtTime(.0001,audio.currentTime+when+dur);o.connect(g).connect(musicGain);o.start(audio.currentTime+when);o.stop(audio.currentTime+when+dur+.02)}
+function playMusicBar(){if(!audio||audio.state==='suspended')return;const boss=game&&game.boss;const root=boss?146.83:174.61;const motif=boss?[0,3,5,3]:[0,5,7,10];for(let i=0;i<motif.length;i++){let freq=root*Math.pow(2,motif[i]/12);pulseNote(freq,i*.34,.3,boss?.03:.018,boss?'square':'triangle');if(i%2===0)pulseNote(freq/2,i*.34,.52,.014,'sine');}pulseNote(root/2,1.4,.62,.012,'sine');}
+function startMusic(){if(!audio)return;audio.resume();if(musicLoop)return;playMusicBar();musicLoop=setInterval(playMusicBar,1600)}
+function toast(t){$('toast').textContent=t;$('toast').style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.opacity=0,650)}
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7))});
+show('menu');
+</script>
+</body>
+</html>
