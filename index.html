@@ -361,8 +361,8 @@ function startGame(){
  unlockAudio().then(()=>startMusic());resetOcclusionWarning();const os=$('occStatus');if(os){os.className='occStatus';os.textContent='';}paused=false;questionOpen=false;$('bossBar').classList.remove('show');$('bossFill').style.width='100%';
  clearObjects(obstacles);clearObjects(oxygens);trail.forEach(x=>{scene.remove(x.mesh||x);if(x.mesh&&x.mesh.material)x.mesh.material.dispose()});trail.length=0;
  player.position.set(0,0,1);player.rotation.set(-.22,0,0);
- game={score:0,dist:0,oxy:100,hits:0,knowledge:0,qcount:0,elapsed:0,spawn:.7,oSpawn:.8,qTimer:5,stage:0,vessel:5.9,alive:true,inputX:0,inputY:0,vx:0,vy:0,boss:false,trailTimer:0,questionDeck:Array.from({length:50},(_,i)=>i*2+(Math.random()<.5?0:1)).sort(()=>Math.random()-.5),event:null,eventTimer:0,eventDuration:0,eventWave:0,eventHeme:0,nextMajor:1200,nextMinor:650,majorIndex:0,hypoxiaCollected:0,rushCollected:0,keRemaining:0,keCorrect:0,currentEmergency:false,goldenActive:false};
- ['hud'].forEach(id=>$(id).classList.remove('hidden'));show(null);last=performance.now();requestAnimationFrame(loop)
+ game={score:0,dist:0,oxy:100,hits:0,knowledge:0,qcount:0,elapsed:0,spawn:.7,oSpawn:.8,qTimer:5,stage:0,vessel:5.9,alive:true,inputX:0,inputY:0,vx:0,vy:0,boss:false,trailTimer:0,questionDeck:Array.from({length:50},(_,i)=>i*2+(Math.random()<.5?0:1)).sort(()=>Math.random()-.5),event:null,eventTimer:0,eventDuration:0,eventWave:0,eventHeme:0,nextMajor:1200,nextMinor:650,majorIndex:0,hypoxiaCollected:0,rushCollected:0,keRemaining:0,keCorrect:0,currentEmergency:false,goldenActive:false,runId:(crypto.randomUUID?crypto.randomUUID():'run-'+Date.now()+'-'+Math.random().toString(36).slice(2)),submitted:false,submissionPending:false};
+ const submitBtn=$('submit');if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='SUBMIT SCORE';} ['hud'].forEach(id=>$(id).classList.remove('hidden'));show(null);last=performance.now();requestAnimationFrame(loop)
 }
 function setStage(){
  let old=game.stage;game.stage=game.dist<700?0:game.dist<1600?1:game.dist<2800?2:game.dist<4300?3:4;
@@ -548,6 +548,8 @@ function getLocalScores(){
 
 function saveLocalScore(scoreData){
   let a=getLocalScores();
+  const runId=scoreData&&scoreData.runId;
+  if(runId&&a.some(x=>x&&x.runId===runId))return;
   a.push(scoreData);
   safeStore.set('bloodRun3DScores',JSON.stringify(a.sort((x,y)=>y.score-x.score).slice(0,100)));
 }
@@ -589,33 +591,45 @@ function startLiveLeaderboard(){
 startLiveLeaderboard();
 
 bindPress('submit',async()=>{
-  if(!game)return;
+  if(!game||game.submitted||game.submissionPending)return;
+  game.submissionPending=true;
+  const submitBtn=$('submit');
+  if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='SUBMITTING...';}
+
   let n=($('name').value.trim()||'RBC Runner').slice(0,12).replace(/[&<>"']/g,'');
   const scoreData={
     name:n||'RBC Runner',
     score:Math.max(0,Math.floor(Number(game.score)||0)),
     distance:Math.max(0,Math.floor(Number(game.dist)||0)),
-    time:Date.now()
+    time:Date.now(),
+    runId:game.runId
   };
-
-  // Keep a local copy as a backup if internet/Firebase is unavailable.
-  saveLocalScore(scoreData);
 
   if(firebaseReady&&db){
     try{
-      const newScoreRef=push(ref(db,'leaderboard'));
-      await set(newScoreRef,scoreData);
+      // The run ID is the Firebase key, so the same run cannot create a second entry.
+      await set(ref(db,'leaderboard/'+game.runId),scoreData);
+      saveLocalScore(scoreData);
+      game.submitted=true;
       leaderboardConnected=true;
+      if(submitBtn)submitBtn.textContent='SCORE SUBMITTED ✓';
       notify('SCORE POSTED LIVE','good');
       sfxPrize();
     }catch(error){
-      console.error('Score submission failed; saved locally instead.',error);
-      notify('SCORE SAVED LOCALLY — CHECK CONNECTION','warn');
+      console.error('Score submission failed.',error);
+      game.submissionPending=false;
+      if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='RETRY SUBMIT';}
+      notify('COULD NOT SUBMIT — CHECK CONNECTION','warn');
+      return;
     }
   }else{
-    notify('LOCAL LEADERBOARD — ADD FIREBASE CONFIG','warn');
+    saveLocalScore(scoreData);
+    game.submitted=true;
+    if(submitBtn)submitBtn.textContent='SCORE SAVED ✓';
+    notify('LOCAL LEADERBOARD — FIREBASE OFFLINE','warn');
   }
 
+  game.submissionPending=false;
   renderBoard();
   show('boardScreen');
 });
