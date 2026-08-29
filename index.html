@@ -165,7 +165,7 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 'use strict';
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { getDatabase, ref, push, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 // ─────────────────────────────────────────────────────────────
 // FIREBASE SETUP
@@ -614,25 +614,26 @@ bindPress('submit',async()=>{
   if(submitBtn){submitBtn.disabled=true;submitBtn.style.pointerEvents='none';submitBtn.textContent='SUBMITTING...';}
 
   let n=($('name').value.trim()||'RBC Runner').slice(0,12).replace(/[&<>"']/g,'');
-  const scoreData={
+  const baseScoreData={
     name:n||'RBC Runner',
     score:Math.max(0,Math.floor(Number(game.score)||0)),
-    distance:Math.max(0,Math.floor(Number(game.dist)||0)),
-    time:Date.now()
+    distance:Math.max(0,Math.floor(Number(game.dist)||0))
   };
 
   try{
     if(firebaseReady&&db){
-      // Fixed Firebase key = fixed run. Repeated network sends can only target
-      // this one record, never create another leaderboard row.
-      await set(ref(db,'leaderboard/'+runId),scoreData);
+      // Use Firebase's own clock so the security rule `time <= now` cannot
+      // reject a score just because a player's phone clock is slightly fast.
+      const remoteScoreData={...baseScoreData,time:serverTimestamp()};
+      await set(ref(db,'leaderboard/'+runId),remoteScoreData);
       leaderboardConnected=true;
-      saveLocalScore({...scoreData,runId});
+      // Local fallback still uses a normal numeric timestamp.
+      saveLocalScore({...baseScoreData,time:Date.now(),runId});
       if(submitBtn)submitBtn.textContent='SCORE SUBMITTED ✓';
       notify('SCORE POSTED LIVE','good');
       sfxPrize();
     }else{
-      saveLocalScore({...scoreData,runId});
+      saveLocalScore({...baseScoreData,time:Date.now(),runId});
       if(submitBtn)submitBtn.textContent='SCORE SAVED ✓';
       notify('LOCAL LEADERBOARD — FIREBASE OFFLINE','warn');
     }
@@ -642,7 +643,7 @@ bindPress('submit',async()=>{
     game.submitted=false;
     submittedRunIds.delete(runId);
     if(submitBtn){submitBtn.disabled=false;submitBtn.style.pointerEvents='';submitBtn.textContent='RETRY SUBMIT';}
-    notify('COULD NOT SUBMIT — CHECK CONNECTION','warn');
+    notify('SUBMIT FAILED — '+String(error&&error.code?error.code:'CHECK CONNECTION').replace('database/','').toUpperCase(),'warn');
     return;
   }finally{
     game.submissionPending=false;
