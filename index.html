@@ -161,8 +161,49 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
-<script>
+<script type="module">
 'use strict';
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+// ─────────────────────────────────────────────────────────────
+// FIREBASE SETUP
+// Replace ONLY the placeholder values below with the values from
+// Firebase Console > Project settings > Your apps > Web app.
+// ─────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyD3Z-y04Jx8NEggseF--X6u5FFnsiWIfp0",
+  authDomain: "blood-run.firebaseapp.com",
+  databaseURL: "https://blood-run-default-rtdb.firebaseio.com",
+  projectId: "blood-run",
+  storageBucket: "blood-run.firebasestorage.app",
+  messagingSenderId: "668511007296",
+  appId: "1:668511007296:web:8e717d5c4cdc72bceb25a5",
+  measurementId: "G-2C49ZSQQ48"
+};
+
+let db = null;
+let firebaseReady = false;
+let firebaseUnsubscribe = null;
+
+function firebaseConfigIsFilledIn(){
+  return !Object.values(firebaseConfig).some(v => String(v).includes("YOUR_"));
+}
+
+if(firebaseConfigIsFilledIn()){
+  try{
+    const firebaseApp = initializeApp(firebaseConfig);
+    db = getDatabase(firebaseApp);
+    firebaseReady = true;
+    console.log("Blood Run live leaderboard connected to Firebase.");
+  }catch(error){
+    console.error("Firebase initialization failed; using local leaderboard fallback.", error);
+  }
+}else{
+  console.warn("Firebase config has placeholders. Game will use its local leaderboard until you fill them in.");
+}
+
 const $=id=>document.getElementById(id), app=$('app');
 const screens=['menu','learnScreen','labScreen','boardScreen','knowledge','pauseScreen','gameover'];
 function show(id){screens.forEach(s=>$(s).classList.toggle('hidden',s!==id));}
@@ -391,37 +432,68 @@ function keyboardVector(){
 }
 function applyKeyboard(){if(!game||paused||questionOpen)return;const v=keyboardVector();if(v.x||v.y){game.inputX=v.x;game.inputY=v.y}}
 
-// Swipe/drag anywhere on the live game area. The gesture behaves like a
-// floating analog stick: direction comes from the finger's displacement
-// from where the gesture began, so diagonal movement is natural and fluid.
-let dragging=false,dragPointer=null,dragStartX=0,dragStartY=0;
+// Responsive mobile swipe steering. On touch screens we use Touch Events
+// directly (instead of relying on browser pointer coalescing) and a small,
+// floating control radius. Tiny thumb motions now register immediately while
+// the top movement speed stays the same.
+const touchControls=('ontouchstart' in window)||matchMedia('(pointer:coarse)').matches;
+let dragging=false,dragPointer=null,dragTouch=null,dragStartX=0,dragStartY=0;
 function uiTouchTarget(target){return target.closest('button,input,.panel,#pause,#knowledge,.screen');}
+function setSwipeInput(clientX,clientY){
+ if(!game||paused||questionOpen)return;
+ let dx=clientX-dragStartX,dy=clientY-dragStartY;
+ const dist=Math.hypot(dx,dy),dead=2,radius=42;
+ if(dist<=dead){game.inputX=0;game.inputY=0;return}
+ const nx=dx/dist,ny=dy/dist;
+ // A response curve boosts small movements without increasing max speed.
+ const raw=clamp((dist-dead)/(radius-dead),0,1);
+ const power=Math.pow(raw,.62);
+ game.inputX=nx*power;
+ game.inputY=-ny*power; // finger up = RBC up; finger down = RBC down
+ // Floating center: once the thumb reaches the control radius, move the
+ // virtual center with it so the player never has to make a huge swipe.
+ if(dist>radius){dragStartX=clientX-nx*radius;dragStartY=clientY-ny*radius}
+}
+
+// Native touch path for phones/tablets.
+app.addEventListener('touchstart',e=>{
+ if(!touchControls||!game||paused||questionOpen||uiTouchTarget(e.target)||dragTouch!==null)return;
+ const t=e.changedTouches[0];dragging=true;dragTouch=t.identifier;dragStartX=t.clientX;dragStartY=t.clientY;
+ unlockAudio();e.preventDefault();
+},{passive:false});
+app.addEventListener('touchmove',e=>{
+ if(!touchControls||!dragging||dragTouch===null||!game||paused||questionOpen)return;
+ let t=null;for(const p of e.changedTouches)if(p.identifier===dragTouch){t=p;break}
+ if(!t)return;e.preventDefault();setSwipeInput(t.clientX,t.clientY);
+},{passive:false});
+function finishTouch(e){
+ if(dragTouch===null)return;
+ for(const p of e.changedTouches)if(p.identifier===dragTouch){dragging=false;dragTouch=null;release();e.preventDefault();break}
+}
+app.addEventListener('touchend',finishTouch,{passive:false});
+app.addEventListener('touchcancel',finishTouch,{passive:false});
+
+// Pointer path remains for mouse/pen and as a non-touch fallback.
 app.addEventListener('pointerdown',e=>{
+ if(touchControls&&e.pointerType==='touch')return;
  if(!game||paused||questionOpen||uiTouchTarget(e.target))return;
  dragging=true;dragPointer=e.pointerId;dragStartX=e.clientX;dragStartY=e.clientY;
  try{app.setPointerCapture&&app.setPointerCapture(e.pointerId)}catch(_){}
  unlockAudio();e.preventDefault();
 },{passive:false});
 app.addEventListener('pointermove',e=>{
+ if(touchControls&&e.pointerType==='touch')return;
  if(!dragging||e.pointerId!==dragPointer||!game||paused||questionOpen)return;
- e.preventDefault();
- const dx=e.clientX-dragStartX;
- const dy=e.clientY-dragStartY;
- const radius=72; // smaller = more responsive
- let x=clamp(dx/radius,-1,1);
- let y=clamp(-dy/radius,-1,1); // FIX: finger up = RBC up, finger down = RBC down
- const len=Math.hypot(x,y);
- if(len>1){x/=len;y/=len}
- game.inputX=x;game.inputY=y;
+ e.preventDefault();setSwipeInput(e.clientX,e.clientY);
 },{passive:false});
 function finishSwipe(e){
+ if(touchControls&&e.pointerType==='touch')return;
  if(!dragging||e.pointerId!==dragPointer)return;
  dragging=false;dragPointer=null;
  try{app.releasePointerCapture&&app.releasePointerCapture(e.pointerId)}catch(_){}
  release();
 }
 ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>app.addEventListener(ev,finishSwipe,{passive:false}));
-app.addEventListener('touchmove',e=>{if(game&&!paused&&!questionOpen&&!uiTouchTarget(e.target))e.preventDefault()},{passive:false});
 addEventListener('keydown',e=>{if(e.key.startsWith('Arrow')){e.preventDefault();keysHeld.add(e.key);applyKeyboard()}});
 addEventListener('keyup',e=>{if(e.key.startsWith('Arrow')){keysHeld.delete(e.key);const v=keyboardVector();if(game){if(v.x||v.y){game.inputX=v.x;game.inputY=v.y}else release()}}});
 
@@ -431,7 +503,7 @@ function loop(t){
   game.elapsed+=dt;let speed=17+Math.min(25,game.dist*.0042);game.dist+=speed*dt*2.2;game.score+=speed*dt*2;if(!game.event&&game.dist>=game.nextMajor)startMajorEvent();else if(!game.event&&game.dist>=game.nextMinor)startMinorEvent();
   if(game.event&&game.event!=='knowledge'){game.eventTimer-=dt;if(game.eventDuration>0)$('bossFill').style.width=Math.max(0,game.eventTimer/game.eventDuration*100)+'%';if(game.event==='crisis'){game.eventWave-=dt;if(game.eventWave<=0){spawnBossWave();game.eventWave=1.12}}if(game.event==='golden'&&game.eventTimer<=0){game.event=null;game.goldenActive=false;$('bossBar').classList.remove('show');toast('Golden RBC escaped');}else if(game.eventTimer<=0&&game.event!=='golden')finishEvent(true)}
   if(keysHeld.size)applyKeyboard();
-  game.vx+=(game.inputX*11.8-game.vx)*Math.min(1,dt*7.6);game.vy+=(game.inputY*10.2-game.vy)*Math.min(1,dt*7.6);
+  let steerResponse=touchControls?11.2:7.6;game.vx+=(game.inputX*11.8-game.vx)*Math.min(1,dt*steerResponse);game.vy+=(game.inputY*10.2-game.vy)*Math.min(1,dt*steerResponse);
   if(!dragging&&!keysHeld.size){game.inputX*=Math.pow(.78,dt*60);game.inputY*=Math.pow(.78,dt*60)}
   player.position.x+=game.vx*dt;player.position.y+=game.vy*dt;
   updateTrail(dt);
@@ -467,9 +539,86 @@ function updateOcclusionWarning(){
 }
 function updateHud(){if(!game)return;let liveScore=Math.floor(game.score);$('score').textContent=liveScore.toLocaleString();$('dist').textContent=Math.floor(game.dist)+' m';$('oxy').textContent=Math.max(0,Math.floor(game.oxy))+'%';$('oxyBar').style.width=Math.max(0,game.oxy)+'%';$('o2').classList.toggle('low',game.oxy<55);$('o2').classList.toggle('critical',game.oxy<25)}
 function endGame(reason){stopQuestionTimer();if(!game||!game.alive)return;game.alive=false;paused=false;resetOcclusionWarning();['hud'].forEach(id=>$(id).classList.add('hidden'));$('bossBar').classList.remove('show');let score=Math.floor(game.score),dist=Math.floor(game.dist),baseEarned=Math.max(26,Math.floor(dist/52)+game.knowledge*18),earned=baseEarned+(game.eventHeme||0);profile.heme+=earned;profile.highScore=Math.max(profile.highScore,score);let newlyUnlocked=unlockFrames();save();if(newlyUnlocked)toast('NEW FRAME UNLOCKED!');$('reason').textContent=reason;$('finalScore').textContent=score.toLocaleString();$('finalDist').textContent=dist+' m';$('knowledgeScore').textContent=(game.qcount?Math.round(game.knowledge/game.qcount*100):100)+'%';$('earned').textContent=earned;$('name').value='';show('gameover')}
-function getScores(){return JSON.parse(safeStore.get('bloodRun3DScores','[]')||'[]')}
-function renderBoard(){let a=getScores().sort((x,y)=>y.score-x.score).slice(0,10);$('rows').innerHTML=a.length?a.map((x,i)=>{let cls=i===0?'podium1':i===1?'podium2':i===2?'podium3':'';let tag=i===0?'<span class="podiumTag">PRIZE POSITION</span>':i===1?'<span class="podiumTag">2ND</span>':i===2?'<span class="podiumTag">3RD</span>':'';return `<tr class="${cls}"><td>${i+1}. ${String(x.name).replace(/[&<>"']/g,'')} ${tag}</td><td>${x.score.toLocaleString()}</td></tr>`}).join(''):'<tr><td colspan="2">No scores yet — be the first to set one.</td></tr>'}
-bindPress('submit',()=>{if(!game)return;let n=($('name').value.trim()||'RBC Runner').slice(0,12),a=getScores();a.push({name:n,score:Math.floor(game.score),distance:Math.floor(game.dist),time:Date.now()});safeStore.set('bloodRun3DScores',JSON.stringify(a.sort((x,y)=>y.score-x.score).slice(0,100)));renderBoard();show('boardScreen')});
+let liveScores=[];
+let leaderboardConnected=false;
+
+function getLocalScores(){
+  try{return JSON.parse(safeStore.get('bloodRun3DScores','[]')||'[]')}catch(e){return []}
+}
+
+function saveLocalScore(scoreData){
+  let a=getLocalScores();
+  a.push(scoreData);
+  safeStore.set('bloodRun3DScores',JSON.stringify(a.sort((x,y)=>y.score-x.score).slice(0,100)));
+}
+
+function renderBoard(){
+  const source=(firebaseReady&&leaderboardConnected)?liveScores:getLocalScores();
+  let a=[...source].filter(x=>x&&Number.isFinite(Number(x.score))).sort((x,y)=>Number(y.score)-Number(x.score)).slice(0,10);
+  $('rows').innerHTML=a.length?a.map((x,i)=>{
+    let cls=i===0?'podium1':i===1?'podium2':i===2?'podium3':'';
+    let tag=i===0?'<span class="podiumTag">PRIZE POSITION</span>':i===1?'<span class="podiumTag">2ND</span>':i===2?'<span class="podiumTag">3RD</span>':'';
+    let safeName=String(x.name||'RBC Runner').replace(/[&<>"']/g,'').slice(0,12);
+    let safeScore=Math.max(0,Math.floor(Number(x.score)||0));
+    return `<tr class="${cls}"><td>${i+1}. ${safeName} ${tag}</td><td>${safeScore.toLocaleString()}</td></tr>`
+  }).join(''):'<tr><td colspan="2">No scores yet — be the first to set one.</td></tr>';
+}
+
+function startLiveLeaderboard(){
+  if(!firebaseReady||!db||firebaseUnsubscribe)return;
+  try{
+    const leaderboardRef=ref(db,'leaderboard');
+    firebaseUnsubscribe=onValue(leaderboardRef,snapshot=>{
+      liveScores=[];
+      snapshot.forEach(childSnapshot=>{
+        const scoreData=childSnapshot.val();
+        if(scoreData)liveScores.push(scoreData);
+      });
+      leaderboardConnected=true;
+      renderBoard();
+    },error=>{
+      console.error('Live leaderboard listener failed; using local fallback.',error);
+      leaderboardConnected=false;
+      renderBoard();
+    });
+  }catch(error){
+    console.error('Could not start live leaderboard; using local fallback.',error);
+  }
+}
+
+startLiveLeaderboard();
+
+bindPress('submit',async()=>{
+  if(!game)return;
+  let n=($('name').value.trim()||'RBC Runner').slice(0,12).replace(/[&<>"']/g,'');
+  const scoreData={
+    name:n||'RBC Runner',
+    score:Math.max(0,Math.floor(Number(game.score)||0)),
+    distance:Math.max(0,Math.floor(Number(game.dist)||0)),
+    time:Date.now()
+  };
+
+  // Keep a local copy as a backup if internet/Firebase is unavailable.
+  saveLocalScore(scoreData);
+
+  if(firebaseReady&&db){
+    try{
+      const newScoreRef=push(ref(db,'leaderboard'));
+      await set(newScoreRef,scoreData);
+      leaderboardConnected=true;
+      notify('SCORE POSTED LIVE','good');
+      sfxPrize();
+    }catch(error){
+      console.error('Score submission failed; saved locally instead.',error);
+      notify('SCORE SAVED LOCALLY — CHECK CONNECTION','warn');
+    }
+  }else{
+    notify('LOCAL LEADERBOARD — ADD FIREBASE CONFIG','warn');
+  }
+
+  renderBoard();
+  show('boardScreen');
+});
 bindPress('start',startGame);bindPress('learn',()=>show('learnScreen'));bindPress('lab',()=>{renderShop();show('labScreen')});bindPress('board',()=>{renderBoard();show('boardScreen');setTimeout(sfxPrize,80)});
 bindPress('backLearn',()=>show('menu'));bindPress('backLab',()=>show('menu'));bindPress('backBoard',()=>show('menu'));bindPress('again',startGame);bindPress('home',()=>show('menu'));
 bindPress('pause',()=>{if(!game)return;paused=true;show('pauseScreen')});bindPress('resume',()=>{paused=false;show(null);['hud'].forEach(id=>$(id).classList.remove('hidden'));last=performance.now()});bindPress('quit',()=>{paused=false;endGame('Run ended by player.')});
