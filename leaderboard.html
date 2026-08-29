@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Blood Run 3D — Live Leaderboard</title>
+<style>
+:root{--bg:#06080d;--panel:#0e1420;--text:#f7f9fc;--muted:#929bad;--red:#ff3158;--gold:#ffe381}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#32121d 0,#0b0e15 34%,#05070b 72%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+.shell{width:min(100%,1000px)}
+.top{text-align:center;margin-bottom:24px}.eyebrow{color:#ff6682;font-size:13px;font-weight:950;letter-spacing:2.2px;text-transform:uppercase}.top h1{font-size:clamp(40px,7vw,78px);line-height:.92;letter-spacing:-3px;margin:8px 0 10px}.live{display:inline-flex;align-items:center;gap:8px;color:#b8c2d1;font-size:13px;font-weight:800}.dot{width:9px;height:9px;border-radius:50%;background:#778194}.live.connected .dot{background:#55e89b;box-shadow:0 0 16px #55e89b}.live.error .dot{background:#ff8b6d}
+.prize{position:relative;margin:0 auto 22px;padding:18px 22px;border-radius:22px;background:linear-gradient(135deg,#3b2a0b,#17140c 58%,#432c0a);border:1px solid #ffd86a66;box-shadow:inset 0 1px #fff3b633,0 20px 50px #0007,0 0 36px #ffc84713;text-align:center;overflow:hidden}.prize:before{content:'';position:absolute;inset:-80% 58% -80% -12%;background:linear-gradient(110deg,transparent,#fff7c226,transparent);transform:rotate(10deg)}.prize small{position:relative;color:#ffd86a;font-size:11px;font-weight:950;letter-spacing:2px}.prize strong{position:relative;display:block;font-size:clamp(20px,3vw,30px);margin-top:4px}.prize strong b{color:#ffe58d}
+.board{padding:18px;border-radius:28px;background:linear-gradient(180deg,#111827f2,#090d14f5);border:1px solid #ffffff14;box-shadow:0 32px 90px #0009;backdrop-filter:blur(18px)}
+table{width:100%;border-collapse:separate;border-spacing:0 10px}td{background:linear-gradient(180deg,#141c29,#0d131d);padding:17px 18px;border-top:1px solid #ffffff0e;border-bottom:1px solid #ffffff08;font-size:clamp(15px,2vw,21px)}td:first-child{border-radius:16px 0 0 16px;border-left:1px solid #ffffff0e;font-weight:850}td:last-child{border-radius:0 16px 16px 0;border-right:1px solid #ffffff0e;text-align:right;font-weight:950;font-variant-numeric:tabular-nums}.podium1 td{background:linear-gradient(135deg,#46340e,#1b1810);border-color:#ffdc6a77;color:#ffe99d;box-shadow:0 10px 30px #0006}.podium2 td{background:linear-gradient(135deg,#2b323d,#131820);border-color:#dce6f466;color:#f2f6ff}.podium3 td{background:linear-gradient(135deg,#3b2418,#18120f);border-color:#d69b7466;color:#eebc9f}.rankIcon{display:inline-block;width:38px}.tag{display:inline-block;margin-left:10px;padding:5px 8px;border-radius:999px;font-size:9px;letter-spacing:1px;font-weight:950;background:#ffffff12;border:1px solid #ffffff16;vertical-align:middle}.podium1 .tag{background:#ffd85a18;border-color:#ffd85a55;color:#ffe68d}.empty{text-align:center!important;color:var(--muted)!important;padding:34px!important}.foot{text-align:center;color:#697386;font-size:12px;margin-top:15px}
+@media(max-width:600px){body{padding:14px}.board{padding:9px;border-radius:20px}td{padding:14px 10px}.rankIcon{width:29px}.tag{display:none}.prize{padding:15px}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="top">
+    <div class="eyebrow">🩸 EBNF Poster Project Day</div>
+    <h1>BLOOD RUN 3D</h1>
+    <div id="liveStatus" class="live"><span class="dot"></span><span>Connecting to live leaderboard…</span></div>
+  </div>
+
+  <div class="prize">
+    <small>🏆 FINISH THE DAY IN 1ST PLACE</small>
+    <strong>Win a <b>$25 Chick-fil-A gift card</b></strong>
+  </div>
+
+  <section class="board">
+    <table aria-label="Live Blood Run leaderboard"><tbody id="rows"><tr><td class="empty" colspan="2">Waiting for scores…</td></tr></tbody></table>
+  </section>
+  <div class="foot">Scores update automatically — no refresh needed.</div>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+// IMPORTANT: paste the SAME Firebase Web App config here that you put in index.html.
+const firebaseConfig = {
+  apiKey: "AIzaSyD3Z-y04Jx8NEggseF--X6u5FFnsiWIfp0",
+  authDomain: "blood-run.firebaseapp.com",
+  databaseURL: "https://blood-run-default-rtdb.firebaseio.com",
+  projectId: "blood-run",
+  storageBucket: "blood-run.firebasestorage.app",
+  messagingSenderId: "668511007296",
+  appId: "1:668511007296:web:8e717d5c4cdc72bceb25a5",
+  measurementId: "G-2C49ZSQQ48"
+};
+
+const rows=document.getElementById('rows');
+const status=document.getElementById('liveStatus');
+
+function safeName(value){return String(value||'RBC Runner').replace(/[&<>"']/g,'').slice(0,12)}
+function render(scores){
+  const top=[...scores].filter(x=>x&&Number.isFinite(Number(x.score))).sort((a,b)=>Number(b.score)-Number(a.score)).slice(0,10);
+  if(!top.length){rows.innerHTML='<tr><td class="empty" colspan="2">No scores yet — be the first to set one.</td></tr>';return;}
+  rows.innerHTML=top.map((x,i)=>{
+    const cls=i===0?'podium1':i===1?'podium2':i===2?'podium3':'';
+    const icon=i===0?'👑':i===1?'🥈':i===2?'🥉':`${i+1}.`;
+    const tag=i===0?'<span class="tag">PRIZE POSITION</span>':i===1?'<span class="tag">2ND PLACE</span>':i===2?'<span class="tag">3RD PLACE</span>':'';
+    return `<tr class="${cls}"><td><span class="rankIcon">${icon}</span>${safeName(x.name)} ${tag}</td><td>${Math.max(0,Math.floor(Number(x.score)||0)).toLocaleString()}</td></tr>`;
+  }).join('');
+}
+
+if(Object.values(firebaseConfig).some(v=>String(v).includes('YOUR_'))){
+  status.classList.add('error');
+  status.querySelector('span:last-child').textContent='Add your Firebase config to leaderboard.html';
+  rows.innerHTML='<tr><td class="empty" colspan="2">Firebase has not been configured yet.</td></tr>';
+}else{
+  try{
+    const firebaseApp=initializeApp(firebaseConfig);
+    const db=getDatabase(firebaseApp);
+    onValue(ref(db,'leaderboard'),snapshot=>{
+      const scores=[];
+      snapshot.forEach(child=>{const val=child.val();if(val)scores.push(val)});
+      render(scores);
+      status.classList.remove('error');status.classList.add('connected');
+      status.querySelector('span:last-child').textContent='LIVE — updating in real time';
+    },error=>{
+      console.error(error);
+      status.classList.remove('connected');status.classList.add('error');
+      status.querySelector('span:last-child').textContent='Could not connect to Firebase';
+    });
+  }catch(error){
+    console.error(error);
+    status.classList.add('error');
+    status.querySelector('span:last-child').textContent='Firebase configuration error';
+  }
+}
+</script>
+</body>
+</html>
