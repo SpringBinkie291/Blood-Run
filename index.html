@@ -618,8 +618,7 @@ bindPress('submit',async()=>{
     name:n||'RBC Runner',
     score:Math.max(0,Math.floor(Number(game.score)||0)),
     distance:Math.max(0,Math.floor(Number(game.dist)||0)),
-    time:Date.now(),
-    runId
+    time:Date.now()
   };
 
   try{
@@ -628,12 +627,12 @@ bindPress('submit',async()=>{
       // this one record, never create another leaderboard row.
       await set(ref(db,'leaderboard/'+runId),scoreData);
       leaderboardConnected=true;
-      saveLocalScore(scoreData);
+      saveLocalScore({...scoreData,runId});
       if(submitBtn)submitBtn.textContent='SCORE SUBMITTED ✓';
       notify('SCORE POSTED LIVE','good');
       sfxPrize();
     }else{
-      saveLocalScore(scoreData);
+      saveLocalScore({...scoreData,runId});
       if(submitBtn)submitBtn.textContent='SCORE SAVED ✓';
       notify('LOCAL LEADERBOARD — FIREBASE OFFLINE','warn');
     }
