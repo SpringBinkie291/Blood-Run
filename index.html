@@ -227,7 +227,70 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 .battleRewardInfo b{display:block;font-size:12px;line-height:1.2}.battleRewardInfo small{display:block;margin-top:2px;font-size:9px;color:#bfccdb;letter-spacing:.4px;line-height:1.35;min-height:38px}.battleRewardPill{display:inline-flex;align-items:center;gap:6px;margin-top:2px;padding:4px 8px;border-radius:999px;font-size:8px;font-weight:950;letter-spacing:1px;background:#ffffff10;color:#fff}.battleRewardPill.claim{background:#163021;color:#8df5be}.battleRewardPill.lock{background:#2b2430;color:#d8bfef}.battleRewardPill.need{background:#3a2718;color:#ffd6a7}
 .battlePreviewStage{height:350px;border-radius:24px;background:radial-gradient(circle at 50% 16%,#5f86b3 0,#233149 22%,#0f1621 56%,#0a0e15 100%);border:1px solid #ffffff12;box-shadow:inset 0 1px #ffffff12,0 28px 54px #00000050;position:relative;overflow:hidden}.battlePreviewStage::before{content:'';position:absolute;inset:auto 10% 10% 10%;height:20%;background:radial-gradient(ellipse,#62eaff2e 0,transparent 70%);pointer-events:none}.battlePreviewStage::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,#ffffff18,transparent 18%),radial-gradient(circle at 72% 18%,#ffb06816,transparent 16%);pointer-events:none}.battlePreviewCard{margin-top:12px;padding:16px;border-radius:20px;background:linear-gradient(180deg,#1b2536,#101621);border:1px solid #ffffff16}.battlePreviewCard h3{margin:8px 0 4px;font-size:22px}.previewTrackBadge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:9px;letter-spacing:1.4px;font-weight:950;background:#ffffff12;color:#dfe6ef}.previewTrackBadge.paid{background:linear-gradient(180deg,#ff9d54,#7d3e11);border:1px solid #ffcf9b5f;color:#fff0dd}.previewTrackBadge.free{background:linear-gradient(180deg,#5f6873,#2f363f);border:1px solid #b6c0ca40;color:#f1f6fa}.previewActionRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.previewActionRow .btn{margin:0}.battleMetaRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.battleMetaRow .badge{margin:0}
 @media(max-width:1080px){.battleLayout{grid-template-columns:1fr}.battlePreviewPane{position:relative;top:auto}.battleHero{flex-direction:column}.battleHeroSide{justify-items:stretch;min-width:0}.battleHeroSide .btn{min-width:0}}
-@media(max-width:760px){#battleScreen .panel{padding:20px}.battleSummary{grid-template-columns:1fr}.battleProgressLabels{flex-direction:column;gap:4px}.battleCarousel{grid-template-columns:42px 1fr 42px}.battleArrow{font-size:24px;border-radius:16px}.battlePageWindow{padding:8px}.battleTierCol{min-width:136px}.battlePreviewStage{height:280px}.previewActionRow{grid-template-columns:1fr}}
+@media(max-width:760px){
+ #battleScreen .panel{padding:16px 12px 24px}
+ #battleScreen .battleHero{margin-bottom:8px;gap:10px}
+ #battleScreen .battleHero h2{font-size:24px;margin:.25rem 0}
+ #battleScreen .battleHero p{font-size:11px;line-height:1.4;margin:.3rem 0}
+ #battleScreen .battleHeroSide{grid-template-columns:1fr 1fr;display:grid;gap:7px;width:100%}
+ #battleScreen .battleHeroSide .btn{grid-column:1/-1;min-height:42px;padding:9px 12px}
+ #battleScreen .battleSummary{grid-template-columns:repeat(3,1fr);gap:6px;margin:7px 0}
+ #battleScreen .battleTierStat{padding:9px 8px;border-radius:13px;text-align:center}
+ #battleScreen .battleTierStat strong{font-size:17px}
+ #battleScreen .battleTierStat small{font-size:7px}
+ #battleScreen .battleProgressWrap{padding:9px 10px;border-radius:14px;margin-bottom:9px}
+ #battleScreen .battleProgressLabels{font-size:9px;gap:4px;margin-bottom:5px}
+ #battleScreen .battleLayout{display:block}
+ #battleScreen .battleListPane{padding:10px 8px;border-radius:20px}
+ #battleScreen .battlePageMeta{align-items:center;margin-bottom:7px}
+ #battleScreen .battlePageMeta .uiEyebrow{display:none}
+ #battleScreen .battlePageMeta h3{font-size:16px;margin:0}
+ #battleScreen .battlePageStat{padding:6px 9px;border-radius:11px}
+ #battleScreen .battlePageStat span{font-size:9px}
+ #battleScreen .battlePageStat small{font-size:8px;margin-top:2px}
+ #battleScreen .battleTracksHeader{display:none}
+ #battleScreen .battleCarousel{grid-template-columns:34px minmax(0,1fr) 34px;gap:5px;align-items:stretch}
+ #battleScreen .battleArrow{font-size:20px;border-radius:13px;min-width:34px;padding:0;box-shadow:inset 0 1px #ffffff18,0 8px 16px #0005}
+ #battleScreen .battlePageWindow{padding:6px 4px;overflow:hidden;border-radius:16px}
+ #battleScreen #battleTierGrid{display:grid;grid-template-columns:repeat(10,74px);grid-template-rows:38px 108px 108px;grid-auto-flow:column;gap:6px;overflow-x:auto;overflow-y:hidden;padding:0 2px 6px;scroll-snap-type:x proximity;touch-action:pan-x;overscroll-behavior-x:contain}
+ #battleScreen .battleTierCol{display:contents;min-width:0;opacity:1!important;filter:none!important}
+ #battleScreen .battleTierNo{grid-row:1;min-width:74px;padding:3px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:4px;scroll-snap-align:start}
+ #battleScreen .battleTierNo small,#battleScreen .battleTierNo span,#battleScreen .battleTierNo .sparkle{display:none}
+ #battleScreen .battleTierNo strong{font-size:13px;margin:0}
+ #battleScreen .battleTierNo strong::before{content:'T';font-size:8px;color:#a9b8cb;margin-right:2px}
+ #battleScreen .battleRewardCell{min-width:74px;min-height:108px;height:108px;padding:5px;border-radius:12px;display:grid;grid-template-rows:62px 1fr;gap:4px;overflow:hidden;scroll-snap-align:start}
+ #battleScreen .battleRewardCell.free{grid-row:2}
+ #battleScreen .battleRewardCell.paid{grid-row:3}
+ #battleScreen .rewardTrackMini,#battleScreen .battleRewardInfo small,#battleScreen .evolveBadge{display:none}
+ #battleScreen .rewardThumb{height:62px;border-radius:10px;margin:0}
+ #battleScreen .battleRewardInfo{min-width:0;align-self:center}
+ #battleScreen .battleRewardInfo b{font-size:8px;line-height:1.12;text-align:center;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+ #battleScreen .battleRewardPill{position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;padding:0;display:grid;place-items:center;font-size:0;margin:0;border:1px solid #ffffff24}
+ #battleScreen .battleRewardPill.claim::after{content:'✓';font-size:9px}
+ #battleScreen .battleRewardPill.lock::after{content:'🔒';font-size:8px}
+ #battleScreen .battleRewardPill.need::after{content:'★';font-size:9px}
+ #battleScreen .battleRewardCell.claimable .battleRewardPill::after{content:'!';font-size:10px}
+ #battleScreen .battleRewardCell.active{transform:none;box-shadow:0 0 0 2px #62eaff88,0 8px 18px #0006}
+ #battleScreen .battleRewardCell.mythicEvolve{box-shadow:0 0 0 1px #ffaf66aa,0 0 18px #ff8a4255}
+ #battleScreen .battleListPane::before{content:'FREE';display:block;position:absolute;left:60px;margin-top:52px;font-size:7px;letter-spacing:1px;color:#c6d0db;z-index:2;pointer-events:none}
+ #battleScreen .battleListPane::after{content:'PREMIUM';display:block;position:absolute;left:60px;margin-top:166px;font-size:7px;letter-spacing:1px;color:#ffc289;z-index:2;pointer-events:none}
+ #battleScreen .battleListPane{position:relative}
+ #battleScreen .battlePreviewPane{position:fixed!important;left:8px;right:8px;bottom:0;top:auto!important;z-index:1200;max-height:min(68vh,590px);overflow-y:auto;padding:10px 12px calc(14px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:linear-gradient(180deg,#1d2a3f 0%,#101722 40%,#0a0f17 100%);box-shadow:0 -24px 70px #000b;border:1px solid #ffffff24;transform:translateY(calc(100% + 24px));visibility:hidden;opacity:0;transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .2s ease,visibility 0s linear .28s}
+ #battleScreen .battlePreviewPane.mobileOpen{transform:translateY(0);visibility:visible;opacity:1;transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .2s ease}
+ #battleScreen .mobilePreviewHandle{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;position:sticky;top:-10px;z-index:5;padding:6px 2px 9px;background:linear-gradient(180deg,#1d2a3f 70%,transparent)}
+ #battleScreen .mobilePreviewHandle span{width:44px;height:4px;border-radius:999px;background:#ffffff35;justify-self:start}
+ #battleScreen .mobilePreviewHandle b{font-size:9px;letter-spacing:1.2px;color:#dce7f4}
+ #battleScreen .mobilePreviewHandle button{justify-self:end;width:32px;height:32px;border-radius:50%;border:1px solid #ffffff22;background:#ffffff10;color:#fff;font-weight:900}
+ #battleScreen .battlePreviewStage{height:210px;border-radius:17px}
+ #battleScreen .battlePreviewCard{padding:10px;margin-top:8px;border-radius:15px}
+ #battleScreen .battlePreviewCard h3{font-size:18px;margin:6px 0 3px}
+ #battleScreen .battlePreviewCard p{font-size:10px;line-height:1.4;margin:.45rem 0}
+ #battleScreen .previewActionRow{grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+ #battleScreen .previewActionRow .btn{padding:9px 7px;min-height:40px;font-size:9px}
+ #battleScreen #backBattle{margin-top:10px}
+}
+@media(min-width:761px){.mobilePreviewHandle{display:none!important}}
+
 
 /* knowledge incoming + study lab */
 #knowledgeIncoming{position:fixed;z-index:26;left:50%;top:86px;transform:translate(-50%,-12px) scale(.96);display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;background:linear-gradient(180deg,#1b2d42e8,#0c1826eb);border:1px solid #62eaff55;box-shadow:0 12px 30px #0007,0 0 28px #62eaff1f;opacity:0;pointer-events:none;transition:.2s ease;backdrop-filter:blur(10px)}#knowledgeIncoming.show{opacity:1;transform:translate(-50%,0) scale(1)}#knowledgeIncoming.emergency{border-color:#ff9c5b66;background:linear-gradient(180deg,#422514ed,#201208ed);box-shadow:0 12px 30px #0007,0 0 28px #ff8a422c}.knowledgeIncomingIcon{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#62eaff17;border:1px solid #62eaff30;font-size:14px;animation:knowledgePing 1s ease-in-out infinite}.knowledgeIncomingText{display:grid}.knowledgeIncomingText b{font-size:10px;letter-spacing:1.25px}.knowledgeIncomingText span{font-size:8px;color:#9db0c4;margin-top:1px}.knowledgeIncomingBar{width:64px;height:4px;border-radius:999px;background:#ffffff10;overflow:hidden}.knowledgeIncomingBar i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#62eaff,#9c7dff);transform-origin:left;animation:knowledgeCountdown 1.05s linear forwards}.emergency .knowledgeIncomingBar i{background:linear-gradient(90deg,#ffb66b,#ff624a);animation-duration:.65s}@keyframes knowledgePing{50%{transform:scale(1.12);box-shadow:0 0 16px #62eaff44}}@keyframes knowledgeCountdown{to{transform:scaleX(0)}}
@@ -389,7 +452,8 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
    <button class="battleArrow" id="battleNextPage" aria-label="Next battle pass page">❯</button>
   </div>
  </div>
- <aside class="battlePreviewPane">
+ <aside class="battlePreviewPane" id="battlePreviewPane">
+  <div class="mobilePreviewHandle"><span></span><b>REWARD PREVIEW</b><button id="bpCloseDrawer" aria-label="Close reward preview">✕</button></div>
   <div class="battlePreviewStage" id="battlePreviewStage"></div>
   <div class="battlePreviewCard">
    <div class="previewTrackBadge" id="bpPreviewTrack">FREE TRACK</div>
@@ -903,11 +967,11 @@ function rewardThumbMarkup(reward,track,tier){
 function rewardCellMarkup(reward,track,tier){const claimed=isBattleClaimed(track,tier),unlocked=isBattleTierUnlocked(tier),canClaim=unlocked&&(track==='free'||profile.battlePassPremium)&&!claimed;const needPremium=track==='paid'&&!profile.battlePassPremium;const state=claimed?'CLAIMED':canClaim?'READY TO CLAIM':needPremium?'PREMIUM NEEDED':unlocked?'UNLOCK PREMIUM':'LOCKED';const pillClass=claimed?'claim':canClaim?'claim':needPremium?'need':'lock';const active=battleSelection.tier===tier&&battleSelection.track===track,ev=rewardEvolution(reward);const rarity=tier===50?'MYTHIC':tier>=40?'LEGENDARY':tier>=20?'EPIC':'RARE';return `<button class="battleRewardCell ${track} ${active?'active':''} ${claimed?'claimed':''} ${canClaim?'claimable':''} ${ev?'evolving':''} ${tier===50&&ev?'mythicEvolve':''}" data-bptier="${tier}" data-bptrack="${track}"><div class="rewardTrackMini"><span>${track==='paid'?'PREMIUM':'FREE'}</span><em class="rewardRarity">${rarity}</em></div>${rewardThumbMarkup(reward,track,tier)}<div class="battleRewardInfo"><b>${rewardDisplayName(reward)}</b>${ev?`<span class="evolveBadge">↗ EVOLVING • ${ev.name}</span>`:''}<small>${reward.desc}</small></div><span class="battleRewardPill ${pillClass}">${state}</span></button>`}
 function renderBattlePass(){if(!$('battleTierGrid'))return;const pageCount=Math.ceil(BATTLE_PASS_TIERS/BATTLE_PASS_PAGE_SIZE),pageStart=battlePage*BATTLE_PASS_PAGE_SIZE+1,pageEnd=Math.min(BATTLE_PASS_TIERS,pageStart+BATTLE_PASS_PAGE_SIZE-1),progress=battleProgressInfo();if(battleSelection.tier<pageStart||battleSelection.tier>pageEnd)battleSelection={tier:pageStart,track:'free'};$('battleHeme').textContent=profile.heme;$('battleOwned').textContent=profile.battlePassPremium?'PREMIUM':'FREE';$('battleTierNow').textContent=progress.tier;$('battleXpNow').textContent=Math.floor(profile.battleXP);$('battleUnlockedNow').textContent=`${battleUnlockedTierCount()} / ${BATTLE_PASS_TIERS}`;$('battleProgressLabel').textContent=`Tier ${progress.tier}`;$('battleProgressNext').textContent=progress.tier>=BATTLE_PASS_TIERS?'Pass complete':'Tier '+progress.nextTier+' • '+Math.floor(progress.intoTier)+' / '+BATTLE_PASS_XP_PER_TIER+' XP';$('battleProgressFill').style.width=(progress.ratio*100)+'%';$('battlePageLabel').textContent=`PAGE ${battlePage+1} / ${pageCount}`;$('battlePageRange').textContent=`TIERS ${pageStart}–${pageEnd}`;const buyBtn=$('battleBuy');if(buyBtn){buyBtn.textContent=profile.battlePassPremium?'PREMIUM TRACK ACTIVE':'UNLOCK PREMIUM • 300 Heme';buyBtn.disabled=profile.battlePassPremium;buyBtn.style.pointerEvents=profile.battlePassPremium?'none':'';}
  $('battleTierGrid').innerHTML=battlePassTiers.slice(pageStart-1,pageEnd).map(row=>{const unlocked=isBattleTierUnlocked(row.tier),selected=battleSelection.tier===row.tier;return `<div class="battleTierCol ${unlocked?'':'locked'} ${selected?'selected':''}"><div class="battleTierNo"><small>TIER</small><strong>${row.tier}</strong><span>${unlocked?'UNLOCKED':'LOCKED'}</span><div class="sparkle">${row.tier===1?'✨':row.tier===50?'👑':'•'}</div></div>${rewardCellMarkup(row.free,'free',row.tier)}${rewardCellMarkup(row.paid,'paid',row.tier)}</div>`}).join('');
- document.querySelectorAll('[data-bptier]').forEach(el=>bindPress(el,()=>{battleSelection={tier:+el.dataset.bptier,track:el.dataset.bptrack};updateBattlePreview();renderBattlePass();}));
+ document.querySelectorAll('[data-bptier]').forEach(el=>bindPress(el,()=>{battleSelection={tier:+el.dataset.bptier,track:el.dataset.bptrack};updateBattlePreview();if(matchMedia('(max-width:760px)').matches)$('battlePreviewPane')?.classList.add('mobileOpen');renderBattlePass();}));
  const prev=$('battlePrevPage'),next=$('battleNextPage');if(prev){prev.disabled=battlePage<=0}if(next){next.disabled=battlePage>=pageCount-1}
  updateBattlePreview();
 }
-function openBattlePass(){battlePage=Math.floor((battleSelection.tier-1)/BATTLE_PASS_PAGE_SIZE);show('battleScreen');initBattlePreview();renderBattlePass()}
+function openBattlePass(){battlePage=Math.floor((battleSelection.tier-1)/BATTLE_PASS_PAGE_SIZE);$('battlePreviewPane')?.classList.remove('mobileOpen');show('battleScreen');initBattlePreview();renderBattlePass()}
 function openLabFromBattle(){renderShop();show('labScreen')}
 function buyBattlePass(){if(profile.battlePassPremium){toast('Premium already active');return}if(profile.heme<BATTLE_PASS_PRICE){toast('Need 300 Heme');return}profile.heme-=BATTLE_PASS_PRICE;profile.battlePassPremium=true;save();toast('PREMIUM TRACK UNLOCKED');try{sfxPrize()}catch(_){}renderBattlePass()}
 function claimBattleReward(track,tier){if(!isBattleTierUnlocked(tier)){toast('Tier locked');return}if(track==='paid'&&!profile.battlePassPremium){toast('Buy the premium track first');return}const maxTier=Math.min(tier,battleUnlockedTierCount());let count=0,latest='';for(let t=1;t<=maxTier;t++){if(!profile.bpClaimedFree.includes(t)){const r=battleRewardFor(t,'free');if(r){grantReward(r);profile.bpClaimedFree.push(t);count++;latest=r.label}}if(profile.battlePassPremium&&!profile.bpClaimedPaid.includes(t)){const r=battleRewardFor(t,'paid');if(r){grantReward(r);profile.bpClaimedPaid.push(t);count++;latest=r.label}}}profile.bpClaimedFree.sort((a,b)=>a-b);profile.bpClaimedPaid.sort((a,b)=>a-b);if(!count){toast('Everything through Tier '+maxTier+' is already claimed');return}save();renderBattlePass();toast(`${count} REWARD${count===1?'':'S'} CLAIMED THROUGH TIER ${maxTier}${latest?' • '+latest.toUpperCase():''}`);try{sfxPrize()}catch(_){} }
@@ -1944,7 +2008,14 @@ function redeemSchoolCode(){
 }
 refreshCodeUnlock();
 bindPress('redeemCode',redeemSchoolCode);
-bindPress('start',startGame);bindPress('learn',()=>{renderLearnHub();show('learnScreen')});bindPress('lab',()=>{renderShop();show('labScreen')});bindPress('stats',openStats);bindPress('backStats',()=>show('menu'));bindPress('battle',openBattlePass);bindPress('battleBuy',buyBattlePass);bindPress('battlePrevPage',()=>{if(battlePage>0){battlePage--;renderBattlePass()}});bindPress('battleNextPage',()=>{if(battlePage<Math.ceil(BATTLE_PASS_TIERS/BATTLE_PASS_PAGE_SIZE)-1){battlePage++;renderBattlePass()}});bindPress('backBattle',()=>show('menu'));bindPress('board',()=>{openLeaderboardAtBest();setTimeout(sfxPrize,80)});
+
+let bpSwipeStartX=0,bpSwipeStartY=0,bpSwipeActive=false;
+const bpWindow=document.querySelector('.battlePageWindow');
+if(bpWindow){
+ bpWindow.addEventListener('touchstart',e=>{if(!matchMedia('(max-width:760px)').matches||!e.touches?.length)return;bpSwipeStartX=e.touches[0].clientX;bpSwipeStartY=e.touches[0].clientY;bpSwipeActive=true},{passive:true});
+ bpWindow.addEventListener('touchend',e=>{if(!bpSwipeActive||!matchMedia('(max-width:760px)').matches)return;bpSwipeActive=false;const t=e.changedTouches?.[0];if(!t)return;const dx=t.clientX-bpSwipeStartX,dy=t.clientY-bpSwipeStartY;if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.2)return;const pages=Math.ceil(BATTLE_PASS_TIERS/BATTLE_PASS_PAGE_SIZE);if(dx<0&&battlePage<pages-1){battlePage++;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}else if(dx>0&&battlePage>0){battlePage--;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}},{passive:true});
+}
+bindPress('start',startGame);bindPress('learn',()=>{renderLearnHub();show('learnScreen')});bindPress('lab',()=>{renderShop();show('labScreen')});bindPress('stats',openStats);bindPress('backStats',()=>show('menu'));bindPress('battle',openBattlePass);bindPress('battleBuy',buyBattlePass);bindPress('battlePrevPage',()=>{if(battlePage>0){battlePage--;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}});bindPress('battleNextPage',()=>{if(battlePage<Math.ceil(BATTLE_PASS_TIERS/BATTLE_PASS_PAGE_SIZE)-1){battlePage++;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}});bindPress('bpCloseDrawer',()=>$('battlePreviewPane')?.classList.remove('mobileOpen'));bindPress('backBattle',()=>{$('battlePreviewPane')?.classList.remove('mobileOpen');show('menu')});bindPress('board',()=>{openLeaderboardAtBest();setTimeout(sfxPrize,80)});
 bindPress('openVerify',openPrizeVerifier);bindPress('closeVerify',closePrizeVerifier);bindPress('verifyDevice',verifyCurrentDevice);bindPress('verifyClaim',verifyClaimCode);
 bindPress('viewLeaderboardAfterSubmit',showSubmittedLeaderboard);bindPress('startStudy',startStudyDrill);bindPress('studyNext',nextStudyQuestion);bindPress('studyAgain',startStudyDrill);bindPress('caseNext',nextClinicalCaseStep);bindPress('caseExit',resetCasePanel);bindPress('jumpMastery',()=>{$('masterySection').scrollIntoView({behavior:'smooth',block:'start'})});bindPress('jumpCases',()=>{$('caseSection').scrollIntoView({behavior:'smooth',block:'start'})});bindPress('jumpConcepts',()=>{$('conceptSection').scrollIntoView({behavior:'smooth',block:'start'})});bindPress('backLearn',()=>show('menu'));bindPress('backLab',()=>show('menu'));bindPress('backBoard',()=>{closePrizeVerifier();show('menu')});
 let pendingExitAction=null;
