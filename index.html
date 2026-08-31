@@ -376,6 +376,11 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 .claimPopupFoot{display:flex;gap:10px;justify-content:flex-end;align-items:center;padding:14px 18px 18px;border-top:1px solid #ffffff12;background:#090f18cc}.claimPopupFoot .note{margin-right:auto}.claimPopupFoot .btn{margin:0;min-width:170px}
 @media(max-width:620px){#battleClaimPopup{padding:8px}.claimPopupPanel{width:98vw;max-height:94vh;border-radius:24px}.claimPopupHead{padding:16px 14px 12px}.claimPopupHead p{font-size:10px}.claimPopupCount{min-width:70px;padding:9px 10px}.claimRewardScroll{padding:10px 8px 14px}.claimRewardGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.claimRewardCard{padding:5px;border-radius:13px}.claimRewardCard .rewardThumb{height:58px;border-radius:10px;margin-bottom:5px}.claimRewardTop{display:block;font-size:6.7px;line-height:1.3}.claimRewardTrack{display:inline-flex;margin-top:2px;padding:2px 4px}.claimRewardName{font-size:8.4px;line-height:1.15;min-height:29px;overflow-wrap:anywhere}.claimRewardType{font-size:7px;line-height:1.2}.claimRewardJump{font-size:6.6px;line-height:1.2;margin-top:5px}.claimPopupFoot{padding:10px;display:grid;grid-template-columns:1fr}.claimPopupFoot .note{display:none}.claimPopupFoot .btn{min-width:0;width:100%}}
 
+
+/* Touch intent: scrolling over interactive cards must remain scrolling, not tapping. */
+#app.uiScroll button,#app.uiScroll .battleRewardCell,#app.uiScroll .item,#app.uiScroll .claimRewardCard{touch-action:pan-x pan-y}
+#app.uiScroll #battleTierGrid .battleRewardCell{touch-action:pan-x}
+#app.uiScroll .lockerTabs button,#app.uiScroll .gameoverActions button{touch-action:pan-y}
 </style>
 </head>
 <body>
@@ -636,7 +641,36 @@ const screens=['menu','learnScreen','labScreen','battleScreen','statsScreen','bo
 function show(id){screens.forEach(s=>$(s).classList.toggle('hidden',s!==id));app.classList.toggle('uiScroll',id==='menu'||id==='battleScreen'||id==='gameover');}
 function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
 const safeStore={get(k,fallback=null){try{return localStorage.getItem(k)??fallback}catch(e){return fallback}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}};
-function bindPress(id,fn){const el=typeof id==='string'?$(id):id;let lastTap=0;const run=async e=>{if(e){e.preventDefault();e.stopPropagation();}const now=Date.now();if(now-lastTap<240)return;lastTap=now;const ready=await unlockAudio();if(ready)sfxClick();fn(e);};['click','pointerup','touchend'].forEach(type=>el.addEventListener(type,run,{passive:false}));}
+function bindPress(id,fn){
+ const el=typeof id==='string'?$(id):id;if(!el)return;
+ let press=null,lastFire=0,lastPointerFire=0;
+ const TAP_SLOP=14;
+ const fire=async e=>{
+  const now=Date.now();if(now-lastFire<220)return;lastFire=now;
+  if(e){e.preventDefault();e.stopPropagation();}
+  const ready=await unlockAudio();if(ready)sfxClick();fn(e);
+ };
+ el.addEventListener('pointerdown',e=>{
+  if(e.isPrimary===false)return;
+  press={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};
+ },{passive:true});
+ el.addEventListener('pointermove',e=>{
+  if(!press||press.id!==e.pointerId)return;
+  if(Math.hypot(e.clientX-press.x,e.clientY-press.y)>TAP_SLOP)press.moved=true;
+ },{passive:true});
+ const cancel=e=>{if(press&&(!e||e.pointerId===undefined||press.id===e.pointerId))press=null};
+ el.addEventListener('pointercancel',cancel,{passive:true});
+ el.addEventListener('lostpointercapture',cancel,{passive:true});
+ el.addEventListener('pointerup',e=>{
+  if(!press||press.id!==e.pointerId)return;
+  const moved=press.moved||Math.hypot(e.clientX-press.x,e.clientY-press.y)>TAP_SLOP;
+  press=null;
+  if(moved)return;
+  lastPointerFire=Date.now();fire(e);
+ },{passive:false});
+ // Keyboard activation and browsers that synthesize click without Pointer Events.
+ el.addEventListener('click',e=>{if(Date.now()-lastPointerFire<500)return;fire(e)},{passive:false});
+}
 if(!window.THREE){alert('Three.js failed to load. Open this file with internet access to play the 3D version.');}
 
 const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x080a10,.023);
@@ -1597,15 +1631,27 @@ function commitRunnerSwipe(clientX,clientY){
  if(Math.max(ax,ay)<SWIPE_MIN)return;
  if(ax>ay)runnerLaneStep(dx>0?1:-1);else if(dy<0)runnerJump();else runnerDuck();
 }
-// Touch: one discrete action per released swipe.
-$('scene').addEventListener('touchstart',e=>{
- if(!touchControls||!game||paused||fullScreenQuestionActive()||uiTouchTarget(e.target)||dragTouch!==null)return;
+// Touch: capture gameplay gestures across the whole gameplay viewport. HUD layers may sit
+// above the WebGL canvas on mobile, so listening only on #scene can lose swipes.
+function gameplayTouchAllowed(e){
+ return touchControls&&game&&game.alive&&!paused&&!fullScreenQuestionActive()&&!app.classList.contains('uiScroll')&&!uiTouchTarget(e.target);
+}
+window.addEventListener('touchstart',e=>{
+ if(!gameplayTouchAllowed(e)||dragTouch!==null||!e.changedTouches?.length)return;
  const t=e.changedTouches[0];dragging=true;dragTouch=t.identifier;dragStartX=t.clientX;dragStartY=t.clientY;unlockAudio();e.preventDefault();
-},{passive:false});
-$('scene').addEventListener('touchmove',e=>{if(!touchControls||!dragging||dragTouch===null)return;for(const p of e.changedTouches)if(p.identifier===dragTouch){e.preventDefault();break}},{passive:false});
-function finishTouch(e){if(dragTouch===null)return;for(const p of e.changedTouches)if(p.identifier===dragTouch){commitRunnerSwipe(p.clientX,p.clientY);dragging=false;dragTouch=null;e.preventDefault();break}}
-$('scene').addEventListener('touchend',finishTouch,{passive:false});
-$('scene').addEventListener('touchcancel',e=>{if(dragTouch!==null){dragging=false;dragTouch=null;e.preventDefault()}},{passive:false});
+},{passive:false,capture:true});
+window.addEventListener('touchmove',e=>{
+ if(!touchControls||!dragging||dragTouch===null)return;
+ for(const p of e.changedTouches)if(p.identifier===dragTouch){e.preventDefault();break}
+},{passive:false,capture:true});
+function finishTouch(e){
+ if(dragTouch===null)return;
+ for(const p of e.changedTouches)if(p.identifier===dragTouch){
+  commitRunnerSwipe(p.clientX,p.clientY);dragging=false;dragTouch=null;e.preventDefault();break
+ }
+}
+window.addEventListener('touchend',finishTouch,{passive:false,capture:true});
+window.addEventListener('touchcancel',e=>{if(dragTouch!==null){dragging=false;dragTouch=null}},{passive:true,capture:true});
 // Desktop mouse/pen uses the exact same discrete swipe language.
 $('scene').addEventListener('pointerdown',e=>{
  if(touchControls&&e.pointerType==='touch')return;if(!game||paused||fullScreenQuestionActive()||uiTouchTarget(e.target))return;
@@ -2137,12 +2183,10 @@ function redeemSchoolCode(){
 refreshCodeUnlock();
 bindPress('redeemCode',redeemSchoolCode);
 
-let bpSwipeStartX=0,bpSwipeStartY=0,bpSwipeActive=false;
+// Battle-pass reward rails use native horizontal scrolling on touch devices.
+// Page changes stay on the explicit arrow controls so dragging over a reward never
+// doubles as a page gesture or an accidental reward activation.
 const bpWindow=document.querySelector('.battlePageWindow');
-if(bpWindow){
- bpWindow.addEventListener('touchstart',e=>{if(!matchMedia('(max-width:760px)').matches||!e.touches?.length)return;bpSwipeStartX=e.touches[0].clientX;bpSwipeStartY=e.touches[0].clientY;bpSwipeActive=true},{passive:true});
- bpWindow.addEventListener('touchend',e=>{if(!bpSwipeActive||!matchMedia('(max-width:760px)').matches)return;bpSwipeActive=false;const t=e.changedTouches?.[0];if(!t)return;const dx=t.clientX-bpSwipeStartX,dy=t.clientY-bpSwipeStartY;if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.2)return;const pages=Math.ceil(BATTLE_PASS_TIERS/BATTLE_PASS_PAGE_SIZE);if(dx<0&&battlePage<pages-1){battlePage++;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}else if(dx>0&&battlePage>0){battlePage--;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}},{passive:true});
-}
 bindPress('claimPopupClose',closeBattleClaimPopup);
 bindPress('start',startGame);bindPress('learn',()=>{renderLearnHub();show('learnScreen')});bindPress('lab',()=>{renderShop();show('labScreen')});bindPress('stats',openStats);bindPress('backStats',()=>show('menu'));bindPress('battle',openBattlePass);bindPress('battleBuy',buyBattlePass);bindPress('battlePrevPage',()=>{if(battlePage>0){battlePage--;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}});bindPress('battleNextPage',()=>{if(battlePage<Math.ceil(BATTLE_PASS_TIERS/BATTLE_PASS_PAGE_SIZE)-1){battlePage++;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}});bindPress('bpCloseDrawer',()=>$('battlePreviewPane')?.classList.remove('mobileOpen'));bindPress('backBattle',()=>{$('battlePreviewPane')?.classList.remove('mobileOpen');show('menu')});bindPress('board',()=>{openLeaderboardAtBest();setTimeout(sfxPrize,80)});
 bindPress('openVerify',openPrizeVerifier);bindPress('closeVerify',closePrizeVerifier);bindPress('verifyDevice',verifyCurrentDevice);bindPress('verifyClaim',verifyClaimCode);
