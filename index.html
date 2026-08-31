@@ -10,6 +10,7 @@
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;overscroll-behavior:none}
 body{touch-action:manipulation}
 #app{position:fixed;inset:0;overflow:hidden;touch-action:none}
+#scene,#scene canvas{touch-action:none!important;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
 #scene{position:absolute;inset:0;z-index:0;pointer-events:none}
 canvas{display:block;width:100%;height:100%}
 .screen{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg,#05070bcc,#05070d99);pointer-events:auto}
@@ -191,7 +192,7 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 #shopGrid{max-height:min(50vh,520px);overflow:auto;padding-right:4px;scrollbar-width:thin}.item{transform:translateZ(0)}@media(hover:hover){.item:hover{transform:translateY(-3px);border-color:#ffffff22;box-shadow:0 16px 34px #0006}}
 
 
-/* animated high-rank frames + evolving Flow Core */
+/* animated high-rank frames + evolving Hemoglobin Core */
 .flowCoreBadge{position:absolute;right:7px;top:7px;width:18px;height:18px;border-radius:50%;z-index:4;background:radial-gradient(circle at 35% 30%,#fff 0 8%,var(--coreLight,#62eaff) 18%,var(--coreMain,#177a9a) 58%,#07101a 72%);box-shadow:0 0 9px var(--coreGlow,#62eaff88),0 0 18px var(--coreGlow,#62eaff55);opacity:.9}.flowCoreBadge i{position:absolute;inset:-4px;border:1px solid var(--coreLight,#62eaff);border-radius:50%;animation:coreBadgeSpin 3.2s linear infinite}.flowCoreBadge i::after{content:'';position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;left:50%;top:-2px;box-shadow:0 0 7px var(--coreLight,#62eaff)}
 #portrait[data-rank="4"] .frameShell,#portrait[data-rank="5"] .frameShell,#portrait[data-rank="6"] .frameShell,#portrait[data-rank="7"] .frameShell,#portrait[data-rank="8"] .frameShell,#portrait[data-rank="9"] .frameShell,#portrait[data-rank="10"] .frameShell{border-color:var(--rankLight);box-shadow:inset 0 0 12px var(--rankGlow),0 0 16px var(--rankGlow);animation:frameBreath 1.8s ease-in-out infinite}
 #portrait[data-rank="5"],#portrait[data-rank="10"]{animation:frameChromatic 3s linear infinite}#portrait[data-rank="10"]::before,#portrait[data-rank="10"]::after{filter:drop-shadow(0 0 7px var(--rankStar));animation:frameCornerPulse .8s ease-in-out infinite alternate}.frameMini.animatedFrame{overflow:hidden;animation:frameMiniPulse 1.8s ease-in-out infinite}.frameMini.animatedFrame::after{content:'';position:absolute;inset:-30%;background:conic-gradient(from 0deg,transparent,var(--miniLight),transparent 28%,var(--miniMain),transparent 55%);animation:frameMiniSpin 3s linear infinite;mix-blend-mode:screen;opacity:.55}
@@ -327,6 +328,54 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 @media(max-width:480px){.menuActions{grid-template-columns:1fr}.menuActions #start,.menuActions #board{grid-column:auto}.playerPass.show{grid-template-columns:1fr}.passSeal{display:none}.learnFlow{grid-template-columns:1fr 1fr}.verifyActions{grid-template-columns:1fr}.verifyRow{grid-template-columns:1fr}.verifyRow .btn{width:100%}}
 @media(prefers-reduced-motion:reduce){.menuActions #start::after,.menuKicker i,.uiEyebrow i,.lockerCell,.lockerPreview::before,.playerPass::before,.boardLive i{animation:none!important}}
 
+
+
+/* balanced popup knowledge checks: readable without making the bloodstream feel dead */
+#knowledge{background:linear-gradient(180deg,rgba(5,10,17,.74),rgba(8,12,20,.82));backdrop-filter:blur(3px)}
+#knowledge .panel{background:linear-gradient(180deg,rgba(18,27,41,.94),rgba(10,16,26,.95));box-shadow:0 28px 70px #0009,0 0 38px #62eaff18}
+#knowledgeIncoming{min-width:min(92vw,390px)}
+
+/* in-world Synapse Junction knowledge system (legacy visuals retained but no longer used during normal runs) */
+#knowledgeForkHUD{position:fixed;z-index:21;left:50%;top:92px;transform:translate(-50%,-12px);width:min(95vw,850px);pointer-events:none;opacity:0;transition:.22s ease;display:grid;gap:9px}#knowledgeForkHUD.show{opacity:1;transform:translate(-50%,0)}
+.knowledgeForkPrompt{padding:12px 16px 13px;border-radius:19px;background:linear-gradient(180deg,#102235f5,#091522f5);border:1px solid #62eaff62;box-shadow:0 16px 38px #0008,0 0 32px #62eaff1d;backdrop-filter:blur(12px);text-align:center}.knowledgeForkPrompt small{display:block;font-size:9px;letter-spacing:1.7px;font-weight:1000;color:#7fe8ff;margin-bottom:5px}.knowledgeForkPrompt b{display:block;font-size:clamp(15px,3vw,20px);line-height:1.28;color:#fff;text-wrap:balance}
+.knowledgeForkLanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.knowledgeLaneCard{min-width:0;min-height:66px;padding:10px 9px;border-radius:16px;background:linear-gradient(180deg,#172638f2,#0b1622f2);border:1px solid #ffffff1c;box-shadow:0 12px 24px #0006;display:grid;grid-template-columns:32px 1fr;align-items:center;gap:8px;transition:.15s ease}.knowledgeLaneCard i{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:1000;color:#071018;background:#7feaff;box-shadow:0 0 18px #62eaff66}.knowledgeLaneCard span{font-size:11px;line-height:1.28;font-weight:900;color:#f1f8ff;overflow-wrap:anywhere}.knowledgeLaneCard.target{border-color:#62eaff4d}.knowledgeLaneCard.correct{background:linear-gradient(180deg,#176b4df2,#0d3e2ef2);border-color:#66efb480}.knowledgeLaneCard.wrong{background:linear-gradient(180deg,#7b273ef2,#421624f2);border-color:#ff718d80}.knowledgeLaneCard.dim{opacity:.44}
+.knowledgeForkProgress{height:7px;border-radius:999px;overflow:hidden;background:#ffffff12;margin:0 12px;box-shadow:inset 0 1px #ffffff15}.knowledgeForkProgress i{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,#62eaff,#8f78ff,#ff9b55);box-shadow:0 0 16px #62eaff70}.knowledgeForkResult{display:none;text-align:center;padding:8px 12px;border-radius:14px;font-size:10px;font-weight:950;letter-spacing:.3px;background:#0b1622f2;border:1px solid #ffffff18;color:#d7e5f2}.knowledgeForkResult.show{display:block;animation:passReveal .2s ease both}.knowledgeForkResult.good{color:#9df1c9;border-color:#7fe2b85c}.knowledgeForkResult.bad{color:#ffd0d9;border-color:#ff718d5c}
+#knowledgeForkHUD.event .knowledgeForkPrompt{border-color:#ff9b5675;background:linear-gradient(180deg,#3b2516f5,#1b120cf5);box-shadow:0 14px 34px #0007,0 0 30px #ff88442a}#knowledgeForkHUD.event .knowledgeForkPrompt small{color:#ffc189}#knowledgeForkHUD.event .knowledgeLaneCard i{background:#ffae69}#knowledgeForkHUD.emergency .knowledgeForkPrompt{border-color:#b678ff80;background:linear-gradient(180deg,#281941f5,#130d23f5)}#knowledgeForkHUD.emergency .knowledgeForkPrompt small{color:#d3a8ff}#knowledgeForkHUD.emergency .knowledgeLaneCard i{background:#c490ff}
+@media(max-width:620px){#knowledgeForkHUD{top:max(68px,calc(env(safe-area-inset-top) + 58px));width:97vw;gap:7px}.knowledgeForkPrompt{padding:11px 12px 12px;border-radius:16px}.knowledgeForkPrompt small{font-size:8px;margin-bottom:5px}.knowledgeForkPrompt b{font-size:14px;line-height:1.28}.knowledgeForkLanes{gap:6px}.knowledgeLaneCard{min-height:82px;padding:8px 6px;display:flex;flex-direction:column;justify-content:center;gap:6px;text-align:center;border-radius:13px}.knowledgeLaneCard i{width:auto;height:23px;min-width:54px;padding:0 7px;border-radius:8px;font-size:9px}.knowledgeLaneCard span{font-size:10px;line-height:1.22;font-weight:900}.knowledgeForkProgress{height:6px;margin:0 8px}.knowledgeForkResult{font-size:9px;line-height:1.3;padding:7px 9px}}
+@media(max-width:390px){.knowledgeForkPrompt b{font-size:13px}.knowledgeLaneCard{min-height:86px;padding:7px 5px}.knowledgeLaneCard span{font-size:9.4px}}
+/* Knowledge transition countdowns */
+#knowledgeIncoming{min-width:min(92vw,390px);justify-content:center}
+#knowledgeIncomingCount{font-size:22px;line-height:1;font-weight:1000;color:#fff;min-width:22px;text-align:center;text-shadow:0 0 14px #62eaff88}
+#knowledgeIncoming.emergency #knowledgeIncomingCount{color:#ffd09e;text-shadow:0 0 14px #ff8a4288}
+#resumeCountdown{position:fixed;inset:0;z-index:29;display:none;align-items:center;justify-content:center;pointer-events:none;background:radial-gradient(circle at 50% 48%,#07111fb8 0,#05070b40 34%,transparent 70%)}
+#resumeCountdown.show{display:flex}
+.resumeCountdownCard{display:grid;justify-items:center;gap:5px;padding:16px 24px;border-radius:22px;background:linear-gradient(180deg,#121d2ce8,#09111be8);border:1px solid #62eaff55;box-shadow:0 18px 50px #0009,0 0 38px #62eaff22;backdrop-filter:blur(10px);animation:resumePulse .7s ease-in-out infinite alternate}
+.resumeCountdownCard small{font-size:9px;letter-spacing:1.7px;font-weight:950;color:#a9bbce}.resumeCountdownCard strong{font-size:46px;line-height:.95;color:#fff;text-shadow:0 0 24px #62eaff80}.resumeCountdownCard span{font-size:10px;color:#b9c8d9;font-weight:850}
+@keyframes resumePulse{from{transform:scale(.97)}to{transform:scale(1.02)}}
+@media(max-width:620px){
+ #app.uiScroll #gameover{touch-action:pan-y;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;align-items:flex-start;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(32px,calc(env(safe-area-inset-bottom) + 22px))}
+ #app.uiScroll #gameover .panel{max-height:none;overflow:visible;margin:0 auto;flex:0 0 auto;width:min(96vw,620px);padding-bottom:28px}
+}
+
+
+.item.claimJumpHighlight{animation:claimJumpGlow 1.8s ease both}@keyframes claimJumpGlow{0%,100%{box-shadow:inherit}25%,70%{box-shadow:0 0 0 2px #62eaff,0 0 34px #62eaff66;transform:translateY(-3px)}}
+
+/* Game-over must remain scrollable on every screen size after score submission. */
+#app.uiScroll #gameover{touch-action:pan-y;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;align-items:flex-start;padding-top:max(18px,env(safe-area-inset-top));padding-bottom:max(38px,calc(env(safe-area-inset-bottom) + 26px));scrollbar-width:thin}
+#app.uiScroll #gameover .panel{max-height:none;overflow:visible;margin:0 auto;flex:0 0 auto;width:min(94vw,620px);padding-bottom:30px}
+
+/* Battle Pass multi-reward claim receipt */
+#battleClaimPopup{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 20%,#ff8b4329 0,transparent 30%),#03060bd9;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);touch-action:pan-y}
+#battleClaimPopup.show{display:flex;animation:claimPopupIn .24s ease both}
+@keyframes claimPopupIn{from{opacity:0}to{opacity:1}}
+.claimPopupPanel{width:min(94vw,920px);max-height:min(88vh,820px);display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;border-radius:30px;background:radial-gradient(circle at 82% 0%,#ff9c4b2b,transparent 28%),linear-gradient(150deg,#1b2638f8,#101722fa 58%,#21150efa);border:1px solid #ffffff20;box-shadow:0 36px 100px #000c,inset 0 1px #ffffff18;animation:claimPanelIn .34s cubic-bezier(.18,.86,.2,1) both}
+@keyframes claimPanelIn{from{transform:translateY(22px) scale(.975);opacity:.5}to{transform:none;opacity:1}}
+.claimPopupHead{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:22px 24px 16px;border-bottom:1px solid #ffffff12}.claimPopupHead h2{margin:4px 0 5px}.claimPopupHead p{margin:0;color:#b9c6d5;font-size:11px}.claimPopupCount{display:grid;justify-items:center;min-width:86px;padding:10px 14px;border-radius:18px;background:linear-gradient(180deg,#ff9a4d,#8b4216);box-shadow:0 12px 28px #ff7b3230}.claimPopupCount strong{font-size:27px;line-height:1}.claimPopupCount small{margin-top:3px;font-size:8px;font-weight:950;letter-spacing:1.2px;color:#fff4e9}
+.claimRewardScroll{overflow-y:auto;overscroll-behavior:contain;padding:16px 18px 20px;-webkit-overflow-scrolling:touch}.claimRewardGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.claimRewardCard{min-width:0;border:1px solid #ffffff15;border-radius:20px;background:linear-gradient(180deg,#1a2638,#101722);padding:9px;text-align:left;color:#fff;cursor:pointer;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;position:relative;overflow:hidden}.claimRewardCard:hover{transform:translateY(-2px);border-color:#62eaff60;box-shadow:0 14px 26px #0005}.claimRewardCard.paid{background:linear-gradient(180deg,#3b291b,#1d130d);border-color:#ff9b493c}.claimRewardCard.currency{cursor:default}.claimRewardCard.currency:hover{transform:none;border-color:#ffffff15;box-shadow:none}.claimRewardCard .rewardThumb{height:88px;margin-bottom:8px}.claimRewardTop{display:flex;justify-content:space-between;gap:6px;align-items:center;margin-bottom:6px;font-size:8px;font-weight:1000;letter-spacing:.9px}.claimRewardTop span:first-child{color:#9fb0c4}.claimRewardTrack{padding:3px 6px;border-radius:999px;background:#ffffff10}.claimRewardCard.paid .claimRewardTrack{background:#ff934d22;color:#ffc999}.claimRewardName{font-size:12px;font-weight:950;line-height:1.2;min-height:30px}.claimRewardType{font-size:9px;color:#aebdce;margin-top:4px}.claimRewardJump{margin-top:8px;font-size:8px;font-weight:950;letter-spacing:.8px;color:#78eaff}.claimRewardCard.currency .claimRewardJump{color:#ffb887}
+.claimPopupFoot{display:flex;gap:10px;justify-content:flex-end;align-items:center;padding:14px 18px 18px;border-top:1px solid #ffffff12;background:#090f18cc}.claimPopupFoot .note{margin-right:auto}.claimPopupFoot .btn{margin:0;min-width:170px}
+@media(max-width:620px){#battleClaimPopup{padding:8px}.claimPopupPanel{width:98vw;max-height:94vh;border-radius:24px}.claimPopupHead{padding:16px 14px 12px}.claimPopupHead p{font-size:10px}.claimPopupCount{min-width:70px;padding:9px 10px}.claimRewardScroll{padding:10px 8px 14px}.claimRewardGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.claimRewardCard{padding:5px;border-radius:13px}.claimRewardCard .rewardThumb{height:58px;border-radius:10px;margin-bottom:5px}.claimRewardTop{display:block;font-size:6.7px;line-height:1.3}.claimRewardTrack{display:inline-flex;margin-top:2px;padding:2px 4px}.claimRewardName{font-size:8.4px;line-height:1.15;min-height:29px;overflow-wrap:anywhere}.claimRewardType{font-size:7px;line-height:1.2}.claimRewardJump{font-size:6.6px;line-height:1.2;margin-top:5px}.claimPopupFoot{padding:10px;display:grid;grid-template-columns:1fr}.claimPopupFoot .note{display:none}.claimPopupFoot .btn{min-width:0;width:100%}}
+
 </style>
 </head>
 <body>
@@ -350,7 +399,9 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
  </div>
 </div>
 <div id="toast"></div>
-<div id="knowledgeIncoming"><div class="knowledgeIncomingIcon">🧠</div><div class="knowledgeIncomingText"><b id="knowledgeIncomingTitle">KNOWLEDGE CHECK INCOMING</b><span id="knowledgeIncomingSub">Get ready — question in a moment</span></div><div class="knowledgeIncomingBar"><i></i></div></div>
+<div id="knowledgeIncoming"><div class="knowledgeIncomingIcon">🧠</div><div class="knowledgeIncomingText"><b id="knowledgeIncomingTitle">KNOWLEDGE CHECK INCOMING</b><span id="knowledgeIncomingSub">Get ready — question in 3 seconds</span></div><div id="knowledgeIncomingCount">3</div><div class="knowledgeIncomingBar"><i></i></div></div>
+<div id="resumeCountdown"><div class="resumeCountdownCard"><small>FLOW RESUMES IN</small><strong id="resumeCountdownNumber">2</strong><span>Find your lane • get ready</span></div></div>
+<div id="knowledgeForkHUD" aria-live="polite"><div class="knowledgeForkPrompt"><small id="knowledgeForkKicker">🧠 SYNAPSE JUNCTION • CHOOSE A LANE</small><b id="knowledgeForkQuestion">Knowledge question</b></div><div class="knowledgeForkLanes"><div class="knowledgeLaneCard" id="knowledgeLane0"><i>L</i><span></span></div><div class="knowledgeLaneCard" id="knowledgeLane1"><i>M</i><span></span></div><div class="knowledgeLaneCard" id="knowledgeLane2"><i>R</i><span></span></div></div><div class="knowledgeForkProgress"><i id="knowledgeForkProgressFill"></i></div><div id="knowledgeForkResult" class="knowledgeForkResult"></div></div>
 <div id="occlusionWarning"><div class="occMsg" id="occlusionMsg">FLOW WARNING</div></div>
 <div id="lastChanceWarning"><div class="lastChanceEyebrow" id="flowWarnEye">FLOW INTEGRITY</div><div><div class="lastChanceTitle" id="flowWarnTitle">3 HITS LEFT</div><div class="lastChanceSub" id="flowWarnSub">Obstruction damage is building — protect the cell</div></div><div class="lastChanceBeat"><i></i></div></div>
 <div id="confettiLayer"></div>
@@ -361,7 +412,7 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
    <div class="menuPrimary">
     <div class="menuKicker"><i></i> LIVE BLOODSTREAM SIMULATION</div>
     <h1>BLOOD<br>RUN 3D</h1>
-    <p>Race a living bloodstream, deliver oxygen, dodge vaso-occlusion, master clinical knowledge drops, and fight for the top of the event leaderboard.</p>
+    <p>Race a living bloodstream, deliver oxygen, dodge vaso-occlusion, master clinical knowledge junctions, and fight for the top of the event leaderboard.</p>
     <div class="menuActions">
      <button class="btn" id="start">▶ START RUN</button>
      <button class="btn alt" id="learn">🧠 LEARN</button>
@@ -469,14 +520,20 @@ input{min-height:52px;border-radius:15px;background:#0f1520;border-color:#ffffff
 </div>
 <button class="btn" id="backBattle">BACK TO ARCADE</button></div></div>
 
+<div id="battleClaimPopup" aria-hidden="true"><div class="claimPopupPanel" role="dialog" aria-modal="true" aria-labelledby="claimPopupTitle">
+ <div class="claimPopupHead"><div><div class="uiEyebrow"><i></i> BATTLE PASS DROP</div><h2 id="claimPopupTitle">Rewards Claimed</h2><p>Everything you just unlocked is collected below. Tap a cosmetic to jump directly to it in the RBC Lab.</p></div><div class="claimPopupCount"><strong id="claimPopupCount">0</strong><small>REWARDS</small></div></div>
+ <div class="claimRewardScroll"><div class="claimRewardGrid" id="claimRewardGrid"></div></div>
+ <div class="claimPopupFoot"><span class="note">Heme is added directly to your wallet. Cosmetic cards open their exact Lab category.</span><button class="btn" id="claimPopupClose">BACK TO BATTLE PASS</button></div>
+</div></div>
+
 <div id="statsScreen" class="screen hidden"><div class="panel statsPanel">
 <div class="statsHero">
- <div><div class="uiEyebrow"><i></i> CAREER DIAGNOSTICS</div><h2>Blood Run Stats</h2><p>Your lifetime run history, evolving Flow Core, challenge progression, and performance records live here.</p></div>
+ <div><div class="uiEyebrow"><i></i> CAREER DIAGNOSTICS</div><h2>Blood Run Stats</h2><p>Your lifetime run history, evolving Hemoglobin Core, challenge progression, and performance records live here.</p></div>
  <div class="statsTierChip"><small>BATTLE PASS</small><strong id="statsBattleTier">Tier 1</strong><span id="statsBattleXP">0 XP</span></div>
 </div>
 <div class="flowCoreHero">
  <div class="flowCoreVisual" id="statsFlowCore"><div class="coreOrbit one"></div><div class="coreOrbit two"></div><div class="coreOrb"></div><div class="coreSparks"></div></div>
- <div class="flowCoreMeta"><div class="uiEyebrow"><i></i> EVOLVING COSMETIC</div><h3 id="flowCoreName">Dormant Flow Core</h3><p id="flowCoreDesc">Your Flow Core evolves automatically as your lifetime stats grow.</p><div class="flowCoreProgress"><i id="flowCoreProgressFill"></i></div><div class="note" id="flowCoreProgressText">0 / 5,000 Flow Rating</div></div>
+ <div class="flowCoreMeta"><div class="uiEyebrow"><i></i> EVOLVING COSMETIC</div><h3 id="flowCoreName">Dormant Hemoglobin Core</h3><p id="flowCoreDesc">Your Hemoglobin Core evolves automatically as your lifetime stats grow.</p><div class="flowCoreProgress"><i id="flowCoreProgressFill"></i></div><div class="note" id="flowCoreProgressText">0 / 5,000 Flow Rating</div></div>
 </div>
 <div class="statsGrid" id="statsGrid"></div>
 <div class="statsSectionHead"><div><div class="uiEyebrow"><i></i> ACTIVE OBJECTIVES</div><h3>Rotating Challenges</h3></div><span class="note">Finish one and it immediately rotates into a harder challenge with a larger XP reward.</span></div>
@@ -576,7 +633,7 @@ if(firebaseConfigIsFilledIn()){
 
 const $=id=>document.getElementById(id), app=$('app');
 const screens=['menu','learnScreen','labScreen','battleScreen','statsScreen','boardScreen','knowledge','pauseScreen','gameover'];
-function show(id){screens.forEach(s=>$(s).classList.toggle('hidden',s!==id));app.classList.toggle('uiScroll',id==='menu'||id==='battleScreen');}
+function show(id){screens.forEach(s=>$(s).classList.toggle('hidden',s!==id));app.classList.toggle('uiScroll',id==='menu'||id==='battleScreen'||id==='gameover');}
 function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
 const safeStore={get(k,fallback=null){try{return localStorage.getItem(k)??fallback}catch(e){return fallback}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}};
 function bindPress(id,fn){const el=typeof id==='string'?$(id):id;let lastTap=0;const run=async e=>{if(e){e.preventDefault();e.stopPropagation();}const now=Date.now();if(now-lastTap<240)return;lastTap=now;const ready=await unlockAudio();if(ready)sfxClick();fn(e);};['click','pointerup','touchend'].forEach(type=>el.addEventListener(type,run,{passive:false}));}
@@ -849,11 +906,11 @@ function renderChallenges(){ensureChallengeState();const html=profile.challengeS
 function advanceChallenges(type,amount=1,autoSave=true){ensureChallengeState();let completed=[];for(let i=0;i<profile.challengeSlots.length;i++){let c=profile.challengeSlots[i];if(c.type!==type)continue;c.progress=(Number(c.progress)||0)+Math.max(0,Number(amount)||0);if(c.progress>=c.target){profile.battleXP+=c.xp;completed.push({name:c.name,xp:c.xp,level:c.level});profile.challengeSerial++;profile.challengeSlots[i]=makeChallenge(i,(c.level||1)+1)}}if(completed.length){for(const c of completed){toast(`CHALLENGE COMPLETE • ${c.name} • +${c.xp} XP`);try{sfxPrize()}catch(_){}}if(autoSave)save()}else renderChallenges();return completed.reduce((n,c)=>n+c.xp,0)}
 function flowRating(){const s=profile.stats;return Math.floor(s.totalDistance+s.totalScore/9+profile.highScore/2+s.oxygen*22+s.correct*75+s.events*145+s.runs*80)}
 const FLOW_CORE_STAGES=[
- {name:'Dormant Flow Core',min:0,next:5000,main:'#177a9a',light:'#62eaff',desc:'A fresh core. Keep running to charge its first evolution.'},
- {name:'Ionized Flow Core',min:5000,next:15000,main:'#5366d9',light:'#9aa8ff',desc:'Lifetime flow has ionized the core. Its orbit is becoming more energetic.'},
- {name:'Radiant Flow Core',min:15000,next:35000,main:'#8f4dcc',light:'#d59cff',desc:'A radiant core powered by sustained distance, knowledge, and oxygen delivery.'},
- {name:'Ascendant Flow Core',min:35000,next:70000,main:'#cc7129',light:'#ffd06d',desc:'An advanced cosmetic evolution earned through serious lifetime performance.'},
- {name:'Apex Flow Core',min:70000,next:null,main:'#ff5d4b',light:'#ffffff',desc:'Maximum evolution. Your lifetime stats have pushed the Flow Core into Apex state.'}
+ {name:'Dormant Hemoglobin Core',min:0,next:5000,main:'#177a9a',light:'#62eaff',desc:'A fresh core. Keep running to charge its first evolution.'},
+ {name:'Ionized Hemoglobin Core',min:5000,next:15000,main:'#5366d9',light:'#9aa8ff',desc:'Lifetime flow has ionized the core. Its orbit is becoming more energetic.'},
+ {name:'Radiant Hemoglobin Core',min:15000,next:35000,main:'#8f4dcc',light:'#d59cff',desc:'A radiant core powered by sustained distance, knowledge, and oxygen delivery.'},
+ {name:'Ascendant Hemoglobin Core',min:35000,next:70000,main:'#cc7129',light:'#ffd06d',desc:'An advanced cosmetic evolution earned through serious lifetime performance.'},
+ {name:'Apex Hemoglobin Core',min:70000,next:null,main:'#ff5d4b',light:'#ffffff',desc:'Maximum evolution. Your lifetime stats have pushed the Hemoglobin Core into Apex state.'}
 ];
 function currentFlowCore(){const r=flowRating();let idx=0;for(let i=0;i<FLOW_CORE_STAGES.length;i++)if(r>=FLOW_CORE_STAGES[i].min)idx=i;return {...FLOW_CORE_STAGES[idx],idx,rating:r}}
 function evolutionStage(kind,value){const s=profile.stats||{};if(kind==='aura'&&value===BP_AURA_GENESIS){const n=s.runs||0;return n>=12?{stage:3,name:'Radiant',progress:n,next:null}:{stage:n>=4?2:1,name:n>=4?'Ionized':'Spark',progress:n,next:n>=4?12:4}}if(kind==='skin'&&value===BP_SKIN_PULSE_CADET){const n=s.oxygen||0;return n>=180?{stage:3,name:'Overcharged',progress:n,next:null}:{stage:n>=60?2:1,name:n>=60?'Charged':'Fresh',progress:n,next:n>=60?180:60}}if(kind==='aura'&&value===BP_AURA_APEX){const n=flowRating();return n>=120000?{stage:3,name:'Event Horizon',progress:n,next:null}:{stage:n>=90000?2:1,name:n>=90000?'Gravity Well':'Singularity',progress:n,next:n>=90000?120000:90000}}if(kind==='skin'&&value===BP_SKIN_APEX_REACTOR){const n=profile.highScore||0;return n>=30000?{stage:3,name:'Ascendant Prime',progress:n,next:null}:{stage:n>=20000?2:1,name:n>=20000?'Ascendant II':'Ascendant I',progress:n,next:n>=20000?30000:20000}}if(kind==='title'&&value===BP_TITLE_FLOW_ROOKIE){const n=s.correct||0;return n>=75?{stage:3,name:'Flow Scholar',progress:n,next:null}:{stage:n>=25?2:1,name:n>=25?'Flow Adept':'Flow Rookie',progress:n,next:n>=25?75:25}}if(kind==='title'&&value===BP_TITLE_BLOODSTREAM_LEGEND){const n=flowRating();return n>=120000?{stage:3,name:'Bloodstream Mythic',progress:n,next:null}:{stage:n>=90000?2:1,name:n>=90000?'Bloodstream Paragon':'Bloodstream Legend',progress:n,next:n>=90000?120000:90000}}return null}
@@ -974,7 +1031,11 @@ function renderBattlePass(){if(!$('battleTierGrid'))return;const pageCount=Math.
 function openBattlePass(){battlePage=Math.floor((battleSelection.tier-1)/BATTLE_PASS_PAGE_SIZE);$('battlePreviewPane')?.classList.remove('mobileOpen');show('battleScreen');initBattlePreview();renderBattlePass()}
 function openLabFromBattle(){renderShop();show('labScreen')}
 function buyBattlePass(){if(profile.battlePassPremium){toast('Premium already active');return}if(profile.heme<BATTLE_PASS_PRICE){toast('Need 300 Heme');return}profile.heme-=BATTLE_PASS_PRICE;profile.battlePassPremium=true;save();toast('PREMIUM TRACK UNLOCKED');try{sfxPrize()}catch(_){}renderBattlePass()}
-function claimBattleReward(track,tier){if(!isBattleTierUnlocked(tier)){toast('Tier locked');return}if(track==='paid'&&!profile.battlePassPremium){toast('Buy the premium track first');return}const maxTier=Math.min(tier,battleUnlockedTierCount());let count=0,latest='';for(let t=1;t<=maxTier;t++){if(!profile.bpClaimedFree.includes(t)){const r=battleRewardFor(t,'free');if(r){grantReward(r);profile.bpClaimedFree.push(t);count++;latest=r.label}}if(profile.battlePassPremium&&!profile.bpClaimedPaid.includes(t)){const r=battleRewardFor(t,'paid');if(r){grantReward(r);profile.bpClaimedPaid.push(t);count++;latest=r.label}}}profile.bpClaimedFree.sort((a,b)=>a-b);profile.bpClaimedPaid.sort((a,b)=>a-b);if(!count){toast('Everything through Tier '+maxTier+' is already claimed');return}save();renderBattlePass();toast(`${count} REWARD${count===1?'':'S'} CLAIMED THROUGH TIER ${maxTier}${latest?' • '+latest.toUpperCase():''}`);try{sfxPrize()}catch(_){} }
+function labTabForReward(reward){if(!reward)return null;if(reward.kind==='skin')return 'skins';if(reward.kind==='trail')return 'trails';if(reward.kind==='aura')return 'auras';if(reward.kind==='title')return 'titles';if(reward.kind==='frame')return 'frames';if(reward.kind==='theme')return 'themes';return null}
+function closeBattleClaimPopup(){const pop=$('battleClaimPopup');if(!pop)return;pop.classList.remove('show');pop.setAttribute('aria-hidden','true')}
+function jumpClaimRewardToLab(reward){const tab=labTabForReward(reward);if(!tab)return;closeBattleClaimPopup();activeTab=tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));renderShop();show('labScreen');requestAnimationFrame(()=>requestAnimationFrame(()=>{let selector;if(tab==='frames')selector=`[data-frame="${reward.value}"]`;else if(tab==='themes')selector=`[data-theme="${reward.value}"]`;else selector=`[data-buy="${reward.value}"]`;const button=document.querySelector(selector),card=button?.closest('.item');if(card){card.scrollIntoView({behavior:'smooth',block:'center'});card.classList.add('claimJumpHighlight');setTimeout(()=>card.classList.remove('claimJumpHighlight'),1800)}}))}
+function showBattleClaimPopup(claimed){const pop=$('battleClaimPopup'),grid=$('claimRewardGrid'),count=$('claimPopupCount');if(!pop||!grid||!claimed?.length)return;if(count)count.textContent=claimed.length;grid.innerHTML=claimed.map((entry,i)=>{const r=entry.reward,isCurrency=r.kind==='heme';return `<button class="claimRewardCard ${entry.track==='paid'?'paid':''} ${isCurrency?'currency':''}" data-claim-index="${i}" ${isCurrency?'aria-disabled="true"':''}><div class="claimRewardTop"><span>TIER ${entry.tier}</span><span class="claimRewardTrack">${entry.track==='paid'?'PREMIUM':'FREE'}</span></div>${rewardThumbMarkup(r,entry.track,entry.tier)}<div class="claimRewardName">${rewardDisplayName(r)}</div><div class="claimRewardType">${rewardTypeLabel(r)}</div><div class="claimRewardJump">${isCurrency?'ADDED TO WALLET':'OPEN IN RBC LAB →'}</div></button>`}).join('');grid.querySelectorAll('[data-claim-index]').forEach(card=>{const entry=claimed[+card.dataset.claimIndex];if(entry?.reward?.kind==='heme')return;bindPress(card,()=>jumpClaimRewardToLab(entry.reward))});pop.classList.add('show');pop.setAttribute('aria-hidden','false');const scroll=pop.querySelector('.claimRewardScroll');if(scroll)scroll.scrollTop=0}
+function claimBattleReward(track,tier){if(!isBattleTierUnlocked(tier)){toast('Tier locked');return}if(track==='paid'&&!profile.battlePassPremium){toast('Buy the premium track first');return}const maxTier=Math.min(tier,battleUnlockedTierCount()),claimed=[];for(let t=1;t<=maxTier;t++){if(!profile.bpClaimedFree.includes(t)){const r=battleRewardFor(t,'free');if(r){grantReward(r);profile.bpClaimedFree.push(t);claimed.push({reward:r,track:'free',tier:t})}}if(profile.battlePassPremium&&!profile.bpClaimedPaid.includes(t)){const r=battleRewardFor(t,'paid');if(r){grantReward(r);profile.bpClaimedPaid.push(t);claimed.push({reward:r,track:'paid',tier:t})}}}profile.bpClaimedFree.sort((a,b)=>a-b);profile.bpClaimedPaid.sort((a,b)=>a-b);if(!claimed.length){toast('Everything through Tier '+maxTier+' is already claimed');return}save();renderBattlePass();showBattleClaimPopup(claimed);try{sfxPrize()}catch(_){} }
 function makeTextPlane(text,bg='#09111d',fg='#ffffff',stroke='#62eaff'){const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle=bg;ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle=stroke;ctx.lineWidth=10;ctx.strokeRect(8,8,c.width-16,c.height-16);ctx.fillStyle=fg;ctx.font='900 86px system-ui, Arial, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,c.width/2,c.height/2);const tex=new THREE.CanvasTexture(c);tex.needsUpdate=true;const mat=new THREE.MeshBasicMaterial({map:tex,transparent:false});const mesh=new THREE.Mesh(new THREE.PlaneGeometry(5.2,1.3),mat);return mesh}
 function makePreviewRBC(primary=0xff4568,secondary=0xb31c3d,rimColor=null){const g=new THREE.Group();const body=new THREE.Mesh(new THREE.SphereGeometry(1,34,24),new THREE.MeshStandardMaterial({color:primary,roughness:.28,metalness:.08}));body.scale.set(1.55,1.15,.5);g.add(body);const d1=new THREE.Mesh(new THREE.SphereGeometry(.74,24,18),new THREE.MeshStandardMaterial({color:secondary,roughness:.48,metalness:.04}));d1.scale.set(1.08,.85,.25);d1.position.z=.28;g.add(d1);const d2=d1.clone();d2.position.z=-.28;g.add(d2);const rim=new THREE.Mesh(new THREE.TorusGeometry(1.03,.14,10,34),new THREE.MeshStandardMaterial({color:rimColor??primary,roughness:.25,metalness:.1,transparent:true,opacity:.36}));rim.scale.set(1.2,.88,1);g.add(rim);g.userData.body=body;return g}
 function makePreviewFrame(frameIdx){const f=frames[frameIdx]||frames[0],g=makePreviewRBC(0xff4568,0xb31c3d);const ring=new THREE.Mesh(new THREE.TorusGeometry(2.25,.14,16,64),new THREE.MeshStandardMaterial({color:f[2],emissive:new THREE.Color(f[2]),emissiveIntensity:.35,roughness:.28,metalness:.2}));ring.rotation.x=.55;g.add(ring);const ring2=new THREE.Mesh(new THREE.TorusGeometry(2.7,.08,12,40),new THREE.MeshStandardMaterial({color:f[3],roughness:.2,metalness:.12}));ring2.rotation.y=.6;g.add(ring2);return g}
@@ -1158,11 +1219,19 @@ function laneX(lane,vessel=game?.vessel||5.9){return clamp(lane,-1,1)*laneSpacin
 function randomLane(){return Math.floor(Math.random()*3)-1}
 function obstacleMaterial(color,roughness=.65,emissive=0){return new THREE.MeshStandardMaterial({color,roughness,emissive,emissiveIntensity:emissive?.2:0})}
 let raftSerial=0;
+function makeDuckCue(){
+ const c=document.createElement('canvas');c.width=128;c.height=128;const x=c.getContext('2d');
+ x.clearRect(0,0,128,128);x.fillStyle='rgba(7,12,20,.78)';x.beginPath();x.arc(64,64,48,0,Math.PI*2);x.fill();
+ x.strokeStyle='#62eaff';x.lineWidth=7;x.beginPath();x.arc(64,64,45,0,Math.PI*2);x.stroke();
+ x.fillStyle='#ffffff';x.beginPath();x.moveTo(50,28);x.lineTo(78,28);x.lineTo(78,66);x.lineTo(98,66);x.lineTo(64,103);x.lineTo(30,66);x.lineTo(50,66);x.closePath();x.fill();
+ const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false,depthTest:false});const s=new THREE.Sprite(mat);s.scale.set(.9,.9,.9);s.position.set(0,1.78,.18);s.renderOrder=20;return s
+}
 function makeFibrinGate(){
  const g=new THREE.Group(),mat=obstacleMaterial(0xe8b8c3,.72),knot=obstacleMaterial(0xb96b7e,.78);
  const beam=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,1.62,10),mat);beam.rotation.z=Math.PI/2;beam.position.y=.72;g.add(beam);
  for(const x of [-.68,.68]){const cord=new THREE.Mesh(new THREE.CylinderGeometry(.065,.075,1.2,8),mat);cord.position.set(x,1.22,0);g.add(cord);const n=new THREE.Mesh(new THREE.SphereGeometry(.14,8,6),knot);n.position.set(x,.67,0);g.add(n)}
  for(const x of [-.38,0,.38]){const strand=new THREE.Mesh(new THREE.CylinderGeometry(.035,.045,.52,7),mat);strand.position.set(x,.98,0);g.add(strand)}
+ const cue=makeDuckCue();g.add(cue);g.userData.duckCue=cue;
  return g;
 }
 function makeThrombusRaft(hasRamp=true,length=8.4){
@@ -1276,6 +1345,7 @@ function startGame(){
 
  paused=false;
  questionOpen=false;
+ app.classList.remove('uiScroll');
 
  $('bossBar').classList.remove('show');
  $('bossFill').style.width='100%';
@@ -1303,7 +1373,7 @@ function startGame(){
    elapsed:0,
    spawn:.7,
    oSpawn:.8,
-   qTimer:5,
+   qTimer:24,
    stage:0,
    vessel:5.9,
    alive:true,
@@ -1335,6 +1405,8 @@ function startGame(){
    goldenActive:false,
    oxygenDemandLevel:0,
    questionIncoming:false,
+   knowledgeFork:null,
+   knowledgeGateSerial:0,
    currentQuestionEvent:null,
    currentQuestionExplanation:'',
    capillaryAssist:0,
@@ -1381,6 +1453,21 @@ function finishEvent(success=true){
  game.event=null;game.boss=false;game.eventTimer=0;$('bossBar').classList.remove('show');game.nextMinor=Math.max(game.nextMinor,game.dist+550);
 }
 
+
+function makeKnowledgeTextSprite(textValue,color='#ffffff',bg='rgba(7,15,25,.88)'){
+ const canvas=document.createElement('canvas');canvas.width=512;canvas.height=160;const c=canvas.getContext('2d');c.clearRect(0,0,512,160);c.fillStyle=bg;c.beginPath();c.roundRect(8,8,496,144,26);c.fill();c.strokeStyle=color;c.lineWidth=5;c.stroke();c.fillStyle=color;c.font='900 48px system-ui, sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(textValue,256,80,450);const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false});const sprite=new THREE.Sprite(mat);sprite.scale.set(2.2,.69,1);sprite.userData.disposeTex=tex;return sprite
+}
+function clearKnowledgeForkVisual(){if(!game||!game.knowledgeFork)return;const fork=game.knowledgeFork;if(fork.group){scene.remove(fork.group);fork.group.traverse(o=>{if(o.userData&&o.userData.disposeTex)o.userData.disposeTex.dispose();if(o.geometry)o.geometry.dispose?.();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose?.());else o.material.dispose?.()}})}fork.group=null}
+function hideKnowledgeForkHUD(delay=0){const done=()=>{const hud=$('knowledgeForkHUD');if(hud)hud.className='';};if(delay)setTimeout(done,delay);else done()}
+function threeChoiceFromRaw(raw){const answers=raw[1],correctText=answers[raw[2]],wrong=answers.map((a,i)=>({a,i})).filter(x=>x.i!==raw[2]).sort(()=>Math.random()-.5).slice(0,2).map(x=>x.a),choices=[correctText,...wrong].sort(()=>Math.random()-.5);return {prompt:raw[0],choices,correct:choices.indexOf(correctText),explanation:raw[3]||''}}
+function nextRunnerKnowledgeQuestion(){if(!game.questionDeck.length)game.questionDeck=Array.from({length:questions.length},(_,i)=>i).sort(()=>Math.random()-.5);const raw=questions[game.questionDeck.pop()];return threeChoiceFromRaw(raw)}
+function buildKnowledgeGateGroup(fork){const group=new THREE.Group();group.position.z=-88;for(let lane=0;lane<3;lane++){const x=laneX(lane-1,game.vessel),correct=lane===fork.correct;const color=fork.emergency?0xc490ff:fork.eventType?0xffa35c:0x62eaff;const frameMat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:.46,depthWrite:false,blending:THREE.AdditiveBlending});const frame=new THREE.Mesh(new THREE.TorusGeometry(1.05,.085,10,32),frameMat);frame.scale.y=1.45;frame.position.set(x,.15,0);frame.userData.knowledgeLane=lane;group.add(frame);const railMat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:.20,depthWrite:false,blending:THREE.AdditiveBlending});for(const sx of [-.88,.88]){const rail=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,3.3,7),railMat.clone());rail.position.set(x+sx,-.1,0);group.add(rail)}const letter=makeKnowledgeTextSprite(['← LEFT','CENTER','RIGHT →'][lane], '#'+new THREE.Color(color).getHexString());letter.position.set(x,1.86,0);letter.scale.set(1.8,.56,1);group.add(letter);for(let j=0;j<5;j++){const orb=new THREE.Mesh(new THREE.SphereGeometry(.035+(j%2)*.018,6,6),new THREE.MeshBasicMaterial({color:correct?0x8fffd0:color,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending}));orb.position.set(x+(Math.random()-.5)*1.5,(Math.random()-.5)*2.2,(Math.random()-.5)*.6);orb.userData.floatSeed=Math.random()*10;group.add(orb)}}scene.add(group);return group}
+function showKnowledgeForkHUD(fork){const hud=$('knowledgeForkHUD');if(!hud)return;hud.className='show'+(fork.eventType?' event':'')+(fork.emergency?' emergency':'');$('knowledgeForkKicker').textContent=fork.emergency?`⚡ CLINICAL RELAY • ${4-game.keRemaining}/3`:fork.eventType?`${fork.eventType==='crisis'?'🩸 FLOW DECISION':fork.eventType==='hypoxia'?'🫁 OXYGEN DECISION':'🔬 MICROFLOW DECISION'} • RUN THROUGH YOUR ANSWER`:'🧠 SYNAPSE JUNCTION • RUN THROUGH YOUR ANSWER';$('knowledgeForkQuestion').textContent=fork.prompt;fork.choices.forEach((answer,i)=>{const card=$('knowledgeLane'+i);if(card){card.className='knowledgeLaneCard target';const icon=card.querySelector('i');if(icon)icon.textContent=['← LEFT','CENTER','RIGHT →'][i];const span=card.querySelector('span');if(span)span.textContent=answer}});const r=$('knowledgeForkResult');if(r){r.className='knowledgeForkResult';r.textContent=''}const fill=$('knowledgeForkProgressFill');if(fill){fill.style.transform='scaleX(1)'}}
+function clearKnowledgeCorridor(){for(let i=obstacles.length-1;i>=0;i--){const o=obstacles[i];if(o.platform||o.raftTop)continue;if(o.mesh.position.z<-5&&o.mesh.position.z>-96){scene.remove(o.mesh);obstacles.splice(i,1)}}}
+function spawnKnowledgeFork({emergency=false,eventType=null}={}){if(!game||!game.alive||game.knowledgeFork)return false;if(!emergency&&!eventType&&(game.event||game.onRaft))return false;let q;if(eventType){const bank=eventKnowledgeQuestions[eventType];if(!bank||!bank.length)return false;q=threeChoiceFromRaw(bank[Math.floor(Math.random()*bank.length)])}else q=nextRunnerKnowledgeQuestion();game.qcount++;const fork={...q,emergency,eventType,resolved:false,group:null,startZ:-88,decisionTime:emergency?5.4:eventType?7.0:7.6,spawnTime:performance.now()};game.knowledgeFork=fork;game.questionIncoming=false;if(eventType==='crisis'){clearCrisisWave();game.eventWave=Math.max(game.eventWave,3.6)}clearKnowledgeCorridor();game.spawn=Math.max(game.spawn,4.5);fork.group=buildKnowledgeGateGroup(fork);showKnowledgeForkHUD(fork);return true}
+function resolveKnowledgeFork(lane){if(!game||!game.knowledgeFork||game.knowledgeFork.resolved)return;const fork=game.knowledgeFork;fork.resolved=true;const correct=lane===fork.correct;recordMastery(fork.prompt,correct,fork.eventType==='crisis'?'complications':fork.eventType==='hypoxia'||fork.eventType==='capillary'?'oxygen':null);const result=$('knowledgeForkResult');fork.choices.forEach((_,i)=>{const card=$('knowledgeLane'+i);if(card){card.className='knowledgeLaneCard '+(i===fork.correct?'correct':i===lane&&!correct?'wrong':'dim')}});if(correct){game.knowledge++;game.score+=500;game.oxy=Math.min(100,game.oxy+8);advanceChallenges('correct',1);if(fork.eventType)applyEventKnowledgeBonus(fork.eventType);else{sfxCorrect();toast('SYNAPSE LOCKED • +500 • O₂ +8%')}if(result){result.className='knowledgeForkResult show good';result.textContent=fork.eventType?'CORRECT • YOU CHANGED THE EVENT':'CORRECT • FLOW BOOSTED'}}else{game.score=Math.max(0,game.score-100);game.oxy=Math.max(0,game.oxy-5);sfxWrong();const why=fork.explanation||categoryWhy(categorizeQuestion(fork.prompt));toast('MISSED JUNCTION • O₂ -5%');if(result){result.className='knowledgeForkResult show bad';result.textContent=`CORRECT: ${fork.choices[fork.correct]} • ${why}`}}renderMastery();if(fork.emergency&&correct)game.keCorrect++;setTimeout(()=>finishKnowledgeFork(fork),1650)}
+function finishKnowledgeFork(fork){if(!game||game.knowledgeFork!==fork)return;clearKnowledgeForkVisual();hideKnowledgeForkHUD();game.knowledgeFork=null;game.qTimer=28+Math.random()*12;if(fork.emergency){game.keRemaining--;const done=3-game.keRemaining;$('eventLabel').textContent=`🧠 CLINICAL RELAY ${done}/3`;$('bossFill').style.width=(game.keRemaining/3*100)+'%';if(game.keRemaining>0){setTimeout(()=>{if(game&&game.alive&&game.event==='knowledge')spawnKnowledgeFork({emergency:true})},900)}else{const score=game.keCorrect===3?1100:game.keCorrect*250,heme=game.keCorrect===3?30:game.keCorrect*6,oxy=game.keCorrect===3?15:game.keCorrect*3;awardEvent(game.keCorrect===3?'PERFECT CLINICAL RELAY':'CLINICAL RELAY COMPLETE',score,heme,oxy);game.event=null;game.currentEmergency=false;$('bossBar').classList.remove('show');game.nextMinor=game.dist+650}}}
+function updateKnowledgeFork(dt,t,speed){const fork=game&&game.knowledgeFork;if(!fork||!fork.group)return;const travel=Math.max(4.8,fork.decisionTime||7.4),gateSpeed=88/travel;fork.group.position.z+=gateSpeed*dt;const progress=clamp((fork.group.position.z+88)/88,0,1),fill=$('knowledgeForkProgressFill');if(fill)fill.style.transform=`scaleX(${1-progress})`;const remaining=Math.max(0,(88-Math.max(0,fork.group.position.z+88))/gateSpeed);const kicker=$('knowledgeForkKicker');if(kicker&&!fork.resolved){const base=fork.emergency?`⚡ CLINICAL RELAY • ${4-game.keRemaining}/3`:fork.eventType?`${fork.eventType==='crisis'?'🩸 FLOW DECISION':fork.eventType==='hypoxia'?'🫁 OXYGEN DECISION':'🔬 MICROFLOW DECISION'}`:'🧠 SYNAPSE JUNCTION';kicker.textContent=`${base} • CHOOSE A LANE • ${remaining.toFixed(1)}s`}fork.group.children.forEach((c,i)=>{if(c.userData&&c.userData.floatSeed!==undefined)c.position.y+=Math.sin(t*.003+c.userData.floatSeed)*dt*.18;if(c.material&&c.material.opacity!==undefined&&c.type==='Mesh'&&c.geometry&&c.geometry.type==='TorusGeometry')c.material.opacity=.40+.20*Math.sin(t*.008+i)});if(!fork.resolved&&fork.group.position.z>=-.3)resolveKnowledgeFork((game.lane|0)+1);if(fork.group.position.z>7&&!fork.resolved)resolveKnowledgeFork((game.lane|0)+1)}
 const eventKnowledgeQuestions={
  crisis:[
   ['Why can vaso-occlusion cause tissue pain?',['Reduced blood flow can cause ischemia','It increases tissue oxygen','It makes RBCs more flexible','It creates larger vessels'],0,'Reduced perfusion can cause tissue ischemia and pain.'],
@@ -1395,8 +1482,6 @@ const eventKnowledgeQuestions={
   ['Why is hypoxia especially important in sickle cell disease?',['It can promote sickling and worsen flow','It makes every RBC more flexible','It eliminates vaso-occlusion','It permanently raises HbF'],0,'Lower oxygen tension can favor HbS polymerization and sickling.']
  ]
 };
-function announceEventKnowledge(type){if(!game||!game.alive||questionOpen||game.questionIncoming||game.event!==type)return;game.questionIncoming=true;const el=$('knowledgeIncoming'),title=$('knowledgeIncomingTitle'),sub=$('knowledgeIncomingSub');if(title)title.textContent=type==='crisis'?'CRISIS KNOWLEDGE CHECK':type==='hypoxia'?'HYPOXIA KNOWLEDGE CHECK':'CAPILLARY KNOWLEDGE CHECK';if(sub)sub.textContent='Answer correctly to change the event in your favor';if(el)el.className='show emergency';setTimeout(()=>{hideKnowledgeIncoming();if(!game||!game.alive||game.event!==type){if(game)game.questionIncoming=false;return}game.questionIncoming=false;maybeEventQuestion(type)},900)}
-function maybeEventQuestion(type){const bank=eventKnowledgeQuestions[type];if(!bank||!bank.length||questionOpen)return;const raw=bank[Math.floor(Math.random()*bank.length)],order=raw[1].map((_,i)=>i).sort(()=>Math.random()-.5),correct=order.indexOf(raw[2]);const q=[raw[0],order.map(i=>raw[1][i]),correct];game.qcount++;game.currentEmergency=false;game.currentQuestionEvent=type;game.currentQuestionExplanation=raw[3];const aw=$('answerWhy');if(aw){aw.className='answerWhy';aw.textContent=''};$('question').textContent=(type==='crisis'?'🩸 CRISIS DECISION • ':type==='hypoxia'?'🫁 HYPOXIA DECISION • ':'🔬 CAPILLARY DECISION • ')+q[0];$('answers').innerHTML=q[1].map((a,i)=>`<button class="answer" data-a="${i}">${String.fromCharCode(65+i)}. ${a}</button>`).join('');document.querySelectorAll('[data-a]').forEach(b=>bindPress(b,()=>answer(+b.dataset.a,q,false)));show('knowledge');questionOpen=true;startQuestionTimer(11,q)}
 function clearCrisisWave(){for(let i=obstacles.length-1;i>=0;i--){const o=obstacles[i];if(o&&o.boss){scene.remove(o.mesh);obstacles.splice(i,1)}}}
 function applyEventKnowledgeBonus(type){if(type==='crisis'){clearCrisisWave();game.eventWave=Math.max(game.eventWave,1.8);game.score+=250;toast('KNOWLEDGE OPENED THE FLOW • WAVE CLEARED • +250')}else if(type==='capillary'){game.capillaryAssist=4;game.oxy=Math.min(100,game.oxy+12);game.score+=200;toast('CAPILLARY RELIEF • VESSEL WIDENED • O₂ +12%')}else if(type==='hypoxia'){game.hypoxiaCollected=Math.min(6,(game.hypoxiaCollected||0)+2);game.oxy=Math.min(100,game.oxy+18);game.score+=200;toast(`OXYGEN DELIVERY BOOST • O₂ ${game.hypoxiaCollected}/6`)}sfxCorrect()}
 
@@ -1405,10 +1490,10 @@ function startMajorEvent(){
  if(type==='crisis'){game.eventWave=.12;eventBanner('⚠ VASO-OCCLUSIVE CRISIS • SURVIVE',11)}
  else if(type==='capillary'){eventBanner('CAPILLARY SQUEEZE • STAY CENTERED',10)}
  else {game.hypoxiaCollected=0;eventBanner('HYPOXIA ZONE • COLLECT 6 O₂',11)}
- setTimeout(()=>{if(game&&game.alive&&game.event===type&&!questionOpen)announceEventKnowledge(type)},2100);
+ // Event questions are intentionally delayed so the event has time to breathe first.
+ setTimeout(()=>{if(game&&game.alive&&game.event===type&&!questionOpen)announceEventKnowledge(type)},4300);
 }
 function spawnBossWave(){
- // One clearly readable safe lane per crisis wave. No five-object random cloud.
  const safe=randomLane();
  for(const lane of [-1,0,1]){
   if(lane===safe)continue;
@@ -1426,10 +1511,10 @@ function startMinorEvent(){
  else if(roll===1){game.event='golden';game.eventDuration=9;game.eventTimer=9;$('eventLabel').textContent='✨ GOLDEN RBC';$('bossFill').style.width='100%';$('bossBar').classList.add('show');spawnGoldenRBC()}
  else startKnowledgeEmergency();
 }
-function showKnowledgeIncoming(emergency=false){const el=$('knowledgeIncoming'),title=$('knowledgeIncomingTitle'),sub=$('knowledgeIncomingSub');if(!el)return;if(title)title.textContent=emergency?'RAPID KNOWLEDGE INCOMING':'KNOWLEDGE CHECK INCOMING';if(sub)sub.textContent=emergency?'Rapid-fire question approaching':'Get ready — question in a moment';el.className=emergency?'show emergency':'show';const bar=el.querySelector('i');if(bar){bar.style.animation='none';void bar.offsetWidth;bar.style.animation=''}}
-function hideKnowledgeIncoming(){const el=$('knowledgeIncoming');if(el)el.className=''}
-function announceKnowledgeCheck(emergency=false){if(!game||!game.alive||questionOpen||game.questionIncoming)return;game.questionIncoming=true;showKnowledgeIncoming(emergency);setTimeout(()=>{hideKnowledgeIncoming();if(!game||!game.alive){return}game.questionIncoming=false;if(!emergency&&game.event)return;maybeQuestion(emergency)},emergency?650:1050)}
-function startKnowledgeEmergency(){game.event='knowledge';game.keRemaining=3;game.keCorrect=0;game.currentEmergency=false;$('eventLabel').textContent='🧠 KNOWLEDGE EMERGENCY 0/3';$('bossBar').classList.add('show');$('bossFill').style.width='100%';announceKnowledgeCheck(true)}
+let knowledgeIncomingInterval=null;
+function showKnowledgeIncoming(emergency=false,titleText=null,subText=null,seconds=2){const el=$('knowledgeIncoming'),title=$('knowledgeIncomingTitle'),sub=$('knowledgeIncomingSub'),count=$('knowledgeIncomingCount');if(!el)return;if(title)title.textContent=titleText||(emergency?'RAPID KNOWLEDGE INCOMING':'KNOWLEDGE CHECK INCOMING');if(sub)sub.textContent=subText||`Question in ${seconds} seconds`;if(count)count.textContent=seconds;el.className=emergency?'show emergency':'show';const bar=el.querySelector('i');if(bar){bar.style.animation='none';bar.style.transform='scaleX(1)';void bar.offsetWidth;bar.style.animation=`knowledgeCountdown ${seconds}s linear forwards`}}
+function hideKnowledgeIncoming(){const el=$('knowledgeIncoming');if(el)el.className='';if(knowledgeIncomingInterval){clearInterval(knowledgeIncomingInterval);knowledgeIncomingInterval=null}}
+function runKnowledgeCountdown(emergency,titleText,subText,onDone,seconds=2){hideKnowledgeIncoming();let n=seconds;showKnowledgeIncoming(emergency,titleText,subText,n);knowledgeIncomingInterval=setInterval(()=>{n--;const count=$('knowledgeIncomingCount'),sub=$('knowledgeIncomingSub');if(n>0){if(count)count.textContent=n;if(sub)sub.textContent=(subText||'Get ready')+` • ${n}`}else{hideKnowledgeIncoming();onDone&&onDone()}},1000)}
 function stopQuestionTimer(){if(questionTimerId){clearInterval(questionTimerId);questionTimerId=null}}
 function startQuestionTimer(seconds,q){
  stopQuestionTimer();questionAnswered=false;questionTimerTotal=seconds*1000;questionTimerEnd=performance.now()+questionTimerTotal;
@@ -1437,15 +1522,50 @@ function startQuestionTimer(seconds,q){
  const tick=()=>{if(!questionOpen||questionAnswered){stopQuestionTimer();return}let remain=Math.max(0,questionTimerEnd-performance.now()),ratio=remain/questionTimerTotal;fill.style.width=(ratio*100)+'%';num.textContent=Math.max(0,Math.ceil(remain/1000));wrap.classList.toggle('timerDanger',ratio<=.3);if(remain<=0){stopQuestionTimer();answer(-1,q,true)}};
  tick();questionTimerId=setInterval(tick,100);
 }
+function openPopupQuestion(raw,{emergency=false,eventType=null}={}){
+ if(!game||!game.alive||questionOpen||!raw)return false;
+ game.qcount++;
+ const originalAnswers=raw[1],order=originalAnswers.map((_,i)=>i).sort(()=>Math.random()-.5),correct=order.indexOf(raw[2]);
+ const q=[raw[0],order.map(i=>originalAnswers[i]),correct,raw[3]||''];
+ game.currentEmergency=emergency;game.currentQuestionEvent=eventType;game.currentQuestionExplanation=raw[3]||'';
+ const aw=$('answerWhy');if(aw){aw.className='answerWhy';aw.textContent=''};
+ $('question').textContent=(emergency?'⚡ RAPID FIRE • ':eventType?'🩺 EVENT CHECK • ':'')+q[0];
+ $('answers').innerHTML=q[1].map((a,i)=>`<button class="answer" data-a="${i}">${String.fromCharCode(65+i)}. ${a}</button>`).join('');
+ document.querySelectorAll('[data-a]').forEach(b=>bindPress(b,()=>answer(+b.dataset.a,q,false)));
+ show('knowledge');questionOpen=true;startQuestionTimer(emergency?8:12,q);return true;
+}
 function maybeQuestion(emergency=false){
- hideKnowledgeIncoming();if((game.qcount>=12&&!emergency)||!game.questionDeck.length)return;
- game.qcount++;let q=questions[game.questionDeck.pop()];let order=q[1].map((_,i)=>i).sort(()=>Math.random()-.5),correct=order.indexOf(q[2]);q=[q[0],order.map(i=>q[1][i]),correct];
- game.currentEmergency=emergency;const aw=$('answerWhy');if(aw){aw.className='answerWhy';aw.textContent=''};$('question').textContent=(emergency?'⚡ RAPID FIRE • ':'')+q[0];$('answers').innerHTML=q[1].map((a,i)=>`<button class="answer" data-a="${i}">${String.fromCharCode(65+i)}. ${a}</button>`).join('');
- document.querySelectorAll('[data-a]').forEach(b=>bindPress(b,()=>answer(+b.dataset.a,q,false)));show('knowledge');questionOpen=true;startQuestionTimer(emergency?7:11,q);
+ if(!game||!game.alive||(game.qcount>=12&&!emergency))return false;
+ if(!game.questionDeck.length)game.questionDeck=Array.from({length:questions.length},(_,i)=>i).sort(()=>Math.random()-.5);
+ const raw=questions[game.questionDeck.pop()];return openPopupQuestion(raw,{emergency});
+}
+function announceKnowledgeCheck(emergency=false){
+ if(!game||!game.alive||questionOpen||game.questionIncoming)return;
+ game.questionIncoming=true;
+ runKnowledgeCountdown(emergency,emergency?'RAPID KNOWLEDGE':'KNOWLEDGE CHECK',emergency?'Quick clinical check':'Read, choose, then return to the run',()=>{
+   if(!game||!game.alive){return}
+   game.questionIncoming=false;maybeQuestion(emergency);
+ },emergency?1:2);
+}
+function announceEventKnowledge(type){
+ if(!game||!game.alive||questionOpen||game.questionIncoming||game.event!==type)return;
+ const bank=eventKnowledgeQuestions[type];if(!bank||!bank.length)return;
+ game.questionIncoming=true;
+ runKnowledgeCountdown(false,type==='crisis'?'FLOW KNOWLEDGE CHECK':type==='hypoxia'?'OXYGEN KNOWLEDGE CHECK':'MICROFLOW KNOWLEDGE CHECK','One quick decision',()=>{
+   if(!game||!game.alive||game.event!==type){if(game)game.questionIncoming=false;return}
+   game.questionIncoming=false;openPopupQuestion(bank[Math.floor(Math.random()*bank.length)],{eventType:type});
+ },2);
+}
+function maybeEventQuestion(type){announceEventKnowledge(type);return true}
+function startKnowledgeEmergency(){game.event='knowledge';game.keRemaining=3;game.keCorrect=0;game.currentEmergency=true;$('eventLabel').textContent='🧠 KNOWLEDGE EMERGENCY 0/3';$('bossBar').classList.add('show');$('bossFill').style.width='100%';announceKnowledgeCheck(true)}
+function resumeAfterQuestion(onReady){
+ show(null);['hud'].forEach(id=>$(id).classList.remove('hidden'));
+ const overlay=$('resumeCountdown'),num=$('resumeCountdownNumber');if(overlay)overlay.classList.add('show');if(num)num.textContent='READY';
+ setTimeout(()=>{if(num)num.textContent='GO';setTimeout(()=>{if(overlay)overlay.classList.remove('show');questionOpen=false;last=performance.now();onReady&&onReady()},240)},760);
 }
 function answer(i,q,timedOut=false){
  if(questionAnswered)return;questionAnswered=true;stopQuestionTimer();let correct=!timedOut&&i===q[2];
- const eventType=game.currentQuestionEvent,explanation=game.currentQuestionExplanation||'';recordMastery(q[0],correct,eventType==='crisis'?'complications':eventType==='hypoxia'||eventType==='capillary'?'oxygen':null);
+ const eventType=game.currentQuestionEvent,explanation=game.currentQuestionExplanation||q[3]||'';recordMastery(q[0],correct,eventType==='crisis'?'complications':eventType==='hypoxia'||eventType==='capillary'?'oxygen':null);
  document.querySelectorAll('.answer').forEach((b,j)=>{b.disabled=true;if(j===q[2])b.classList.add('correct');if(j===i&&!correct)b.classList.add('wrong')});
  const why=$('answerWhy');if(why){why.className='answerWhy show '+(correct?'good':'bad');why.textContent=correct?(eventType?'Correct — your knowledge changed the event.':'Correct. '+categoryWhy(categorizeQuestion(q[0]))):questionWhy(q,explanation)}
  if(correct){game.knowledge++;game.score+=500;game.oxy=Math.min(100,game.oxy+8);advanceChallenges('correct',1);if(eventType)applyEventKnowledgeBonus(eventType);else{sfxCorrect();toast('CORRECT • +500')}}
@@ -1453,53 +1573,59 @@ function answer(i,q,timedOut=false){
  else{game.oxy=Math.max(0,game.oxy-12);game.score=Math.max(0,game.score-250);sfxWrong();toast('NOT QUITE • O₂ -12%')}
  game.currentQuestionEvent=null;game.currentQuestionExplanation='';renderMastery();
  const emergency=game.currentEmergency;if(emergency&&correct)game.keCorrect++;
- setTimeout(()=>{questionOpen=false;if(!game||!game.alive)return;if(emergency){game.keRemaining--;let done=3-game.keRemaining;$('eventLabel').textContent=`🧠 KNOWLEDGE EMERGENCY ${done}/3`;$('bossFill').style.width=(game.keRemaining/3*100)+'%';if(game.keRemaining>0){announceKnowledgeCheck(true);return}let score=game.keCorrect===3?1100:game.keCorrect*250,heme=game.keCorrect===3?30:game.keCorrect*6,oxy=game.keCorrect===3?15:game.keCorrect*3;awardEvent(game.keCorrect===3?'PERFECT KNOWLEDGE':'KNOWLEDGE COMPLETE',score,heme,oxy);game.event=null;game.currentEmergency=false;$('bossBar').classList.remove('show');game.nextMinor=game.dist+650;}show(null);['hud'].forEach(id=>$(id).classList.remove('hidden'));last=performance.now()},timedOut?1600:correct?900:1800)
+ setTimeout(()=>{if(!game||!game.alive)return;resumeAfterQuestion(()=>{
+   if(!game||!game.alive)return;
+   // Any popup, including an event question, buys a long uninterrupted gameplay window afterward.
+   game.qTimer=28+Math.random()*12;
+   if(emergency){game.keRemaining--;let done=3-game.keRemaining;$('eventLabel').textContent=`🧠 KNOWLEDGE EMERGENCY ${done}/3`;$('bossFill').style.width=(game.keRemaining/3*100)+'%';if(game.keRemaining>0){setTimeout(()=>announceKnowledgeCheck(true),700);return}let score=game.keCorrect===3?1100:game.keCorrect*250,heme=game.keCorrect===3?30:game.keCorrect*6,oxy=game.keCorrect===3?15:game.keCorrect*3;awardEvent(game.keCorrect===3?'PERFECT KNOWLEDGE':'KNOWLEDGE COMPLETE',score,heme,oxy);game.event=null;game.currentEmergency=false;$('bossBar').classList.remove('show');game.nextMinor=game.dist+650;}
+ })},timedOut?1500:correct?950:1800)
 }
+function fullScreenQuestionActive(){const k=$('knowledge');return !!(questionOpen&&k&&!k.classList.contains('hidden'))}
 function runnerLaneStep(dir){
- if(!game||paused||questionOpen)return;
+ if(!game||paused||fullScreenQuestionActive())return;
  game.lane=clamp((game.lane|0)+dir,-1,1);
 }
 const RUNNER_JUMP_TIME=.62,RUNNER_DUCK_TIME=.52,SWIPE_MIN=24;
-function runnerJump(){if(!game||paused||questionOpen)return;if((game.jumpT||0)<.12)game.jumpT=RUNNER_JUMP_TIME;game.duckT=0}
-function runnerDuck(){if(!game||paused||questionOpen)return;game.duckT=RUNNER_DUCK_TIME;game.jumpT=0}
+function runnerJump(){if(!game||paused||fullScreenQuestionActive())return;if((game.jumpT||0)<.12)game.jumpT=RUNNER_JUMP_TIME;game.duckT=0}
+function runnerDuck(){if(!game||paused||fullScreenQuestionActive())return;game.duckT=RUNNER_DUCK_TIME;game.jumpT=0}
 const touchControls=('ontouchstart' in window)||matchMedia('(pointer:coarse)').matches;
 let dragging=false,dragPointer=null,dragTouch=null,dragStartX=0,dragStartY=0;
-function uiTouchTarget(target){return target.closest('button,input,.panel,#pause,#knowledge,.screen')}
+function uiTouchTarget(target){return !!target.closest('button,input,textarea,select,#pause,#knowledge:not(.hidden),.verifyModal:not(.hidden),.leaveConfirm:not(.hidden)')}
 function commitRunnerSwipe(clientX,clientY){
- if(!game||paused||questionOpen)return;
+ if(!game||paused||fullScreenQuestionActive())return;
  const dx=clientX-dragStartX,dy=clientY-dragStartY,ax=Math.abs(dx),ay=Math.abs(dy);
  if(Math.max(ax,ay)<SWIPE_MIN)return;
  if(ax>ay)runnerLaneStep(dx>0?1:-1);else if(dy<0)runnerJump();else runnerDuck();
 }
 // Touch: one discrete action per released swipe.
-app.addEventListener('touchstart',e=>{
- if(!touchControls||!game||paused||questionOpen||uiTouchTarget(e.target)||dragTouch!==null)return;
+$('scene').addEventListener('touchstart',e=>{
+ if(!touchControls||!game||paused||fullScreenQuestionActive()||uiTouchTarget(e.target)||dragTouch!==null)return;
  const t=e.changedTouches[0];dragging=true;dragTouch=t.identifier;dragStartX=t.clientX;dragStartY=t.clientY;unlockAudio();e.preventDefault();
 },{passive:false});
-app.addEventListener('touchmove',e=>{if(!touchControls||!dragging||dragTouch===null)return;for(const p of e.changedTouches)if(p.identifier===dragTouch){e.preventDefault();break}},{passive:false});
+$('scene').addEventListener('touchmove',e=>{if(!touchControls||!dragging||dragTouch===null)return;for(const p of e.changedTouches)if(p.identifier===dragTouch){e.preventDefault();break}},{passive:false});
 function finishTouch(e){if(dragTouch===null)return;for(const p of e.changedTouches)if(p.identifier===dragTouch){commitRunnerSwipe(p.clientX,p.clientY);dragging=false;dragTouch=null;e.preventDefault();break}}
-app.addEventListener('touchend',finishTouch,{passive:false});
-app.addEventListener('touchcancel',e=>{if(dragTouch!==null){dragging=false;dragTouch=null;e.preventDefault()}},{passive:false});
+$('scene').addEventListener('touchend',finishTouch,{passive:false});
+$('scene').addEventListener('touchcancel',e=>{if(dragTouch!==null){dragging=false;dragTouch=null;e.preventDefault()}},{passive:false});
 // Desktop mouse/pen uses the exact same discrete swipe language.
-app.addEventListener('pointerdown',e=>{
- if(touchControls&&e.pointerType==='touch')return;if(!game||paused||questionOpen||uiTouchTarget(e.target))return;
- dragging=true;dragPointer=e.pointerId;dragStartX=e.clientX;dragStartY=e.clientY;try{app.setPointerCapture&&app.setPointerCapture(e.pointerId)}catch(_){}unlockAudio();e.preventDefault();
+$('scene').addEventListener('pointerdown',e=>{
+ if(touchControls&&e.pointerType==='touch')return;if(!game||paused||fullScreenQuestionActive()||uiTouchTarget(e.target))return;
+ dragging=true;dragPointer=e.pointerId;dragStartX=e.clientX;dragStartY=e.clientY;try{renderer.domElement.setPointerCapture&&renderer.domElement.setPointerCapture(e.pointerId)}catch(_){}unlockAudio();e.preventDefault();
 },{passive:false});
 function finishPointer(e){
  if(touchControls&&e.pointerType==='touch')return;if(!dragging||e.pointerId!==dragPointer)return;
- commitRunnerSwipe(e.clientX,e.clientY);dragging=false;dragPointer=null;try{app.releasePointerCapture&&app.releasePointerCapture(e.pointerId)}catch(_){}e.preventDefault();
+ commitRunnerSwipe(e.clientX,e.clientY);dragging=false;dragPointer=null;try{renderer.domElement.releasePointerCapture&&renderer.domElement.releasePointerCapture(e.pointerId)}catch(_){}e.preventDefault();
 }
-['pointerup','pointercancel','lostpointercapture'].forEach(ev=>app.addEventListener(ev,finishPointer,{passive:false}));
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>$('scene').addEventListener(ev,finishPointer,{passive:false}));
 // Desktop keyboard: left/right = lanes, up = jump, down = duck.
 addEventListener('keydown',e=>{
- if(!game||paused||questionOpen||!e.key.startsWith('Arrow'))return;e.preventDefault();if(e.repeat)return;
+ if(!game||paused||fullScreenQuestionActive()||!e.key.startsWith('Arrow'))return;e.preventDefault();if(e.repeat)return;
  if(e.key==='ArrowLeft')runnerLaneStep(-1);else if(e.key==='ArrowRight')runnerLaneStep(1);else if(e.key==='ArrowUp')runnerJump();else if(e.key==='ArrowDown')runnerDuck();
 });
 
 function loop(t){
  if(!game||!game.alive)return;let dt=Math.min((t-last)/1000,.033);last=t;
  if(!paused&&!questionOpen){
-  game.elapsed+=dt;let speed=17+Math.min(25,game.dist*.0042);game.dist+=speed*dt*2.2;game.score+=speed*dt*2;if(!game.event&&game.dist>=game.nextMajor)startMajorEvent();else if(!game.event&&game.dist>=game.nextMinor)startMinorEvent();
+  game.elapsed+=dt;let speed=17+Math.min(25,game.dist*.0042);game.dist+=speed*dt*2.2;game.score+=speed*dt*2;if(!game.event&&!questionOpen&&!game.questionIncoming&&game.dist>=game.nextMajor)startMajorEvent();else if(!game.event&&!questionOpen&&!game.questionIncoming&&game.dist>=game.nextMinor)startMinorEvent();
   if(game.event&&game.event!=='knowledge'){game.eventTimer-=dt;if(game.eventDuration>0)$('bossFill').style.width=Math.max(0,game.eventTimer/game.eventDuration*100)+'%';if(game.event==='crisis'){game.eventWave-=dt;if(game.eventWave<=0){spawnBossWave();game.eventWave=1.12}}if(game.event==='golden'&&game.eventTimer<=0){game.event=null;game.goldenActive=false;$('bossBar').classList.remove('show');toast('Golden RBC escaped');}else if(game.eventTimer<=0&&game.event!=='golden')finishEvent(true)}
   // Three lanes remain physically usable at every stage. Constriction narrows
   // the corridor, but never below the width needed for fair lane changes.
@@ -1511,7 +1637,7 @@ function loop(t){
   // onto the raft; while on top, lane changes and jumps can transfer to a nearby raft.
   let support=0,onRaft=null,rampSupport=0;
   for(const o of obstacles){if(!o.platform||o.lane!==(game.lane|0))continue;const rel=player.position.z-o.mesh.position.z,half=o.length*.5;
-   if(rel<=half+.15&&rel>=-half-.15){support=Math.max(support,o.topY);onRaft=o}
+   if(rel<=half+.15&&rel>=-half-.15){if(o.hasRamp||player.position.y>=o.topY-.18){support=Math.max(support,o.topY);onRaft=o}}
    else if(o.hasRamp&&rel>half&&rel<half+2.9){const p=clamp((half+2.9-rel)/2.9,0,1);rampSupport=Math.max(rampSupport,o.topY*p);if(p>.12)onRaft=o}
   }
   game.supportY=Math.max(support,rampSupport);game.onRaft=onRaft?onRaft.raftId:null;
@@ -1523,27 +1649,29 @@ function loop(t){
   const demand=oxygenDemandStages[game.stage]||oxygenDemandStages[0];let oxyDrain=(.72+game.dist/15000)*demand.mult*(game.event==='hypoxia'?2.15:1);game.oxy-=dt*oxyDrain;game.spawn-=dt;game.oSpawn-=dt;game.qTimer-=dt;
   if(game.spawn<=0){spawnObstacle();game.spawn=Math.max(.33,1.08-game.dist/7000)}
   if(game.oSpawn<=0){spawnOxygen();game.oSpawn=(game.event==='oxygenrush'?0.18:game.event==='hypoxia'?0.32:.65)+Math.random()*(game.event==='oxygenrush'?.18:game.event==='hypoxia'?.25:.8)}
-  if(game.qTimer<=0&&game.dist>350&&!game.event&&!game.questionIncoming){game.qTimer=13+Math.random()*8;announceKnowledgeCheck(false)}
-  obstacles.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.position.x=laneX(o.lane,game.vessel);if(o.spin!==false&&!o.platform){o.mesh.rotation.x+=dt*.9;o.mesh.rotation.y+=dt*.7}});
+  if(game.qTimer<=0&&game.elapsed>18&&!game.event&&!questionOpen&&!game.questionIncoming&&!game.onRaft){announceKnowledgeCheck(false);game.qTimer=999}
+
+  obstacles.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.position.x=laneX(o.lane,game.vessel);if(o.type==='fibrinGate'&&o.mesh.userData.duckCue){const cue=o.mesh.userData.duckCue,pulse=1+Math.sin(t*.014)*.12;cue.position.y=1.78+Math.sin(t*.012)*.20;cue.scale.set(.9*pulse,.9*pulse,.9)}if(o.spin!==false&&!o.platform){o.mesh.rotation.x+=dt*.9;o.mesh.rotation.y+=dt*.7}});
   oxygens.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.position.x=laneX(o.lane,game.vessel);o.mesh.position.y=o.y||0});
   function obstacleHitsPlayer(o){
    if(o.hit||o.platform)return false;
    if(Math.abs(o.mesh.position.z-player.position.z)>(o.hitZ||1.18))return false;
    if(Math.abs(o.mesh.position.x-player.position.x)>1.05)return false;
-   if(o.raftTop&&game.onRaft===o.raftId&&game.supportY<(o.y||0)-.2)return false;
-   if(o.type==='fibrinGate')return !(game.duckT>0&&player.position.y<game.supportY-.42);
+   if(o.raftTop){const raft=obstacles.find(r=>r.platform&&r.raftId===o.raftId);if(raft){const rel=player.position.z-raft.mesh.position.z,half=raft.length*.5;if(rel<=half+.25&&rel>=-half-.25&&player.position.y>=raft.topY-.3&&player.position.y<=raft.topY+3.1)return true}}
+   if(o.type==='fibrinGate'){const ducked=game.duckT>0&&player.position.y<game.supportY-.42;if(ducked)o.duckSeen=true;return !ducked}
    if(o.type==='plaqueRidge')return !(game.jumpT>0&&player.position.y>game.supportY+.82);
    return Math.abs((o.y||0)-player.position.y)<1.28;
   }
   // A raft without a ramp is a solid front wall; a ramped raft is enterable from the front.
-  for(const o of obstacles){if(!o.platform||o.hit||o.lane!==(game.lane|0)||o.hasRamp)continue;const front=o.mesh.position.z+o.length*.5;if(front>-.25&&front<2.05&&Math.abs(player.position.y)<.9){o.hit=true;game.hits++;game.oxy-=15;game.score=Math.max(0,game.score-150);sfxHit();updateOcclusionWarning();if(game.hits<5)toast('Dense thrombus raft — find a ramp or change lanes')}}
+  for(const o of obstacles){if(!o.platform||o.hit||o.lane!==(game.lane|0)||o.hasRamp)continue;const front=o.mesh.position.z+o.length*.5;if(front>-.25&&front<2.05&&player.position.y<o.topY+.38){o.hit=true;game.hits++;game.oxy-=15;game.score=Math.max(0,game.score-150);sfxHit();updateOcclusionWarning();if(game.hits<5)toast('Dense thrombus raft — jump onto it or change lanes')}}
   for(const o of obstacles)if(obstacleHitsPlayer(o)){o.hit=true;game.hits++;game.oxy-=o.type==='sickle'?17:o.type==='clot'?13:9;game.score=Math.max(0,game.score-150);sfxHit();updateOcclusionWarning();if(game.hits<5)toast(o.type==='fibrinGate'?'Duck under the fibrin gate':o.type==='plaqueRidge'?'Jump the plaque ridge':o.type==='sickle'?'Sickled cell hit':'Vessel obstruction')}
+  for(const o of obstacles){if(o.type==='fibrinGate'&&!o.hit&&!o.duckRewarded&&o.duckSeen&&o.mesh.position.z>1.65){o.duckRewarded=true;game.score+=180;game.oxy=Math.min(100,game.oxy+5);sfxPickup();toast('PERFECT DUCK • +180 • O₂ +5%')}}
   for(const o of oxygens)if(!o.hit&&o.mesh.position.z>-.2&&o.mesh.position.z<2&&Math.abs(o.mesh.position.x-player.position.x)<.8&&(!o.raftId||game.onRaft===o.raftId||game.supportY>=(o.y||0)-.2)&&Math.abs((o.y||0)-player.position.y)<.95){o.hit=true;if(o.golden){game.score+=700;game.eventHeme+=25;game.goldenCollected=(game.goldenCollected||0)+1;game.goldenActive=false;game.event=null;$('bossBar').classList.remove('show');sfxCorrect();toast('GOLDEN RBC • +700 • +25 Heme')}else{game.oxy=Math.min(100,game.oxy+13);game.score+=120;game.oxygenCollected=(game.oxygenCollected||0)+1;advanceChallenges('oxygen',1);if(game.event==='hypoxia')game.hypoxiaCollected++;if(game.event==='oxygenrush')game.rushCollected++;sfxPickup();toast(game.event==='hypoxia'?`O₂ ${game.hypoxiaCollected}/6`:'+ O₂')}}
   for(let i=obstacles.length-1;i>=0;i--)if(obstacles[i].mesh.position.z>8){scene.remove(obstacles[i].mesh);obstacles.splice(i,1)}
   for(let i=oxygens.length-1;i>=0;i--)if(oxygens[i].mesh.position.z>8){scene.remove(oxygens[i].mesh);oxygens.splice(i,1)}
   setStage();updateHud();if(game.oxy<=0)return endGame('Oxygen critically depleted.');if(game.hits>=8)return endGame('Too many vessel obstructions.');
  }
- camera.position.x+=(player.position.x*.22-camera.position.x)*.08;camera.position.y+=(7.1+player.position.y*.16-camera.position.y)*.08;camera.position.z+=(10.2-camera.position.z)*.08;camera.lookAt(player.position.x*.26,player.position.y*.14,-14);
+ if(questionOpen){const breathe=Math.sin(t*.0017);camera.position.x+=(player.position.x*.22+breathe*.18-camera.position.x)*.035;camera.position.y+=(7.1+player.position.y*.16+Math.cos(t*.0013)*.08-camera.position.y)*.035;tubeGroup.rotation.z=Math.sin(t*.00045)*.012;}else{camera.position.x+=(player.position.x*.22-camera.position.x)*.08;camera.position.y+=(7.1+player.position.y*.16-camera.position.y)*.08;}camera.position.z+=(10.2-camera.position.z)*.08;camera.lookAt(player.position.x*.26,player.position.y*.14,-14);
  player.rotation.z+=(game?(-game.vx*.026)-player.rotation.z:0)*.10;const runnerPitch=game?((game.jumpT>0?-.08:0)+(game.duckT>0?.10:0)):0;player.rotation.x+=((-0.22+runnerPitch)-player.rotation.x)*.08;player.rotation.y=Math.sin(t*.004)*.07;
  body.scale.z=game&&game.event==='capillary'?.34:(game&&game.oxy<35)?.42:.5;body.scale.x=game&&game.event==='capillary'?1.72:1.55;body.scale.y=game&&game.event==='capillary'?1.02:1.15;rim.scale.set(1.2+.06*Math.sin(t*.01),.88+.04*Math.cos(t*.009),1);dimpleFront.scale.z=dimpleBack.scale.z=(game&&game.oxy<35)?.22:.25;
  updateDynamicSkin(t);
@@ -1563,7 +1691,7 @@ function updateOcclusionWarning(){
  occlusionWarningTimer=setTimeout(()=>{w.className='';occlusionWarningTimer=null;},game.hits>=7?1700:1000);
 }
 function updateHud(){if(!game)return;let liveScore=Math.floor(game.score);$('score').textContent=liveScore.toLocaleString();$('dist').textContent=Math.floor(game.dist)+' m';$('oxy').textContent=Math.max(0,Math.floor(game.oxy))+'%';$('oxyBar').style.width=Math.max(0,game.oxy)+'%';$('o2').classList.toggle('low',game.oxy<55);$('o2').classList.toggle('critical',game.oxy<25)}
-function endGame(reason){stopQuestionTimer();hideKnowledgeIncoming();if(!game||!game.alive)return;game.alive=false;paused=false;resetOcclusionWarning();['hud'].forEach(id=>$(id).classList.add('hidden'));$('bossBar').classList.remove('show');let score=Math.floor(game.score),dist=Math.floor(game.dist),accuracy=game.qcount?Math.round(game.knowledge/game.qcount*100):100,baseEarned=Math.max(26,Math.floor(dist/52)+game.knowledge*18),earned=baseEarned+(game.eventHeme||0),bpGain=Math.max(10,Math.floor(score/700)+Math.floor(dist/210)+Math.max(1,game.knowledge*2)+Math.floor((game.eventHeme||0)/8));profile.heme+=earned;profile.battleXP+=bpGain;profile.highScore=Math.max(profile.highScore,score);const s=profile.stats;s.runs++;s.totalScore+=score;s.totalDistance+=dist;s.bestDistance=Math.max(s.bestDistance,dist);s.oxygen+=game.oxygenCollected||0;s.questions+=game.qcount||0;s.correct+=game.knowledge||0;s.events+=game.eventsCleared||0;s.golden+=game.goldenCollected||0;s.hits+=game.hits||0;s.hemeEarned+=earned;s.bestKnowledge=Math.max(s.bestKnowledge,accuracy);let challengeBonus=0;challengeBonus+=advanceChallenges('distance',dist,false);challengeBonus+=advanceChallenges('score',score,false);challengeBonus+=advanceChallenges('runs',1,false);if((game.hits||0)===0)challengeBonus+=advanceChallenges('cleanDistance',dist,false);let newlyUnlocked=unlockFrames();save();if(newlyUnlocked)toast('NEW FRAME UNLOCKED!');$('reason').textContent=reason;$('finalScore').textContent=score.toLocaleString();$('finalDist').textContent=dist+' m';$('knowledgeScore').textContent=accuracy+'%';$('earned').textContent=earned;const ss=$('submitStatus');if(ss){ss.className='submitStatus';ss.textContent='Run saved. +'+bpGain+' Battle XP'+(challengeBonus?' + '+challengeBonus+' challenge XP':'')+'.';}$('leaveScore').textContent=score.toLocaleString();$('leaveDist').textContent=dist+' m';$('name').value='';const pass=$('playerPass');if(pass)pass.classList.remove('show');const passActions=$('playerPassActions');if(passActions)passActions.classList.add('hidden');const confirm=$('leaveConfirm');if(confirm)confirm.classList.add('hidden');game.gameOverShownAt=performance.now();game.exitIntent=null;show('gameover');setTimeout(()=>{try{$('name').focus({preventScroll:true})}catch(_){}} ,650)}
+function endGame(reason){stopQuestionTimer();hideKnowledgeIncoming();if(game&&game.knowledgeFork){clearKnowledgeForkVisual();hideKnowledgeForkHUD();game.knowledgeFork=null;}const rc=$('resumeCountdown');if(rc)rc.classList.remove('show');if(!game||!game.alive)return;game.alive=false;paused=false;resetOcclusionWarning();['hud'].forEach(id=>$(id).classList.add('hidden'));$('bossBar').classList.remove('show');let score=Math.floor(game.score),dist=Math.floor(game.dist),accuracy=game.qcount?Math.round(game.knowledge/game.qcount*100):100,baseEarned=Math.max(26,Math.floor(dist/52)+game.knowledge*18),earned=baseEarned+(game.eventHeme||0),bpGain=Math.max(10,Math.floor(score/700)+Math.floor(dist/210)+Math.max(1,game.knowledge*2)+Math.floor((game.eventHeme||0)/8));profile.heme+=earned;profile.battleXP+=bpGain;profile.highScore=Math.max(profile.highScore,score);const s=profile.stats;s.runs++;s.totalScore+=score;s.totalDistance+=dist;s.bestDistance=Math.max(s.bestDistance,dist);s.oxygen+=game.oxygenCollected||0;s.questions+=game.qcount||0;s.correct+=game.knowledge||0;s.events+=game.eventsCleared||0;s.golden+=game.goldenCollected||0;s.hits+=game.hits||0;s.hemeEarned+=earned;s.bestKnowledge=Math.max(s.bestKnowledge,accuracy);let challengeBonus=0;challengeBonus+=advanceChallenges('distance',dist,false);challengeBonus+=advanceChallenges('score',score,false);challengeBonus+=advanceChallenges('runs',1,false);if((game.hits||0)===0)challengeBonus+=advanceChallenges('cleanDistance',dist,false);let newlyUnlocked=unlockFrames();save();if(newlyUnlocked)toast('NEW FRAME UNLOCKED!');$('reason').textContent=reason;$('finalScore').textContent=score.toLocaleString();$('finalDist').textContent=dist+' m';$('knowledgeScore').textContent=accuracy+'%';$('earned').textContent=earned;const ss=$('submitStatus');if(ss){ss.className='submitStatus';ss.textContent='Run saved. +'+bpGain+' Battle XP'+(challengeBonus?' + '+challengeBonus+' challenge XP':'')+'.';}$('leaveScore').textContent=score.toLocaleString();$('leaveDist').textContent=dist+' m';$('name').value='';const pass=$('playerPass');if(pass)pass.classList.remove('show');const passActions=$('playerPassActions');if(passActions)passActions.classList.add('hidden');const confirm=$('leaveConfirm');if(confirm)confirm.classList.add('hidden');game.gameOverShownAt=performance.now();game.exitIntent=null;show('gameover');setTimeout(()=>{try{$('name').focus({preventScroll:true})}catch(_){}} ,650)}
 let liveScores=[];
 let leaderboardConnected=false;
 
@@ -1949,7 +2077,7 @@ bindPress('submit',async()=>{
 
     try{notify('SCORE POSTED LIVE • PLAYER PASS VERIFIED','good')}catch(uiError){}
     try{sfxPrize()}catch(audioError){}
-    showPlayerPass(playerPassWasNew);playerPassWasNew=false;
+    showPlayerPass(playerPassWasNew);playerPassWasNew=false;app.classList.add('uiScroll');const go=$('gameover');if(go){requestAnimationFrame(()=>{go.style.overflowY='auto';const actions=$('playerPassActions');if(actions)actions.scrollIntoView({behavior:'smooth',block:'nearest'})})}
 
 
   }catch(error){
@@ -2015,6 +2143,7 @@ if(bpWindow){
  bpWindow.addEventListener('touchstart',e=>{if(!matchMedia('(max-width:760px)').matches||!e.touches?.length)return;bpSwipeStartX=e.touches[0].clientX;bpSwipeStartY=e.touches[0].clientY;bpSwipeActive=true},{passive:true});
  bpWindow.addEventListener('touchend',e=>{if(!bpSwipeActive||!matchMedia('(max-width:760px)').matches)return;bpSwipeActive=false;const t=e.changedTouches?.[0];if(!t)return;const dx=t.clientX-bpSwipeStartX,dy=t.clientY-bpSwipeStartY;if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.2)return;const pages=Math.ceil(BATTLE_PASS_TIERS/BATTLE_PASS_PAGE_SIZE);if(dx<0&&battlePage<pages-1){battlePage++;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}else if(dx>0&&battlePage>0){battlePage--;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}},{passive:true});
 }
+bindPress('claimPopupClose',closeBattleClaimPopup);
 bindPress('start',startGame);bindPress('learn',()=>{renderLearnHub();show('learnScreen')});bindPress('lab',()=>{renderShop();show('labScreen')});bindPress('stats',openStats);bindPress('backStats',()=>show('menu'));bindPress('battle',openBattlePass);bindPress('battleBuy',buyBattlePass);bindPress('battlePrevPage',()=>{if(battlePage>0){battlePage--;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}});bindPress('battleNextPage',()=>{if(battlePage<Math.ceil(BATTLE_PASS_TIERS/BATTLE_PASS_PAGE_SIZE)-1){battlePage++;$('battlePreviewPane')?.classList.remove('mobileOpen');renderBattlePass()}});bindPress('bpCloseDrawer',()=>$('battlePreviewPane')?.classList.remove('mobileOpen'));bindPress('backBattle',()=>{$('battlePreviewPane')?.classList.remove('mobileOpen');show('menu')});bindPress('board',()=>{openLeaderboardAtBest();setTimeout(sfxPrize,80)});
 bindPress('openVerify',openPrizeVerifier);bindPress('closeVerify',closePrizeVerifier);bindPress('verifyDevice',verifyCurrentDevice);bindPress('verifyClaim',verifyClaimCode);
 bindPress('viewLeaderboardAfterSubmit',showSubmittedLeaderboard);bindPress('startStudy',startStudyDrill);bindPress('studyNext',nextStudyQuestion);bindPress('studyAgain',startStudyDrill);bindPress('caseNext',nextClinicalCaseStep);bindPress('caseExit',resetCasePanel);bindPress('jumpMastery',()=>{$('masterySection').scrollIntoView({behavior:'smooth',block:'start'})});bindPress('jumpCases',()=>{$('caseSection').scrollIntoView({behavior:'smooth',block:'start'})});bindPress('jumpConcepts',()=>{$('conceptSection').scrollIntoView({behavior:'smooth',block:'start'})});bindPress('backLearn',()=>show('menu'));bindPress('backLab',()=>show('menu'));bindPress('backBoard',()=>{closePrizeVerifier();show('menu')});
